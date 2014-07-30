@@ -58,12 +58,12 @@ doctrine:
         auto_mapping: true
 services:
     app_userbundle.registration.form.type:
-        class: App\UserBundle\Form\Type\RegistrationFormType
+        class: Core\UserBundle\Form\Type\RegistrationFormType
         arguments: [%fos_user.model.user.class%]
         tags:
             -
                 name: form.type
-                alias: app_user_registration
+                alias: core_user_registration
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -76,7 +76,7 @@ swiftmailer:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: App\UserBundle\Entity\User
+    user_class: Core\UserBundle\Entity\User
     registration: 
         form:
-            type: app_user_registration
+            type: core_user_registration
