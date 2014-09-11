@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Post
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Core\BlogBundle\Entity\PostRepository")
+ * @ORM\Entity()
  */
 class Post
 {
@@ -45,11 +45,10 @@ class Post
     private $updatedAt;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="author", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="posts")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id"))
      */
-    private $author;
+    private $user;
 
 //    /**
 //     * @Vich\UploadableField(mapping="blog", fileNameProperty="imageName")
@@ -66,11 +65,10 @@ class Post
 //    private $imageName;
 
 
-    public function __construct($user)
+    public function __construct()
     {
         $this->createdAt = new \Datetime();
         $this->updatedAt = new \Datetime();
-        $this->author = $user;
     }
 
     /**
@@ -87,7 +85,7 @@ class Post
      * Set content
      *
      * @param string $content
-     * @return Article
+     * @return Post
      */
     public function setContent($content)
     {
@@ -110,7 +108,7 @@ class Post
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return Article
+     * @return Post
      */
     public function setCreatedAt($createdAt)
     {
@@ -127,29 +125,6 @@ class Post
     public function getCreatedAt()
     {
         return $this->createdAt;
-    }
-
-    /**
-     * Set author
-     *
-     * @param string $author
-     * @return Article
-     */
-    public function setAuthor($author)
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
-    /**
-     * Get author
-     *
-     * @return string
-     */
-    public function getAuthor()
-    {
-        return $this->author;
     }
 
 //    /**
@@ -222,5 +197,28 @@ class Post
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \src\Core\UserBundle\Entity\User $user
+     * @return Post
+     */
+    public function setUser(\Core\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \src\Core\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
