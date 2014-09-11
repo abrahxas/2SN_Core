@@ -56,6 +56,7 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
+
 services:
     app_userbundle.registration.form.type:
         class: Core\UserBundle\Form\Type\RegistrationFormType
@@ -80,3 +81,21 @@ fos_user:
     registration: 
         form:
             type: core_user_registration
+
+# Sluggable config
+stof_doctrine_extensions:
+    default_locale:  "%locale%"
+    orm:
+        default:
+            sluggable: true
+
+# Vich_uploader Configuration [Upload file]
+vich_uploader:
+    db_driver: orm # or mongodb
+    mappings:
+        blog:
+            upload_destination: %kernel.root_dir%/../web/uploads/blog
+            inject_on_load:     false
+            delete_on_update: true
+            delete_on_remove:   true
+            namer: vich_uploader.namer_uniqid
