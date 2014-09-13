@@ -3,17 +3,14 @@
 namespace Core\BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * Post
+ * Comment
  *
  * @ORM\Table()
  * @ORM\Entity()
- * @Vich\Uploadable
  */
-class Post
+class Comment
 {
     /**
      * @var integer
@@ -52,22 +49,10 @@ class Post
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="Core\BlogBundle\Entity\Comment", mappedBy="post")
+     * @ORM\ManyToOne(targetEntity="Core\BlogBundle\Entity\Post", inversedBy="comment")
+     * @ORM\JoinColumn(name="post_id", referencedColumnName="id"))
      */
-    protected $comment;
-
-    /**
-     * @Vich\UploadableField(mapping="post", fileNameProperty="imageName")
-     * @var File $imageFile
-     */
-    protected $imageFile;
-
-    /**
-     * @ORM\Column(type="string", length=255, name="image_name")
-     *
-     * @var string $imageName
-     */
-    protected $imageName;
+    private $post;
 
     public function __construct()
     {
@@ -89,7 +74,7 @@ class Post
      * Set content
      *
      * @param string $content
-     * @return Post
+     * @return Comment
      */
     public function setContent($content)
     {
@@ -112,7 +97,7 @@ class Post
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return Post
+     * @return Comment
      */
     public function setCreatedAt($createdAt)
     {
@@ -135,7 +120,7 @@ class Post
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return Post
+     * @return Comment
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -147,7 +132,7 @@ class Post
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -158,7 +143,7 @@ class Post
      * Set user
      *
      * @param \Core\UserBundle\Entity\User $user
-     * @return Post
+     * @return Comment
      */
     public function setUser(\Core\UserBundle\Entity\User $user = null)
     {
@@ -178,46 +163,25 @@ class Post
     }
 
     /**
-     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
-     * of 'UploadedFile' is injected into this setter to trigger the  update. If this
-     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
-     * must be able to accept an instance of 'File' as the bundle will inject one here
-     * during Doctrine hydration.
+     * Set post
      *
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
+     * @param \Core\BlogBundle\Entity\Post $post
+     * @return Comment
      */
-    public function setImageFile(File $image)
+    public function setPost(\Core\BlogBundle\Entity\Post $post = null)
     {
-        $this->imageFile = $image;
+        $this->post = $post;
 
-        if ($image) {
-            // It is required that at least one field changes if you are using doctrine
-            // otherwise the event listeners won't be called and the file is lost
-            $this->updatedAt = new \DateTime('now');
-        }
+        return $this;
     }
 
     /**
-     * @return File
+     * Get post
+     *
+     * @return \Core\BlogBundle\Entity\Post
      */
-    public function getImageFile()
+    public function getPost()
     {
-        return $this->imageFile;
-    }
-
-    /**
-     * @param string $imageName
-     */
-    public function setImageName($imageName)
-    {
-        $this->imageName = $imageName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getImageName()
-    {
-        return $this->imageName;
+        return $this->post;
     }
 }
