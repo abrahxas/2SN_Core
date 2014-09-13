@@ -30,8 +30,8 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [ ]
-    #java: /usr/bin/java
+    bundles:        ['CoreBlogBundle']
+#    java: /usr/bin/java
     filters:
         cssrewrite: ~
         #closure:
@@ -89,13 +89,9 @@ stof_doctrine_extensions:
         default:
             sluggable: true
 
-# Vich_uploader Configuration [Upload file]
 vich_uploader:
-    db_driver: orm # or mongodb
+    db_driver: orm
     mappings:
-        blog:
-            upload_destination: %kernel.root_dir%/../web/uploads/blog
-            inject_on_load:     false
-            delete_on_update: true
-            delete_on_remove:   true
-            namer: vich_uploader.namer_uniqid
+        post:
+            uri_prefix:         /uploads/posts
+            upload_destination: %kernel.root_dir%/../web//uploads/posts

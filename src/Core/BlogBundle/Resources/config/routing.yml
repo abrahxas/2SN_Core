@@ -2,13 +2,13 @@ core_blog_homepage:
     path:     /blog
     defaults: { _controller: CoreBlogBundle:Blog:index }
 
-core_blog_homepage_show:
-    path:     /blog/{id}
-    defaults: { _controller: CoreBlogBundle:Blog:show }
-
 core_blog_homepage_add:
     path:     /blog/add
     defaults: { _controller: CoreBlogBundle:Blog:add }
+
+core_blog_homepage_show:
+    path:     /blog/{id}
+    defaults: { _controller: CoreBlogBundle:Blog:show }
 
 core_blog_homepage_update:
     path:     /blog/update/{id}

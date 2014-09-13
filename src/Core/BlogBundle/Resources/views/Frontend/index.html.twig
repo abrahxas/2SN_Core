@@ -5,6 +5,7 @@
         <a style="float:left" href="{{ path('core_blog_homepage_update', {'id': post.id}) }}">update post</a>
         <a style="float:right" href="{{ path('core_blog_homepage_delete', {'id': post.id}) }}">delete post</a>
         <br>
+        <img src="{{ asset('uploads/posts/' ~ post.imageName)}}" />
         <br>
         <a href="{{ path('core_blog_homepage_show', {'id': post.id}) }}">{{ post.content }}</a>
     </div>

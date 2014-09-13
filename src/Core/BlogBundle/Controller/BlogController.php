@@ -23,6 +23,8 @@ class BlogController extends Controller
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
+//        var_dump($user);
+//        die;
         $form = $this->createForm(new PostType(), $post = new Post());
 
         if ($request->isMethod('POST')){
@@ -40,10 +42,10 @@ class BlogController extends Controller
         ));
     }
 
-    public function showAction($id)
+    public function showAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($id);
+        $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($request->get('id'));
 
         return $this->render('CoreBlogBundle:frontend:show.html.twig', array(
             'post' => $post
@@ -62,6 +64,7 @@ class BlogController extends Controller
             $form->handleRequest($request);
             if ($form->isValid()){
                 $post->setUser($user);
+                $post->setUpdatedAt(new \DateTime());
                 $entityManager->persist($post);
                 $entityManager->flush();
                 return $this->redirect($this->generateUrl('core_blog_homepage'));
