@@ -1,3 +1,7 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
 <div style="background-color: #D9CC3B; width: 20%;margin-bottom: 5%;padding: 3%">
     <div style="background-color: white;">
         <a style="float:left" href="{{ path('core_blog_homepage_update', {'id': post.id}) }}">update post</a>
@@ -8,8 +12,16 @@
         {{ post.content }}
     </div>
 </div>
+<br>
+<div style="background-color: #3ADAAC; width: 20%;margin-bottom: 5%;">
+    {{ form(form) }}
+</div>
+<br>
+{% block comment %}
+<h4>Listing comments</h4>
+{{ render(controller('CoreBlogBundle:Comment:index', { 'postId': app.request.get('id') })) }}
+{% endblock comment %}
 
-
-
+{% endblock body %}
 
 

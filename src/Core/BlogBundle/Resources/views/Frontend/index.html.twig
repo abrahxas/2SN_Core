@@ -1,3 +1,7 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
 <a href="{{ path('core_blog_homepage_add') }}">Add post</a>
 {% for post in posts %}
 <div style="background-color: #D9CC3B; width: 20%;margin-bottom: 5%;padding: 3%">
@@ -11,3 +15,5 @@
     </div>
 </div>
 {% endfor %}
+
+{% endblock body %}

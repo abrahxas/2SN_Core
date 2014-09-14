@@ -4,6 +4,8 @@ namespace Core\BlogBundle\Controller;
 
 use Core\BlogBundle\Entity\Post;
 use Core\BlogBundle\Form\Type\PostType;
+use Core\BlogBundle\Entity\Comment;
+use Core\BlogBundle\Form\Type\CommentType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -19,12 +21,10 @@ class BlogController extends Controller
         ));
     }
 
-    public function addAction(Request $request)
+    public function addPostAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-//        var_dump($user);
-//        die;
         $form = $this->createForm(new PostType(), $post = new Post());
 
         if ($request->isMethod('POST')){
@@ -42,17 +42,32 @@ class BlogController extends Controller
         ));
     }
 
-    public function showAction(Request $request)
+    public function showPostAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($request->get('id'));
 
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        $form = $this->createForm(new CommentType(), $comment = new Comment());
+
+        if ($request->isMethod('POST')){
+            $form->handleRequest($request);
+            if ($form->isValid()){
+                $comment->setUser($user);
+                $comment->setPost($post);
+                $entityManager->persist($comment);
+                $entityManager->flush();
+                return $this->redirect($this->generateUrl('core_blog_homepage_show', array('id' => $post->getId())));
+            }
+        }
+
         return $this->render('CoreBlogBundle:frontend:show.html.twig', array(
+            'form' => $form->createView(),
             'post' => $post
         ));
     }
 
-    public function updateAction(Request $request)
+    public function updatePostAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -76,7 +91,7 @@ class BlogController extends Controller
         ));
     }
 
-    public function deleteAction($id)
+    public function deletePostAction($id)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($id);
