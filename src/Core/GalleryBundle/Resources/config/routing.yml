@@ -1,6 +1,15 @@
+#Routing Gallery
+
 core_gallery_homepage:
     path:     /gallery
     defaults: { _controller: CoreGalleryBundle:Gallery:index }
+
+
+#Routing Album
+
+core_album_show:
+    path:     /gallery/{id}
+    defaults: { _controller: CoreGalleryBundle:Gallery:showAlbum }
 
 core_album_create:
     path:     /gallery/album-create
@@ -13,3 +22,18 @@ core_album_update:
 core_album_delete:
     path:     /gallery/album-delete/{id}
     defaults: { _controller: CoreGalleryBundle:Gallery:deleteAlbum }
+
+
+#Routing PHOTO
+
+core_photo_show:
+    path:     /gallery/{albumId}/{id}
+    defaults: { _controller: CoreGalleryBundle:Photo:show }
+
+core_photo_update:
+    path:     /gallery/{albumId}/photo-update/{id}
+    defaults: { _controller: CoreGalleryBundle:Photo:update }
+
+core_photo_delete:
+    path:     /gallery/{albumId}/photo-delete/{id}
+    defaults: { _controller: CoreGalleryBundle:Photo:delete }

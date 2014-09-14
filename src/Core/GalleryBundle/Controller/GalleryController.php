@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Core\GalleryBundle\Entity\Album;
 use Core\GalleryBundle\Form\Type\AlbumType;
+use Core\GalleryBundle\Entity\Photo;
+use Core\GalleryBundle\Form\Type\PhotoType;
 
 class GalleryController extends Controller
 {
@@ -17,6 +19,28 @@ class GalleryController extends Controller
 
         return $this->render('CoreGalleryBundle:default:index.html.twig', array(
             'albums' => $albums
+        ));
+    }
+
+    public function showAlbumAction(Request $request, $id)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($id);
+        $form = $this->createForm(new PhotoType(), $photo = new Photo());
+
+        if ($request->isMethod('POST')){
+            $form->handleRequest($request);
+            if ($form->isValid()){
+                $photo->setAlbum($album);
+                $entityManager->persist($photo);
+                $entityManager->flush();
+                return $this->redirect($this->generateUrl('core_album_show', array('id' => $id)));
+            }
+        }
+
+        return $this->render('CoreGalleryBundle:default:show.html.twig', array(
+            'form' => $form->createView(),
+            'album' => $album,
         ));
     }
 
@@ -69,11 +93,12 @@ class GalleryController extends Controller
     {
         $entityManager = $this->getDoctrine()->getManager();
         $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($id);
-        if ($album)
-        {
+
+        if ($album){
             $entityManager->remove($album);
             $entityManager->flush();
         }
+
         return $this->redirect($this->generateUrl('core_gallery_homepage'));
     }
 }

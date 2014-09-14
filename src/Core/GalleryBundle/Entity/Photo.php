@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Picture
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Core\GalleryBundle\Entity\Gallery\PhotoRepository")
+ * @ORM\Entity()
  */
 class Photo
 {
@@ -30,6 +30,13 @@ class Photo
      * @ORM\Column(name="title", type="string", length=255)
      */
     private $title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="content", type="string", length=255)
+     */
+    private $content;
 
 //    /**
 //     * @var string
@@ -67,16 +74,10 @@ class Photo
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Album", inversedBy="picture")
+     * @ORM\ManyToOne(targetEntity="Album", inversedBy="photo")
      * @ORM\JoinColumn(name="album_id", referencedColumnName="id"))
      */
     private $album;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="\Core\UserBundle\Entity\User", inversedBy="photo")
-     * @ORM\JoinColumn(name="album_id", referencedColumnName="id"))
-     */
-    private $user;
 
     public function __construct()
     {
@@ -97,7 +98,7 @@ class Photo
      * Set title
      *
      * @param string $title
-     * @return Picture
+     * @return Photo
      */
     public function setTitle($title)
     {
@@ -163,29 +164,6 @@ class Photo
     }
 
     /**
-     * Set user
-     *
-     * @param \Core\UserBundle\Entity\User $user
-     * @return Photo
-     */
-    public function setUser(\Core\UserBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \Core\UserBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
      * Set album
      *
      * @param \Core\GalleryBundle\Entity\Album $album
@@ -206,5 +184,28 @@ class Photo
     public function getAlbum()
     {
         return $this->album;
+    }
+
+    /**
+     * Set content
+     *
+     * @param string $content
+     * @return Photo
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * Get content
+     *
+     * @return string 
+     */
+    public function getContent()
+    {
+        return $this->content;
     }
 }
