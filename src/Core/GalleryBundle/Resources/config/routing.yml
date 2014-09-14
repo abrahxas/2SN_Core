@@ -1,0 +1,3 @@
+core_gallery_homepage:
+    path:     /gallery
+    defaults: { _controller: CoreGalleryBundle:Gallery:index }
