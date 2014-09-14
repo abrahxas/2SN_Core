@@ -1,10 +1,8 @@
-<<<<<<< HEAD
 core_blog:
     resource: "@CoreBlogBundle/Resources/config/routing.yml"
-=======
+
 app_gallery:
     resource: "@CoreGalleryBundle/Resources/config/routing.yml"
->>>>>>> Added Bundle Gallery
     prefix:   /
 
 app_user:

@@ -1,3 +1,15 @@
 core_gallery_homepage:
     path:     /gallery
     defaults: { _controller: CoreGalleryBundle:Gallery:index }
+
+core_album_create:
+    path:     /gallery/album-create
+    defaults: { _controller: CoreGalleryBundle:Gallery:addAlbum }
+
+core_album_update:
+    path:     /gallery/album-update/{id}
+    defaults: { _controller: CoreGalleryBundle:Gallery:updateAlbum }
+
+core_album_delete:
+    path:     /gallery/album-delete/{id}
+    defaults: { _controller: CoreGalleryBundle:Gallery:deleteAlbum }

@@ -4,5 +4,19 @@
 </head>
 <body>
 	Gallery
+<br>
+<br>
+<a href="{{ path('core_album_create') }}">Create Album</a>
+<br>
+<br>
+{% for album in albums %}
+<div style="background-color: #313131;padding: 2%">
+    <div style="background-color: white">
+        <a href="{{ path('core_album_update', {'id': album.id}) }}">update</a>
+        <a href="{{ path('core_album_delete', {'id': album.id}) }}">delete</a>
+        <h3>{{ album.name }}</h3>
+    </div>
+</div>
+{% endfor %}
 </body>
 </html>
