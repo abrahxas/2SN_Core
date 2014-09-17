@@ -17,6 +17,7 @@ class PhotoType extends AbstractType
         $builder
             ->add('title')
             ->add('content')
+            ->add('imageFile', 'file')
             ->add('save', 'submit')
             ->getForm()
         ;

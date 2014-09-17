@@ -9,41 +9,49 @@ use Core\GalleryBundle\Form\Type\PhotoType;
 
 class PhotoController extends Controller
 {
-    public function indexAction($albumId)
+    public function indexAction($albumSlug)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $photos = $entityManager->getRepository('CoreGalleryBundle:Photo')->findBy(array('album' => $albumId), array('createdAt' => 'DESC'));
+        $album = $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array(
+            'slug' => $albumSlug,
+        ));
+        $photos = $entityManager->getRepository('CoreGalleryBundle:Photo')->findBy(array('album' => $album->getId()), array('createdAt' => 'DESC'));
 
         return $this->render('CoreGalleryBundle:default:index-photo.html.twig', array(
-            'albumId' => $albumId,
+            'albumSlug' => $albumSlug,
             'photos' => $photos
         ));
     }
 
-    public function showAction($albumId, $id)
+    public function showAction($albumSlug, $photoSlug)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($id);
+        $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->findOneBy(array(
+            'slug' => $photoSlug,
+        ));
 
         return $this->render('CoreGalleryBundle:default:show-photo.html.twig', array(
-            'albumId' => $albumId,
+            'albumSlug' => $albumSlug,
             'photo' => $photo
         ));
     }
 
-    public function addAction($albumId)
+    public function addAction($albumSlug, Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($albumId);
+        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array(
+            'slug' => $albumSlug,
+        ));
         $form = $this->createForm(new PhotoType(), $photo = new Photo());
 
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $photo->setAlbum($album);
+                $photo->setImageName('test');#TODO WTF vich devrait gerer ca normalement
                 $entityManager->persist($photo);
                 $entityManager->flush();
-                return $this->redirect($this->generateUrl('core_album_show', array('albumId' => $albumId)));
+                return $this->redirect($this->generateUrl('core_album_show', array('albumSlug' => $albumSlug)));
             }
         }
 
@@ -52,11 +60,15 @@ class PhotoController extends Controller
         ));
     }
 
-    public function updateAction($albumId, $id, Request $request)
+    public function updateAction($albumSlug, $photoSlug, Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($albumId);
-        $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($id);
+        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array(
+            'slug' => $albumSlug,
+        ));
+        $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->findOneBy(array(
+            'slug' => $photoSlug,
+        ));
         $form = $this->createForm(new PhotoType(), $photo);
 
         if ($request->isMethod('POST')){
@@ -66,7 +78,7 @@ class PhotoController extends Controller
                 $photo->setUpdatedAt(new \DateTime());
                 $entityManager->persist($photo);
                 $entityManager->flush();
-                return $this->redirect($this->generateUrl('core_album_show', array('id' => $albumId)));
+                return $this->redirect($this->generateUrl('core_album_show', array('albumSlug' => $albumSlug)));
             }
         }
 
@@ -76,15 +88,17 @@ class PhotoController extends Controller
     }
 
 
-    public function deleteAction($albumId, $id)
+    public function deleteAction($albumSlug, $photoSlug)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($id);
+        $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->findOneBy(array(
+            'slug' => $photoSlug,
+        ));;
         if ($photo)
         {
             $entityManager->remove($photo);
             $entityManager->flush();
         }
-        return $this->redirect($this->generateUrl('core_album_show', array('id' => $albumId)));
+        return $this->redirect($this->generateUrl('core_album_show', array('albumSlug' => $albumSlug)));
     }
 }

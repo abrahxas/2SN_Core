@@ -11,9 +11,9 @@ Listing Album
 {% for album in albums %}
 <div style="background-color: #313131;padding: 2%;margin-bottom: 2%;width: 30%;">
     <div style="background-color: white">
-        <a href="{{ path('core_album_update', {'id': album.id}) }}">update</a>
-        <a href="{{ path('core_album_delete', {'id': album.id}) }}">delete</a>
-        <a href="{{ path('core_album_show', {'id': album.id}) }}"><h3>{{ album.name }}</h3></a>
+        <a href="{{ path('core_album_update', {'albumSlug': album.slug}) }}">update</a>
+        <a href="{{ path('core_album_delete', {'albumSlug': album.slug}) }}">delete</a>
+        <a href="{{ path('core_album_show', {'albumSlug': album.slug}) }}"><h3>{{ album.name }}</h3></a>
     </div>
 </div>
 {% endfor %}

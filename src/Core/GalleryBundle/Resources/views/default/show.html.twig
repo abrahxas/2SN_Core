@@ -4,12 +4,10 @@
 {{ album.name }}
 <br>
 <br>
-<a href="{{ path('core_photo_create', {'albumId': album.id}) }}">Poster une photo</a>
+<a href="{{ path('core_photo_create', {'albumSlug': album.slug}) }}">Poster une photo</a>
 <br>
 <br>
 Listing photo
-{% block photo %}
-{{ render(controller('CoreGalleryBundle:Photo:index', {'albumId': album.id})) }}
-{% endblock photo %}
+{{ render(controller('CoreGalleryBundle:Photo:index', {'albumSlug': album.slug})) }}
 </body>
 </html>

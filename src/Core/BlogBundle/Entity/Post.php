@@ -220,4 +220,37 @@ class Post
     {
         return $this->imageName;
     }
+
+    /**
+     * Add comment
+     *
+     * @param \Core\BlogBundle\Entity\Comment $comment
+     * @return Post
+     */
+    public function addComment(\Core\BlogBundle\Entity\Comment $comment)
+    {
+        $this->comment[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \Core\BlogBundle\Entity\Comment $comment
+     */
+    public function removeComment(\Core\BlogBundle\Entity\Comment $comment)
+    {
+        $this->comment->removeElement($comment);
+    }
+
+    /**
+     * Get comment
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
 }

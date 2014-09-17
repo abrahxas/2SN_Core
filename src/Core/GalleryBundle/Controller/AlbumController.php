@@ -20,10 +20,12 @@ class AlbumController extends Controller
         ));
     }
 
-    public function showAction($id)
+    public function showAction($albumSlug)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($id);
+        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array(
+            'slug' => $albumSlug,
+        ));
 
         return $this->render('CoreGalleryBundle:default:show.html.twig', array(
             'album' => $album,
@@ -51,11 +53,13 @@ class AlbumController extends Controller
         ));
     }
 
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, $albumSlug)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($id);
+        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array(
+            'slug' => $albumSlug,
+        ));
         $form = $this->createForm(new AlbumType(), $album);
 
         if ($request->isMethod('POST')) {
@@ -74,10 +78,12 @@ class AlbumController extends Controller
         ));
     }
 
-    public function deleteAction($id)
+    public function deleteAction($albumSlug)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($id);
+        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array(
+            'slug' => $albumSlug,
+        ));
 
         if ($album) {
             $entityManager->remove($album);
