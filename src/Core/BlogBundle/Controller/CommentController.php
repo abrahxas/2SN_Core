@@ -20,6 +20,29 @@ class CommentController extends Controller
         ));
     }
 
+    public function addAction($postId, Request $request)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($postId);
+        $form = $this->createForm(new CommentType(), $comment = new Comment());
+
+        if ($request->isMethod('POST')){
+            $form->handleRequest($request);
+            if ($form->isValid()){
+                $comment->setUser($user);
+                $comment->setPost($post);
+                $entityManager->persist($comment);
+                $entityManager->flush();
+                return $this->redirect($this->generateUrl('core_post_show', array('id' => $post->getId())));
+            }
+        }
+
+        return $this->render('CoreBlogBundle:Frontend:createComments.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
     public function updateAction($postId, $id, Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
@@ -36,7 +59,7 @@ class CommentController extends Controller
                 $comment->setUpdatedAt(new \DateTime());
                 $entityManager->persist($comment);
                 $entityManager->flush();
-                return $this->redirect($this->generateUrl('core_blog_homepage_show', array('id' => $postId)));
+                return $this->redirect($this->generateUrl('core_post_show', array('id' => $postId)));
             }
         }
 
@@ -54,6 +77,6 @@ class CommentController extends Controller
             $entityManager->remove($comment);
             $entityManager->flush();
         }
-        return $this->redirect($this->generateUrl('core_blog_homepage_show', array('id' => $postId)));
+        return $this->redirect($this->generateUrl('core_post_show', array('id' => $postId)));
     }
 }
