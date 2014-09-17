@@ -1,0 +1,16 @@
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+{{ album.name }}
+<br>
+<br>
+Poster une photo
+{{ form(form) }}
+<br>
+<br>
+Listing photo
+{{ render(controller('CoreGalleryBundle:Photo:index', {'albumId': album.id})) }}
+</body>
+</html>

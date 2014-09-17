@@ -34,6 +34,11 @@ class User extends BaseUser
      */
     protected $posts;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Core\GalleryBundle\Entity\Album", mappedBy="user")
+     */
+    protected $album;
+
 
     /**
      * Get id

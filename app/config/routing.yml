@@ -1,5 +1,8 @@
 core_blog:
     resource: "@CoreBlogBundle/Resources/config/routing.yml"
+
+app_gallery:
+    resource: "@CoreGalleryBundle/Resources/config/routing.yml"
     prefix:   /
 
 app_user:

@@ -42,27 +42,12 @@ class BlogController extends Controller
         ));
     }
 
-    public function showPostAction(Request $request)
+    public function showPostAction($id)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($request->get('id'));
-
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        $form = $this->createForm(new CommentType(), $comment = new Comment());
-
-        if ($request->isMethod('POST')){
-            $form->handleRequest($request);
-            if ($form->isValid()){
-                $comment->setUser($user);
-                $comment->setPost($post);
-                $entityManager->persist($comment);
-                $entityManager->flush();
-                return $this->redirect($this->generateUrl('core_blog_homepage_show', array('id' => $post->getId())));
-            }
-        }
+        $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($id);
 
         return $this->render('CoreBlogBundle:frontend:show.html.twig', array(
-            'form' => $form->createView(),
             'post' => $post
         ));
     }
