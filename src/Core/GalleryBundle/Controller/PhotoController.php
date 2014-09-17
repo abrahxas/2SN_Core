@@ -31,6 +31,27 @@ class PhotoController extends Controller
         ));
     }
 
+    public function addAction($albumId)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($albumId);
+        $form = $this->createForm(new PhotoType(), $photo = new Photo());
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $photo->setAlbum($album);
+                $entityManager->persist($photo);
+                $entityManager->flush();
+                return $this->redirect($this->generateUrl('core_album_show', array('albumId' => $albumId)));
+            }
+        }
+
+        return $this->render('CoreGalleryBundle:default:create-photo.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
     public function updateAction($albumId, $id, Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();

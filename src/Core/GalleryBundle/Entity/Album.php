@@ -43,7 +43,7 @@ class Album
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="Photo", mappedBy="Album")
+     * @ORM\OneToMany(targetEntity="Photo", mappedBy="Album", cascade={"remove"})
      */
     private $photo;
 

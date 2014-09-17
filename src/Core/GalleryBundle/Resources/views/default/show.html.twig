@@ -1,16 +1,15 @@
 <html>
-<head>
-    <title></title>
-</head>
+<head></head>
 <body>
 {{ album.name }}
 <br>
 <br>
-Poster une photo
-{{ form(form) }}
+<a href="{{ path('core_photo_create', {'albumId': album.id}) }}">Poster une photo</a>
 <br>
 <br>
 Listing photo
+{% block photo %}
 {{ render(controller('CoreGalleryBundle:Photo:index', {'albumId': album.id})) }}
+{% endblock photo %}
 </body>
 </html>
