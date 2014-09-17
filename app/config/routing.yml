@@ -1,3 +1,7 @@
+core_blog:
+    resource: "@CoreBlogBundle/Resources/config/routing.yml"
+    prefix:   /
+
 app_user:
     resource: "@CoreUserBundle/Resources/config/routing.yml"
     prefix:   /

@@ -30,8 +30,8 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [ ]
-    #java: /usr/bin/java
+    bundles:        ['CoreBlogBundle']
+#    java: /usr/bin/java
     filters:
         cssrewrite: ~
         #closure:
@@ -56,6 +56,7 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
+
 services:
     app_userbundle.registration.form.type:
         class: Core\UserBundle\Form\Type\RegistrationFormType
@@ -80,3 +81,17 @@ fos_user:
     registration: 
         form:
             type: core_user_registration
+
+# Sluggable config
+stof_doctrine_extensions:
+    default_locale:  "%locale%"
+    orm:
+        default:
+            sluggable: true
+
+vich_uploader:
+    db_driver: orm
+    mappings:
+        post:
+            uri_prefix:         /uploads/posts
+            upload_destination: %kernel.root_dir%/../web//uploads/posts

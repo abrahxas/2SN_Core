@@ -1,0 +1,27 @@
+core_blog_homepage:
+    path:     /blog
+    defaults: { _controller: CoreBlogBundle:Blog:index }
+
+core_blog_homepage_add:
+    path:     /blog/add-post
+    defaults: { _controller: CoreBlogBundle:Blog:addPost }
+
+core_blog_homepage_show:
+    path:     /blog/{id}
+    defaults: { _controller: CoreBlogBundle:Blog:showPost }
+
+core_blog_homepage_update:
+    path:     /blog/update-post/{id}
+    defaults: { _controller: CoreBlogBundle:Blog:updatePost }
+
+core_blog_homepage_delete:
+    path:     /blog/delete-post/{id}
+    defaults: { _controller: CoreBlogBundle:Blog:deletePost }
+
+core_blog_comment_update:
+    path:     /blog/{postId}/update-comment/{id}
+    defaults: { _controller: CoreBlogBundle:Comment:update }
+
+core_blog_comment_delete:
+    path:     /blog/{postId}/delete-comment/{id}
+    defaults: { _controller: CoreBlogBundle:Comment:delete }

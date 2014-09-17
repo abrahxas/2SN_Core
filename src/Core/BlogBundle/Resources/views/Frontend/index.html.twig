@@ -1,0 +1,19 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+<a href="{{ path('core_blog_homepage_add') }}">Add post</a>
+{% for post in posts %}
+<div style="background-color: #D9CC3B; width: 20%;margin-bottom: 5%;padding: 3%">
+    <div style="background-color: white;">
+        <a style="float:left" href="{{ path('core_blog_homepage_update', {'id': post.id}) }}">update post</a>
+        <a style="float:right" href="{{ path('core_blog_homepage_delete', {'id': post.id}) }}">delete post</a>
+        <br>
+        <img src="{{ asset('uploads/posts/' ~ post.imageName)}}" />
+        <br>
+        <a href="{{ path('core_blog_homepage_show', {'id': post.id}) }}">{{ post.content }}</a>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock body %}

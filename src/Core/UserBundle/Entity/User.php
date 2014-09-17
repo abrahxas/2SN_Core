@@ -29,6 +29,11 @@ class User extends BaseUser
      */
     private $birthDate;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Core\BlogBundle\Entity\Post", mappedBy="user")
+     */
+    protected $posts;
+
 
     /**
      * Get id
@@ -61,5 +66,45 @@ class User extends BaseUser
     public function getBirthDate()
     {
         return $this->birthDate;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add posts
+     *
+     * @param \Core\BlogBundle\Entity\Post $posts
+     * @return User
+     */
+    public function addPost(\Core\BlogBundle\Entity\Post $posts)
+    {
+        $this->posts[] = $posts;
+
+        return $this;
+    }
+
+    /**
+     * Remove posts
+     *
+     * @param \Core\BlogBundle\Entity\Post $posts
+     */
+    public function removePost(\Core\BlogBundle\Entity\Post $posts)
+    {
+        $this->posts->removeElement($posts);
+    }
+
+    /**
+     * Get posts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPosts()
+    {
+        return $this->posts;
     }
 }
