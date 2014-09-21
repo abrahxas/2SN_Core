@@ -78,9 +78,22 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: Core\UserBundle\Entity\User
-    registration: 
+    registration:
         form:
             type: core_user_registration
+
+fos_rest:
+    param_fetcher_listener: true
+    body_listener: true
+    format_listener: true
+    routing_loader:
+        default_format: json
+    view:
+        view_response_listener: force
+
+sensio_framework_extra:
+    view: { annotations: false }
+    router: { annotations: false }
 
 # Sluggable config
 stof_doctrine_extensions:

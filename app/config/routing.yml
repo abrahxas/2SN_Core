@@ -28,3 +28,6 @@ fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
 
+users:
+    type: rest
+    resource: Core\UserBundle\Controller\UsersController
