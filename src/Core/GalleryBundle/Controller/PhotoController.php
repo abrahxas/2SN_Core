@@ -29,6 +29,9 @@ class PhotoController extends Controller
         $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->findOneBy(array(
             'slug' => $photoSlug,
         ));
+        if (!$photo) {
+            throw $this->createNotFoundException('Photo Not Found');
+        }
 
         return $this->render('CoreGalleryBundle:default:show-photo.html.twig', array(
             'albumSlug' => $albumSlug,
@@ -68,6 +71,9 @@ class PhotoController extends Controller
         $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->findOneBy(array(
             'slug' => $photoSlug,
         ));
+        if (!$photo) {
+            throw $this->createNotFoundException('Photo Not Found');
+        }
         $form = $this->createForm(new PhotoType(), $photo);
 
         if ($request->isMethod('POST')){
@@ -93,11 +99,11 @@ class PhotoController extends Controller
         $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->findOneBy(array(
             'slug' => $photoSlug,
         ));;
-        if ($photo)
-        {
-            $entityManager->remove($photo);
-            $entityManager->flush();
+        if (!$photo) {
+            throw $this->createNotFoundException('Photo Not Found');
         }
+        $entityManager->remove($photo);
+        $entityManager->flush();
         return $this->redirect($this->generateUrl('core_album_show', array('albumSlug' => $albumSlug)));
     }
 }

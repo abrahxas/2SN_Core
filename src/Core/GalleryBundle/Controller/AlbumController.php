@@ -27,6 +27,10 @@ class AlbumController extends Controller
             'slug' => $albumSlug,
         ));
 
+        if (!$album) {
+            throw $this->createNotFoundException('Album Not Found');
+        }
+
         return $this->render('CoreGalleryBundle:default:show.html.twig', array(
             'album' => $album,
         ));
@@ -62,6 +66,10 @@ class AlbumController extends Controller
         ));
         $form = $this->createForm(new AlbumType(), $album);
 
+        if (!$album) {
+            throw $this->createNotFoundException('Album Not Found');
+        }
+
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
             if ($form->isValid()) {
@@ -85,10 +93,12 @@ class AlbumController extends Controller
             'slug' => $albumSlug
         ));
 
-        if ($album) {
-            $entityManager->remove($album);
-            $entityManager->flush();
+        if (!$album) {
+            throw $this->createNotFoundException('Album Not Found');
         }
+
+        $entityManager->remove($album);
+        $entityManager->flush();
 
         return $this->redirect($this->generateUrl('core_gallery_homepage'));
     }

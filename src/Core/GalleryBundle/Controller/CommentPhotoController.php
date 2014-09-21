@@ -53,6 +53,10 @@ class CommentPhotoController extends Controller
         $comment = $entityManager->getRepository('CoreGalleryBundle:CommentPhoto')->find($commentId);
         $form = $this->createForm(new CommentPhotoType(), $comment);
 
+        if (!$comment) {
+            throw $this->createNotFoundException('Comment Not Found');
+        }
+
         if ($request->isMethod('POST')){
             $form->handleRequest($request);
             if ($form->isValid()){
@@ -74,11 +78,14 @@ class CommentPhotoController extends Controller
     {
         $entityManager = $this->getDoctrine()->getManager();
         $comment = $entityManager->getRepository('CoreGalleryBundle:CommentPhoto')->find($commentId);
-        if ($comment)
-        {
-            $entityManager->remove($comment);
-            $entityManager->flush();
+
+        if (!$comment) {
+            throw $this->createNotFoundException('Comment Not Found');
         }
+
+        $entityManager->remove($comment);
+        $entityManager->flush();
+
         return $this->redirect($this->generateUrl('core_photo_show', array('albumSlug' => $albumSlug, 'photoSlug' => $photoSlug)));
     }
 }

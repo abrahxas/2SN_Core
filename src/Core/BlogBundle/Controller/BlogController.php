@@ -47,6 +47,10 @@ class BlogController extends Controller
         $entityManager = $this->getDoctrine()->getManager();
         $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($id);
 
+        if (!$post) {
+            throw $this->createNotFoundException('Post Not Found');
+        }
+
         return $this->render('CoreBlogBundle:frontend:show.html.twig', array(
             'post' => $post
         ));
@@ -58,6 +62,11 @@ class BlogController extends Controller
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($request->get('id'));
+
+        if (!$post) {
+            throw $this->createNotFoundException('Post Not Found');
+        }
+
         $form = $this->createForm(new PostType(), $post);
 
         if ($request->isMethod('POST')){
@@ -80,11 +89,14 @@ class BlogController extends Controller
     {
         $entityManager = $this->getDoctrine()->getManager();
         $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($id);
-        if ($post)
-        {
-            $entityManager->remove($post);
-            $entityManager->flush();
+
+        if (!$post) {
+            throw $this->createNotFoundException('Post Not Found');
         }
+
+        $entityManager->remove($post);
+        $entityManager->flush();
+
         return $this->redirect($this->generateUrl('core_blog_homepage'));
     }
 }
