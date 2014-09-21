@@ -39,3 +39,17 @@ core_photo_update:
 core_photo_delete:
     path:     /gallery/{albumSlug}/photo-delete/{photoSlug}
     defaults: { _controller: CoreGalleryBundle:Photo:delete }
+
+
+#Routing COMMENT
+core_photo_comment_create:
+    path:     /gallery/{albumSlug}/{photoSlug}/comment-create
+    defaults: { _controller: CoreGalleryBundle:CommentPhoto:add }
+
+core_photo_comment_update:
+    path:     /gallery/{albumSlug}/{photoSlug}/comment-update/{commentId}
+    defaults: { _controller: CoreGalleryBundle:CommentPhoto:update }
+
+core_photo_comment_delete:
+    path:     /gallery/{albumSlug}/{photoSlug}/comment-delete/{commentId}
+    defaults: { _controller: CoreGalleryBundle:CommentPhoto:delete }
