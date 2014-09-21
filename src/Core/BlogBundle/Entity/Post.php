@@ -27,7 +27,7 @@ class Post
     /**
      * @var string
      *
-     * @ORM\Column(name="content", type="text")
+     * @ORM\Column(name="content", type="text", nullable=true)
      */
     private $content;
 
@@ -63,7 +63,7 @@ class Post
     protected $imageFile;
 
     /**
-     * @ORM\Column(type="string", length=255, name="image_name")
+     * @ORM\Column(type="string", length=255, name="image_name", nullable=true)
      *
      * @var string $imageName
      */
