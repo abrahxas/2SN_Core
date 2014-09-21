@@ -23,9 +23,7 @@ class AlbumController extends Controller
     public function showAction($albumSlug)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array(
-            'slug' => $albumSlug,
-        ));
+        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array('slug' => $albumSlug));
 
         if (!$album) {
             throw $this->createNotFoundException('Album Not Found');
@@ -61,9 +59,7 @@ class AlbumController extends Controller
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array(
-            'slug' => $albumSlug,
-        ));
+        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array('slug' => $albumSlug));
         $form = $this->createForm(new AlbumType(), $album);
 
         if (!$album) {
@@ -89,9 +85,7 @@ class AlbumController extends Controller
     public function deleteAction($albumSlug)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array(
-            'slug' => $albumSlug
-        ));
+        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array('slug' => $albumSlug));
 
         if (!$album) {
             throw $this->createNotFoundException('Album Not Found');

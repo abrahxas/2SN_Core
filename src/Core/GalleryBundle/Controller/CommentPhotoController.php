@@ -29,9 +29,9 @@ class CommentPhotoController extends Controller
         $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->findOneBy(array('slug' => $photoSlug));
         $form = $this->createForm(new CommentPhotoType(), $comment = new CommentPhoto());
 
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             $form->handleRequest($request);
-            if ($form->isValid()){
+            if ($form->isValid()) {
                 $comment->setUser($user);
                 $comment->setPhoto($photo);
                 $entityManager->persist($comment);
@@ -57,9 +57,9 @@ class CommentPhotoController extends Controller
             throw $this->createNotFoundException('Comment Not Found');
         }
 
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             $form->handleRequest($request);
-            if ($form->isValid()){
+            if ($form->isValid()) {
                 $comment->setUser($user);
                 $comment->setPhoto($photo);
                 $comment->setUpdatedAt(new \DateTime());

@@ -4,8 +4,6 @@ namespace Core\BlogBundle\Controller;
 
 use Core\BlogBundle\Entity\Post;
 use Core\BlogBundle\Form\Type\PostType;
-use Core\BlogBundle\Entity\Comment;
-use Core\BlogBundle\Form\Type\CommentType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -60,18 +58,16 @@ class BlogController extends Controller
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-
         $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($request->get('id'));
+        $form = $this->createForm(new PostType(), $post);
 
         if (!$post) {
             throw $this->createNotFoundException('Post Not Found');
         }
 
-        $form = $this->createForm(new PostType(), $post);
-
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             $form->handleRequest($request);
-            if ($form->isValid()){
+            if ($form->isValid()) {
                 $post->setUser($user);
                 $post->setUpdatedAt(new \DateTime());
                 $entityManager->persist($post);

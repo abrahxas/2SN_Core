@@ -27,9 +27,9 @@ class CommentController extends Controller
         $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($postId);
         $form = $this->createForm(new CommentType(), $comment = new Comment());
 
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             $form->handleRequest($request);
-            if ($form->isValid()){
+            if ($form->isValid()) {
                 $comment->setUser($user);
                 $comment->setPost($post);
                 $entityManager->persist($comment);
@@ -50,13 +50,14 @@ class CommentController extends Controller
         $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($postId);
         $comment = $entityManager->getRepository('CoreBlogBundle:Comment')->find($id);
         $form = $this->createForm(new CommentType(), $comment);
+
         if (!$comment) {
             throw $this->createNotFoundException('Comment Not Found');
         }
 
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             $form->handleRequest($request);
-            if ($form->isValid()){
+            if ($form->isValid()) {
                 $comment->setUser($user);
                 $comment->setPost($post);
                 $comment->setUpdatedAt(new \DateTime());
@@ -75,9 +76,11 @@ class CommentController extends Controller
     {
         $entityManager = $this->getDoctrine()->getManager();
         $comment = $entityManager->getRepository('CoreBlogBundle:Comment')->find($id);
+
         if (!$comment) {
             throw $this->createNotFoundException('Comment Not Found');
         }
+
         $entityManager->remove($comment);
         $entityManager->flush();
         return $this->redirect($this->generateUrl('core_post_show', array('id' => $postId)));
