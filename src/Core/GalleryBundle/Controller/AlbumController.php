@@ -82,7 +82,7 @@ class AlbumController extends Controller
     {
         $entityManager = $this->getDoctrine()->getManager();
         $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array(
-            'slug' => $albumSlug,
+            'slug' => $albumSlug
         ));
 
         if ($album) {

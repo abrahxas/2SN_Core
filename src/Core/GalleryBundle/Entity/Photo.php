@@ -12,6 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Table()
  * @ORM\Entity()
+ * @Vich\Uploadable
  */
 class Photo
 {
@@ -27,23 +28,9 @@ class Photo
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255)
-     */
-    private $title;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="content", type="string", length=255)
+     * @ORM\Column(name="content", type="string", length=255, nullable=true)
      */
     private $content;
-
-    /**
-     * @var string
-     * @Gedmo\Slug(fields={"title"}, separator="-", unique=true)
-     * @ORM\Column(name="slug", type="string", length=255)
-     */
-    private $slug;
 
     /**
      * @Vich\UploadableField(mapping="photo", fileNameProperty="imageName")
@@ -58,6 +45,13 @@ class Photo
      * @ORM\Column(name="imageName", type="string", length=255)
      */
     private $imageName;
+
+    /**
+     * @var string
+     * @Gedmo\Slug(fields={"imageName"}, separator="-", unique=true)
+     * @ORM\Column(name="slug", type="string", length=255)
+     */
+    private $slug;
 
     /**
      * @var \DateTime
@@ -75,7 +69,7 @@ class Photo
 
     /**
      * @ORM\ManyToOne(targetEntity="Album", inversedBy="photo")
-     * @ORM\JoinColumn(name="album_id", referencedColumnName="id"))
+     * @ORM\JoinColumn(name="album_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $album;
 
@@ -92,29 +86,6 @@ class Photo
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     * @return Photo
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get titre
-     *
-     * @return string 
-     */
-    public function getTitle()
-    {
-        return $this->title;
     }
 
     /**

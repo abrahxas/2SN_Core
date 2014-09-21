@@ -48,7 +48,6 @@ class PhotoController extends Controller
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $photo->setAlbum($album);
-                $photo->setImageName('test');#TODO WTF vich devrait gerer ca normalement
                 $entityManager->persist($photo);
                 $entityManager->flush();
                 return $this->redirect($this->generateUrl('core_album_show', array('albumSlug' => $albumSlug)));

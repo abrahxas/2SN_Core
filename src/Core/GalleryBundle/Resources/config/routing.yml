@@ -6,6 +6,10 @@ core_gallery_homepage:
 
 
 #Routing Album
+core_album_delete:
+    path:     /gallery/album-delete/{albumSlug}
+    defaults: { _controller: CoreGalleryBundle:Album:delete }
+
 core_album_create:
     path:     /gallery/album-create
     defaults: { _controller: CoreGalleryBundle:Album:add }
@@ -18,9 +22,6 @@ core_album_update:
     path:     /gallery/album-update/{albumSlug}
     defaults: { _controller: CoreGalleryBundle:Album:update }
 
-core_album_delete:
-    path:     /gallery/album-delete/{albumSlug}
-    defaults: { _controller: CoreGalleryBundle:Album:delete }
 
 #Routing PHOTO
 core_photo_create:
