@@ -31,3 +31,5 @@ fos_user_change_password:
 users:
     type: rest
     resource: Core\UserBundle\Controller\UsersController
+    prefix : /api
+
