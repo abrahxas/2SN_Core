@@ -8,6 +8,9 @@ core_blog:
 
 app_gallery:
     resource: "@CoreGalleryBundle/Resources/config/routing.yml"
+
+friend_groups:
+    resource: "@FriendGroupsBundle/Resources/config/routing.yml"
     prefix:   /
 
 app_user:
