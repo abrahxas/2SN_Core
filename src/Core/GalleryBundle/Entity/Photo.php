@@ -8,9 +8,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Picture
+ * Photo
  *
- * @ORM\Table()
+ * @ORM\Table(name="photo")
  * @ORM\Entity()
  * @Vich\Uploadable
  */
@@ -56,14 +56,14 @@ class Photo
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="createdAt", type="datetime")
+     * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updatedAt", type="datetime")
+     * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
 
@@ -76,7 +76,7 @@ class Photo
     /**
      * @ORM\OneToMany(targetEntity="CommentPhoto", mappedBy="Photo")
      */
-    private $commentPhoto;
+    private $commentsPhoto;
 
     public function __construct()
     {
@@ -261,35 +261,35 @@ class Photo
     }
 
     /**
-     * Add commentPhoto
+     * Add commentsPhoto
      *
-     * @param \Core\GalleryBundle\Entity\CommentPhoto $commentPhoto
+     * @param \Core\GalleryBundle\Entity\CommentPhoto $commentsPhoto
      * @return Photo
      */
-    public function addCommentPhoto(\Core\GalleryBundle\Entity\CommentPhoto $commentPhoto)
+    public function addCommentsPhoto(\Core\GalleryBundle\Entity\CommentPhoto $commentsPhoto)
     {
-        $this->commentPhoto[] = $commentPhoto;
+        $this->commentsPhoto[] = $commentsPhoto;
 
         return $this;
     }
 
     /**
-     * Remove commentPhoto
+     * Remove commentsPhoto
      *
-     * @param \Core\GalleryBundle\Entity\CommentPhoto $commentPhoto
+     * @param \Core\GalleryBundle\Entity\CommentPhoto $commentsPhoto
      */
-    public function removeCommentPhoto(\Core\GalleryBundle\Entity\CommentPhoto $commentPhoto)
+    public function removeCommentsPhoto(\Core\GalleryBundle\Entity\CommentPhoto $commentsPhoto)
     {
-        $this->commentPhoto->removeElement($commentPhoto);
+        $this->commentsPhoto->removeElement($commentsPhoto);
     }
 
     /**
-     * Get commentPhoto
+     * Get commentsPhoto
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getCommentPhoto()
+    public function getCommentsPhoto()
     {
-        return $this->commentPhoto;
+        return $this->commentsPhoto;
     }
 }

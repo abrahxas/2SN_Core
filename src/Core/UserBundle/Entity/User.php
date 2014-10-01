@@ -3,15 +3,16 @@
 namespace Core\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Entity\User as BaseUser;
+use FOS\UserBundle\Model\User as BaseUser;
+use FOS\MessageBundle\Model\ParticipantInterface;
 
 /**
  * User
  *
- * @ORM\Table(name="fos_user")
+ * @ORM\Table(name="user")
  * @ORM\Entity
  */
-class User extends BaseUser
+class User extends BaseUser implements ParticipantInterface
 {
     /**
      * @var integer
@@ -37,8 +38,17 @@ class User extends BaseUser
     /**
      * @ORM\OneToMany(targetEntity="Core\GalleryBundle\Entity\Album", mappedBy="user")
      */
-    protected $album;
+    protected $albums;
 
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+//        $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
+        parent::__construct();
+    }
 
     /**
      * Get id
@@ -71,14 +81,6 @@ class User extends BaseUser
     public function getBirthDate()
     {
         return $this->birthDate;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
-        parent::__construct();
     }
 
     /**
@@ -115,35 +117,35 @@ class User extends BaseUser
     }
 
     /**
-     * Add album
+     * Add albums
      *
-     * @param \Core\GalleryBundle\Entity\Album $album
+     * @param \Core\GalleryBundle\Entity\Album $albums
      * @return User
      */
-    public function addAlbum(\Core\GalleryBundle\Entity\Album $album)
+    public function addAlbum(\Core\GalleryBundle\Entity\Album $albums)
     {
-        $this->album[] = $album;
+        $this->albums[] = $albums;
 
         return $this;
     }
 
     /**
-     * Remove album
+     * Remove albums
      *
-     * @param \Core\GalleryBundle\Entity\Album $album
+     * @param \Core\GalleryBundle\Entity\Album $albums
      */
-    public function removeAlbum(\Core\GalleryBundle\Entity\Album $album)
+    public function removeAlbum(\Core\GalleryBundle\Entity\Album $albums)
     {
-        $this->album->removeElement($album);
+        $this->albums->removeElement($albums);
     }
 
     /**
-     * Get album
+     * Get albums
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getAlbum()
+    public function getAlbums()
     {
-        return $this->album;
+        return $this->albums;
     }
 }

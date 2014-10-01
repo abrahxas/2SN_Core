@@ -9,7 +9,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * Post
  *
- * @ORM\Table()
+ * @ORM\Table(name="post")
  * @ORM\Entity()
  * @Vich\Uploadable
  */
@@ -54,7 +54,7 @@ class Post
     /**
      * @ORM\OneToMany(targetEntity="Core\BlogBundle\Entity\Comment", mappedBy="post", cascade={"remove"})
      */
-    protected $comment;
+    protected $comments;
 
     /**
      * @Vich\UploadableField(mapping="post", fileNameProperty="imageName")
@@ -222,35 +222,35 @@ class Post
     }
 
     /**
-     * Add comment
+     * Add comments
      *
-     * @param \Core\BlogBundle\Entity\Comment $comment
+     * @param \Core\BlogBundle\Entity\Comment $comments
      * @return Post
      */
-    public function addComment(\Core\BlogBundle\Entity\Comment $comment)
+    public function addComment(\Core\BlogBundle\Entity\Comment $comments)
     {
-        $this->comment[] = $comment;
+        $this->comments[] = $comments;
 
         return $this;
     }
 
     /**
-     * Remove comment
+     * Remove comments
      *
-     * @param \Core\BlogBundle\Entity\Comment $comment
+     * @param \Core\BlogBundle\Entity\Comment $comments
      */
-    public function removeComment(\Core\BlogBundle\Entity\Comment $comment)
+    public function removeComment(\Core\BlogBundle\Entity\Comment $comments)
     {
-        $this->comment->removeElement($comment);
+        $this->comments->removeElement($comments);
     }
 
     /**
-     * Get comment
+     * Get comments
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getComment()
+    public function getComments()
     {
-        return $this->comment;
+        return $this->comments;
     }
 }
