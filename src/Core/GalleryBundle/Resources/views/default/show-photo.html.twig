@@ -1,14 +1,22 @@
 <html>
-<head>
-    <title></title>
-</head>
+<head></head>
 <body>
 SHOW PHOTO
 <br>
 <br>
-{{ photo.title }}
+{{ photo.imageName }}
 <br>
 <br>
 {{ photo.content }}
+<br>
+<br>
+<img src="{{ asset('uploads/photo/' ~ photo.imageName)}}" />
+<br>
+<br>
+<a href="{{ path('core_photo_comment_create', {'albumSlug': app.request.get('albumSlug'), 'photoSlug': photo.slug}) }}">Poster un commentaire</a>
+<br>
+<br>
+Listing comments
+{{ render(controller('CoreGalleryBundle:CommentPhoto:index', {'albumSlug': app.request.get('albumSlug'), 'photoSlug': photo.slug})) }}
 </body>
 </html>

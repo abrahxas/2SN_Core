@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class PhotoType extends AbstractType
+class CommentPhotoType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -15,10 +15,9 @@ class PhotoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('content', 'text', array('required' => false, 'attr' => array('value' => '') ))
-            ->add('imageFile', 'file')
+            ->add('content')
             ->add('save', 'submit')
-            ->getForm()
+            ->getForm();
         ;
     }
 
@@ -28,7 +27,7 @@ class PhotoType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Core\GalleryBundle\Entity\Photo'
+            'data_class' => 'Core\GalleryBundle\Entity\CommentPhoto'
         ));
     }
 
@@ -37,6 +36,6 @@ class PhotoType extends AbstractType
      */
     public function getName()
     {
-        return 'core_gallerybundle_photo';
+        return 'core_gallerybundle_comment';
     }
 }

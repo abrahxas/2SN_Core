@@ -3,15 +3,14 @@
 namespace Core\GalleryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Album
+ * CommentPhoto
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity()
  */
-class Album
+class CommentPhoto
 {
     /**
      * @var integer
@@ -25,41 +24,35 @@ class Album
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="content", type="text")
      */
-    private $name;
-
-    /**
-     * @var string
-     * @Gedmo\Slug(fields={"name"}, separator="-", unique=true)
-     * @ORM\Column(name="slug", type="string", length=255)
-     */
-    private $slug;
+    private $content;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="createdAt", type="datetime")
+     * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updatedAt", type="datetime")
+     * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="Photo", mappedBy="Album")
-     */
-    private $photo;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="album")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="commentPhoto")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id"))
      */
     private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\GalleryBundle\Entity\Photo", inversedBy="commentPhoto")
+     * @ORM\JoinColumn(name="photo_id", referencedColumnName="id", onDelete="CASCADE"))
+     */
+    private $photo;
 
     public function __construct()
     {
@@ -78,33 +71,33 @@ class Album
     }
 
     /**
-     * Set name
+     * Set content
      *
-     * @param string $name
-     * @return Album
+     * @param string $content
+     * @return CommentPhoto
      */
-    public function setName($name)
+    public function setContent($content)
     {
-        $this->name = $name;
+        $this->content = $content;
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get content
      *
      * @return string
      */
-    public function getName()
+    public function getContent()
     {
-        return $this->name;
+        return $this->content;
     }
 
     /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return Album
+     * @return CommentPhoto
      */
     public function setCreatedAt($createdAt)
     {
@@ -116,7 +109,7 @@ class Album
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -127,7 +120,7 @@ class Album
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return Album
+     * @return CommentPhoto
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -139,7 +132,7 @@ class Album
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -147,43 +140,10 @@ class Album
     }
 
     /**
-     * Add photo
-     *
-     * @param \Core\GalleryBundle\Entity\Photo $photo
-     * @return Album
-     */
-    public function addPhoto(\Core\GalleryBundle\Entity\Photo $photo)
-    {
-        $this->photo[] = $photo;
-
-        return $this;
-    }
-
-    /**
-     * Remove photo
-     *
-     * @param \Core\GalleryBundle\Entity\Photo $photo
-     */
-    public function removePhoto(\Core\GalleryBundle\Entity\Photo $photo)
-    {
-        $this->photo->removeElement($photo);
-    }
-
-    /**
-     * Get photo
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPhoto()
-    {
-        return $this->photo;
-    }
-
-    /**
      * Set user
      *
      * @param \Core\UserBundle\Entity\User $user
-     * @return Album
+     * @return CommentPhoto
      */
     public function setUser(\Core\UserBundle\Entity\User $user = null)
     {
@@ -195,7 +155,7 @@ class Album
     /**
      * Get user
      *
-     * @return \Core\UserBundle\Entity\User 
+     * @return \Core\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -203,25 +163,25 @@ class Album
     }
 
     /**
-     * Set slug
+     * Set photo
      *
-     * @param string $slug
-     * @return Album
+     * @param \Core\GalleryBundle\Entity\Photo $photo
+     * @return CommentPhoto
      */
-    public function setSlug($slug)
+    public function setPhoto(\Core\GalleryBundle\Entity\Photo $photo = null)
     {
-        $this->slug = $slug;
+        $this->photo = $photo;
 
         return $this;
     }
 
     /**
-     * Get slug
+     * Get photo
      *
-     * @return string
+     * @return \Core\GalleryBundle\Entity\Photo
      */
-    public function getSlug()
+    public function getPhoto()
     {
-        return $this->slug;
+        return $this->photo;
     }
 }

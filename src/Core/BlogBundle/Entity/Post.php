@@ -27,7 +27,7 @@ class Post
     /**
      * @var string
      *
-     * @ORM\Column(name="content", type="text")
+     * @ORM\Column(name="content", type="text", nullable=true)
      */
     private $content;
 
@@ -63,7 +63,7 @@ class Post
     protected $imageFile;
 
     /**
-     * @ORM\Column(type="string", length=255, name="image_name")
+     * @ORM\Column(type="string", length=255, name="image_name", nullable=true)
      *
      * @var string $imageName
      */
@@ -219,5 +219,38 @@ class Post
     public function getImageName()
     {
         return $this->imageName;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param \Core\BlogBundle\Entity\Comment $comment
+     * @return Post
+     */
+    public function addComment(\Core\BlogBundle\Entity\Comment $comment)
+    {
+        $this->comment[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \Core\BlogBundle\Entity\Comment $comment
+     */
+    public function removeComment(\Core\BlogBundle\Entity\Comment $comment)
+    {
+        $this->comment->removeElement($comment);
+    }
+
+    /**
+     * Get comment
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 }

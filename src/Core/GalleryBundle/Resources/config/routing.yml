@@ -2,38 +2,54 @@
 
 core_gallery_homepage:
     path:     /gallery
-    defaults: { _controller: CoreGalleryBundle:Gallery:index }
+    defaults: { _controller: CoreGalleryBundle:Album:index }
 
 
 #Routing Album
-
-core_album_show:
-    path:     /gallery/{id}
-    defaults: { _controller: CoreGalleryBundle:Gallery:showAlbum }
+core_album_delete:
+    path:     /gallery/album-delete/{albumSlug}
+    defaults: { _controller: CoreGalleryBundle:Album:delete }
 
 core_album_create:
     path:     /gallery/album-create
-    defaults: { _controller: CoreGalleryBundle:Gallery:addAlbum }
+    defaults: { _controller: CoreGalleryBundle:Album:add }
+
+core_album_show:
+    path:     /gallery/{albumSlug}
+    defaults: { _controller: CoreGalleryBundle:Album:show }
 
 core_album_update:
-    path:     /gallery/album-update/{id}
-    defaults: { _controller: CoreGalleryBundle:Gallery:updateAlbum }
-
-core_album_delete:
-    path:     /gallery/album-delete/{id}
-    defaults: { _controller: CoreGalleryBundle:Gallery:deleteAlbum }
+    path:     /gallery/album-update/{albumSlug}
+    defaults: { _controller: CoreGalleryBundle:Album:update }
 
 
 #Routing PHOTO
+core_photo_create:
+    path:     /gallery/{albumSlug}/photo-create
+    defaults: { _controller: CoreGalleryBundle:Photo:add }
 
 core_photo_show:
-    path:     /gallery/{albumId}/{id}
+    path:     /gallery/{albumSlug}/{photoSlug}
     defaults: { _controller: CoreGalleryBundle:Photo:show }
 
 core_photo_update:
-    path:     /gallery/{albumId}/photo-update/{id}
+    path:     /gallery/{albumSlug}/photo-update/{photoSlug}
     defaults: { _controller: CoreGalleryBundle:Photo:update }
 
 core_photo_delete:
-    path:     /gallery/{albumId}/photo-delete/{id}
+    path:     /gallery/{albumSlug}/photo-delete/{photoSlug}
     defaults: { _controller: CoreGalleryBundle:Photo:delete }
+
+
+#Routing COMMENT
+core_photo_comment_create:
+    path:     /gallery/{albumSlug}/{photoSlug}/comment-create
+    defaults: { _controller: CoreGalleryBundle:CommentPhoto:add }
+
+core_photo_comment_update:
+    path:     /gallery/{albumSlug}/{photoSlug}/comment-update/{commentId}
+    defaults: { _controller: CoreGalleryBundle:CommentPhoto:update }
+
+core_photo_comment_delete:
+    path:     /gallery/{albumSlug}/{photoSlug}/comment-delete/{commentId}
+    defaults: { _controller: CoreGalleryBundle:CommentPhoto:delete }

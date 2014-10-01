@@ -6,10 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Core\GalleryBundle\Entity\Album;
 use Core\GalleryBundle\Form\Type\AlbumType;
-use Core\GalleryBundle\Entity\Photo;
-use Core\GalleryBundle\Form\Type\PhotoType;
 
-class GalleryController extends Controller
+class AlbumController extends Controller
 {
     public function indexAction()
     {
@@ -22,37 +20,29 @@ class GalleryController extends Controller
         ));
     }
 
-    public function showAlbumAction(Request $request, $id)
+    public function showAction($albumSlug)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($id);
-        $form = $this->createForm(new PhotoType(), $photo = new Photo());
+        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array('slug' => $albumSlug));
 
-        if ($request->isMethod('POST')){
-            $form->handleRequest($request);
-            if ($form->isValid()){
-                $photo->setAlbum($album);
-                $entityManager->persist($photo);
-                $entityManager->flush();
-                return $this->redirect($this->generateUrl('core_album_show', array('id' => $id)));
-            }
+        if (!$album) {
+            throw $this->createNotFoundException('Album Not Found');
         }
 
         return $this->render('CoreGalleryBundle:default:show.html.twig', array(
-            'form' => $form->createView(),
             'album' => $album,
         ));
     }
 
-    public function addAlbumAction(Request $request)
+    public function addAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
         $form = $this->createForm(new AlbumType(), $album = new Album());
 
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             $form->handleRequest($request);
-            if ($form->isValid()){
+            if ($form->isValid()) {
                 $album->setUser($user);
                 $entityManager->persist($album);
                 $entityManager->flush();
@@ -65,17 +55,20 @@ class GalleryController extends Controller
         ));
     }
 
-    public function updateAlbumAction(Request $request, $id)
+    public function updateAction(Request $request, $albumSlug)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-
-        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($id);
+        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array('slug' => $albumSlug));
         $form = $this->createForm(new AlbumType(), $album);
 
-        if ($request->isMethod('POST')){
+        if (!$album) {
+            throw $this->createNotFoundException('Album Not Found');
+        }
+
+        if ($request->isMethod('POST')) {
             $form->handleRequest($request);
-            if ($form->isValid()){
+            if ($form->isValid()) {
                 $album->setUser($user);
                 $album->setUpdatedAt(new \DateTime());
                 $entityManager->persist($album);
@@ -89,15 +82,17 @@ class GalleryController extends Controller
         ));
     }
 
-    public function deleteAlbumAction($id)
+    public function deleteAction($albumSlug)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($id);
+        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array('slug' => $albumSlug));
 
-        if ($album){
-            $entityManager->remove($album);
-            $entityManager->flush();
+        if (!$album) {
+            throw $this->createNotFoundException('Album Not Found');
         }
+
+        $entityManager->remove($album);
+        $entityManager->flush();
 
         return $this->redirect($this->generateUrl('core_gallery_homepage'));
     }

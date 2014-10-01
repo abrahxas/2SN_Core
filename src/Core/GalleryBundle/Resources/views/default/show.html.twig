@@ -1,16 +1,13 @@
 <html>
-<head>
-    <title></title>
-</head>
+<head></head>
 <body>
 {{ album.name }}
 <br>
 <br>
-Poster une photo
-{{ form(form) }}
+<a href="{{ path('core_photo_create', {'albumSlug': album.slug}) }}">Poster une photo</a>
 <br>
 <br>
 Listing photo
-{{ render(controller('CoreGalleryBundle:Photo:index', {'albumId': album.id})) }}
+{{ render(controller('CoreGalleryBundle:Photo:index', {'albumSlug': album.slug})) }}
 </body>
 </html>

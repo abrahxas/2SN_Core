@@ -113,4 +113,37 @@ class User extends BaseUser
     {
         return $this->posts;
     }
+
+    /**
+     * Add album
+     *
+     * @param \Core\GalleryBundle\Entity\Album $album
+     * @return User
+     */
+    public function addAlbum(\Core\GalleryBundle\Entity\Album $album)
+    {
+        $this->album[] = $album;
+
+        return $this;
+    }
+
+    /**
+     * Remove album
+     *
+     * @param \Core\GalleryBundle\Entity\Album $album
+     */
+    public function removeAlbum(\Core\GalleryBundle\Entity\Album $album)
+    {
+        $this->album->removeElement($album);
+    }
+
+    /**
+     * Get album
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAlbum()
+    {
+        return $this->album;
+    }
 }

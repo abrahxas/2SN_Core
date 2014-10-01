@@ -1,0 +1,11 @@
+{% for comment in comments %}
+    <div style="background-color: #9C1F06; width: 15%;margin-bottom: 5%;padding: 3%">
+        <div style="background-color: white;">
+            <a style="float:left" href="{{ path('core_photo_comment_update', {'albumSlug': albumSlug, 'photoSlug': photoSlug, 'commentId': comment.id}) }}">up comment</a>
+            <a style="float:right" href="{{ path('core_photo_comment_delete', {'albumSlug': albumSlug, 'photoSlug': photoSlug,'commentId': comment.id}) }}">del comment</a>
+            <br>
+            <br>
+            {{comment.content }}
+        </div>
+    </div>
+{% endfor %}

@@ -30,7 +30,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        ['CoreBlogBundle']
+    bundles:        ['CoreBlogBundle', 'CoreGalleryBundle']
 #    java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -108,3 +108,6 @@ vich_uploader:
         post:
             uri_prefix:         /uploads/posts
             upload_destination: %kernel.root_dir%/../web//uploads/posts
+        photo:
+            uri_prefix:         /uploads/photo
+            upload_destination: %kernel.root_dir%/../web//uploads/photo
