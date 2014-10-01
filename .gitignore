@@ -23,8 +23,9 @@
 # PHPUnit
 /app/phpunit.xml
 
-# Composer PHAR
+# Composer
 /composer.phar
+/composer.lock
 
 
 ### OSX ###
