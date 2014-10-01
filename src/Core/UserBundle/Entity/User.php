@@ -25,9 +25,9 @@ class User extends BaseUser
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="birthDate", type="datetime")
+     * @ORM\Column(name="birthDate", type="datetime", nullable=true)
      */
-    private $birthDate;
+    private $birthDate = null;
 
     /**
      * @ORM\OneToMany(targetEntity="Core\BlogBundle\Entity\Post", mappedBy="user")

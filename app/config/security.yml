@@ -13,10 +13,17 @@ security:
     firewalls:
         main:
             pattern: ^/
+            logout:
+                path:        /api/logout
+                target:      /
             form_login:
-                provider: fos_userbundle
-                csrf_provider: form.csrf_provider
-            logout:       true
+                provider:             fos_userbundle
+                login_path:           /api/login
+                check_path:           /api/login_check
+                failure_path:         /api/login
+                default_target_path:  /api/profile
+                use_forward:          false
+                use_referer:          true
             anonymous:    true
 
     access_control:

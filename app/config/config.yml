@@ -10,7 +10,8 @@ framework:
         resource: "%kernel.root_dir%/config/routing.yml"
         strict_requirements: ~
     form:            ~
-    csrf_protection: ~
+    csrf_protection:
+        enabled: false
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
@@ -78,9 +79,6 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: Core\UserBundle\Entity\User
-    registration:
-        form:
-            type: core_user_registration
 
 fos_rest:
     param_fetcher_listener: true
