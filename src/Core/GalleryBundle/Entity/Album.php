@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Album
  *
- * @ORM\Table()
+ * @ORM\Table(name="album")
  * @ORM\Entity
  */
 class Album
@@ -39,21 +39,21 @@ class Album
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="createdAt", type="datetime")
+     * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updatedAt", type="datetime")
+     * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="Photo", mappedBy="Album")
      */
-    private $photo;
+    private $photos;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="album")
@@ -147,39 +147,6 @@ class Album
     }
 
     /**
-     * Add photo
-     *
-     * @param \Core\GalleryBundle\Entity\Photo $photo
-     * @return Album
-     */
-    public function addPhoto(\Core\GalleryBundle\Entity\Photo $photo)
-    {
-        $this->photo[] = $photo;
-
-        return $this;
-    }
-
-    /**
-     * Remove photo
-     *
-     * @param \Core\GalleryBundle\Entity\Photo $photo
-     */
-    public function removePhoto(\Core\GalleryBundle\Entity\Photo $photo)
-    {
-        $this->photo->removeElement($photo);
-    }
-
-    /**
-     * Get photo
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPhoto()
-    {
-        return $this->photo;
-    }
-
-    /**
      * Set user
      *
      * @param \Core\UserBundle\Entity\User $user
@@ -223,5 +190,38 @@ class Album
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * Add photos
+     *
+     * @param \Core\GalleryBundle\Entity\Photo $photos
+     * @return Album
+     */
+    public function addPhoto(\Core\GalleryBundle\Entity\Photo $photos)
+    {
+        $this->photos[] = $photos;
+
+        return $this;
+    }
+
+    /**
+     * Remove photos
+     *
+     * @param \Core\GalleryBundle\Entity\Photo $photos
+     */
+    public function removePhoto(\Core\GalleryBundle\Entity\Photo $photos)
+    {
+        $this->photos->removeElement($photos);
+    }
+
+    /**
+     * Get photos
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhotos()
+    {
+        return $this->photos;
     }
 }

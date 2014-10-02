@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CommentPhoto
  *
- * @ORM\Table()
+ * @ORM\Table(name="comment_photo")
  * @ORM\Entity()
  */
 class CommentPhoto
