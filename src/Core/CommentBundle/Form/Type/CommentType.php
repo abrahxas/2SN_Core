@@ -1,12 +1,12 @@
 <?php
 
-namespace Core\GalleryBundle\Form\Type;
+namespace Core\CommentBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class CommentPhotoType extends AbstractType
+class CommentType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -27,7 +27,7 @@ class CommentPhotoType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Core\GalleryBundle\Entity\CommentPhoto'
+            'data_class' => 'Core\CommentBundle\Entity\Comment'
         ));
     }
 
@@ -36,6 +36,6 @@ class CommentPhotoType extends AbstractType
      */
     public function getName()
     {
-        return 'core_gallerybundle_comment';
+        return 'core_comment';
     }
 }

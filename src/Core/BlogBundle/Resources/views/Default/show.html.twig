@@ -13,12 +13,8 @@
     </div>
 </div>
 <br>
-<a href="{{ path('core_blog_comment_add', {'postId': post.id}) }}">ADD comments</a>
+<a href="{{ path('core_post_comment_add', {'postId': post.id}) }}">ADD comments</a>
 <br>
-{% block comment %}
-<h4>Listing comments</h4>
-{{ render(controller('CoreBlogBundle:Comment:index', { 'postId': app.request.get('id') })) }}
-{% endblock comment %}
 
 {% endblock body %}
 

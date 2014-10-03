@@ -5,7 +5,6 @@ namespace Core\GalleryBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Photo
@@ -47,13 +46,6 @@ class Photo
     private $imageName;
 
     /**
-     * @var string
-     * @Gedmo\Slug(fields={"imageName"}, separator="-", unique=true)
-     * @ORM\Column(name="slug", type="string", length=255)
-     */
-    private $slug;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -74,9 +66,9 @@ class Photo
     private $album;
 
     /**
-     * @ORM\OneToMany(targetEntity="CommentPhoto", mappedBy="Photo")
+     * @ORM\OneToMany(targetEntity="\Core\CommentBundle\Entity\Comment", mappedBy="Photo")
      */
-    private $commentsPhoto;
+    private $comments;
 
     public function __construct()
     {
@@ -186,29 +178,6 @@ class Photo
     }
 
     /**
-     * Set slug
-     *
-     * @param string $slug
-     * @return Photo
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string 
-     */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
      * of 'UploadedFile' is injected into this setter to trigger the  update. If this
      * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
@@ -261,26 +230,26 @@ class Photo
     }
 
     /**
-     * Add commentsPhoto
+     * Add comments
      *
-     * @param \Core\GalleryBundle\Entity\CommentPhoto $commentsPhoto
+     * @param \Core\CommentBundle\Entity\Comment $comments
      * @return Photo
      */
-    public function addCommentsPhoto(\Core\GalleryBundle\Entity\CommentPhoto $commentsPhoto)
+    public function addCommentsPhoto(\Core\CommentBundle\Entity\Comment $comments)
     {
-        $this->commentsPhoto[] = $commentsPhoto;
+        $this->comments[] = $comments;
 
         return $this;
     }
 
     /**
-     * Remove commentsPhoto
+     * Remove comments
      *
-     * @param \Core\GalleryBundle\Entity\CommentPhoto $commentsPhoto
+     * @param \Core\CommentBundle\Entity\Comment $comments
      */
-    public function removeCommentsPhoto(\Core\GalleryBundle\Entity\CommentPhoto $commentsPhoto)
+    public function removeCommentsPhoto(\Core\CommentBundle\Entity\Comment $comments)
     {
-        $this->commentsPhoto->removeElement($commentsPhoto);
+        $this->comments->removeElement($comments);
     }
 
     /**
@@ -290,6 +259,6 @@ class Photo
      */
     public function getCommentsPhoto()
     {
-        return $this->commentsPhoto;
+        return $this->comments;
     }
 }

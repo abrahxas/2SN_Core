@@ -1,5 +1,10 @@
+core_comment:
+    resource: "@CoreCommentBundle/Resources/config/routing.yml"
+    prefix:   /
+
 core_blog:
     resource: "@CoreBlogBundle/Resources/config/routing.yml"
+    prefix:   /
 
 app_gallery:
     resource: "@CoreGalleryBundle/Resources/config/routing.yml"

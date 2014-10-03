@@ -14,7 +14,7 @@ class BlogController extends Controller
         $entityManager = $this->getDoctrine()->getManager();
         $posts = $entityManager->getRepository('CoreBlogBundle:Post')->findAll();
 
-        return $this->render('CoreBlogBundle:Frontend:index.html.twig', array(
+        return $this->render('CoreBlogBundle:default:index.html.twig', array(
             'posts' => $posts
         ));
     }
@@ -35,7 +35,7 @@ class BlogController extends Controller
             }
         }
 
-        return $this->render('CoreBlogBundle:backend:create.html.twig', array(
+        return $this->render('CoreBlogBundle:default:create.html.twig', array(
             'form' => $form->createView(),
         ));
     }
@@ -49,7 +49,7 @@ class BlogController extends Controller
             throw $this->createNotFoundException('Post Not Found');
         }
 
-        return $this->render('CoreBlogBundle:frontend:show.html.twig', array(
+        return $this->render('CoreBlogBundle:default:show.html.twig', array(
             'post' => $post
         ));
     }
@@ -76,7 +76,7 @@ class BlogController extends Controller
             }
         }
 
-        return $this->render('CoreBlogBundle:backend:update.html.twig', array(
+        return $this->render('CoreBlogBundle:default:update.html.twig', array(
             'form' => $form->createView(),
         ));
     }

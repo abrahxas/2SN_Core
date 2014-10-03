@@ -1,0 +1,17 @@
+{% set post = app.request.get('postId') %}
+{% for comment in comments %}
+    <div style="background-color: #9C1F06; width: 15%;margin-bottom: 5%;padding: 3%">
+        <div style="background-color: white;">
+          {% if post != null  %}
+            <a style="float:left" href="{{ path('core_post_comment_update', {'postId': app.request.get('postId'), 'id': comment.id}) }}">up comment</a>
+            <a style="float:right" href="{{ path('core_post_comment_delete', {'postId': app.request.get('postId'),'id': comment.id}) }}">del comment</a>
+          {% else %}
+            <a style="float:left" href="{{ path('core_photo_comment_update', {'photoId': app.request.get('photoId'), 'id': comment.id}) }}">up comment</a>
+            <a style="float:right" href="{{ path('core_photo_comment_delete', {'photoId': app.request.get('photoId'),'id': comment.id}) }}">del comment</a>
+          {% endif %}
+            <br>
+            <br>
+            {{comment.content }}
+        </div>
+    </div>
+{% endfor %}
