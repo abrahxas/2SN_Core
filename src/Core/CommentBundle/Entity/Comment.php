@@ -44,19 +44,19 @@ class Comment
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="posts")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id"))
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\BlogBundle\Entity\Post", inversedBy="comment")
-     * @ORM\JoinColumn(name="post_id", referencedColumnName="id"))
+     * @ORM\JoinColumn(name="post_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $post;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\GalleryBundle\Entity\Photo", inversedBy="comment")
-     * @ORM\JoinColumn(name="photo_id", referencedColumnName="id"))
+     * @ORM\JoinColumn(name="photo_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $photo;
 

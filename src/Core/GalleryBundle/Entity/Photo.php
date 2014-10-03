@@ -66,7 +66,7 @@ class Photo
     private $album;
 
     /**
-     * @ORM\OneToMany(targetEntity="\Core\CommentBundle\Entity\Comment", mappedBy="Photo")
+     * @ORM\OneToMany(targetEntity="\Core\CommentBundle\Entity\Comment", mappedBy="photo")
      */
     private $comments;
 
