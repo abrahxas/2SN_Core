@@ -1,16 +1,16 @@
 <?php
 
-namespace Core\GalleryBundle\Entity;
+namespace Core\CommentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CommentPhoto
+ * Comment
  *
- * @ORM\Table(name="comment_photo")
+ * @ORM\Table(name="comment")
  * @ORM\Entity()
  */
-class CommentPhoto
+class Comment
 {
     /**
      * @var integer
@@ -43,13 +43,19 @@ class CommentPhoto
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="commentPhoto")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id"))
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="posts")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\GalleryBundle\Entity\Photo", inversedBy="commentPhoto")
+     * @ORM\ManyToOne(targetEntity="Core\BlogBundle\Entity\Post", inversedBy="comment")
+     * @ORM\JoinColumn(name="post_id", referencedColumnName="id", onDelete="CASCADE"))
+     */
+    private $post;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\GalleryBundle\Entity\Photo", inversedBy="comment")
      * @ORM\JoinColumn(name="photo_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $photo;
@@ -74,7 +80,7 @@ class CommentPhoto
      * Set content
      *
      * @param string $content
-     * @return CommentPhoto
+     * @return Comment
      */
     public function setContent($content)
     {
@@ -97,7 +103,7 @@ class CommentPhoto
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return CommentPhoto
+     * @return Comment
      */
     public function setCreatedAt($createdAt)
     {
@@ -120,7 +126,7 @@ class CommentPhoto
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return CommentPhoto
+     * @return Comment
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -143,7 +149,7 @@ class CommentPhoto
      * Set user
      *
      * @param \Core\UserBundle\Entity\User $user
-     * @return CommentPhoto
+     * @return Comment
      */
     public function setUser(\Core\UserBundle\Entity\User $user = null)
     {
@@ -163,16 +169,39 @@ class CommentPhoto
     }
 
     /**
+     * Set post
+     *
+     * @param \Core\BlogBundle\Entity\Post $post
+     * @return Comment
+     */
+    public function setPost(\Core\BlogBundle\Entity\Post $post = null)
+    {
+        $this->post = $post;
+
+        return $this;
+    }
+
+    /**
+     * Get post
+     *
+     * @return \Core\BlogBundle\Entity\Post
+     */
+    public function getPost()
+    {
+        return $this->post;
+    }
+
+    /**
      * Set photo
      *
      * @param \Core\GalleryBundle\Entity\Photo $photo
-     * @return CommentPhoto
+     * @return Comment
      */
     public function setPhoto(\Core\GalleryBundle\Entity\Photo $photo = null)
     {
-        $this->photo = $photo;
+      $this->photo = $photo;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -182,6 +211,6 @@ class CommentPhoto
      */
     public function getPhoto()
     {
-        return $this->photo;
+      return $this->photo;
     }
 }

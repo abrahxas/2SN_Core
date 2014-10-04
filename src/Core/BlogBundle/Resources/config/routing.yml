@@ -19,17 +19,3 @@ core_post_update:
 core_post_delete:
     path:     /blog/delete-post/{id}
     defaults: { _controller: CoreBlogBundle:Blog:deletePost }
-
-#Routing Comments
-
-core_blog_comment_add:
-    path:     /blog/{postId}/add-comment
-    defaults: { _controller: CoreBlogBundle:Comment:add }
-
-core_blog_comment_update:
-    path:     /blog/{postId}/update-comment/{id}
-    defaults: { _controller: CoreBlogBundle:Comment:update }
-
-core_blog_comment_delete:
-    path:     /blog/{postId}/delete-comment/{id}
-    defaults: { _controller: CoreBlogBundle:Comment:delete }

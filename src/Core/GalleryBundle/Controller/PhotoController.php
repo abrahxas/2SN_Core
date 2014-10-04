@@ -21,10 +21,10 @@ class PhotoController extends Controller
         ));
     }
 
-    public function showAction($albumSlug, $photoSlug)
+    public function showAction($albumSlug, $photoId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->findOneBy(array('slug' => $photoSlug));
+        $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($photoId);
 
         if (!$photo) {
             throw $this->createNotFoundException('Photo Not Found');
@@ -57,11 +57,11 @@ class PhotoController extends Controller
         ));
     }
 
-    public function updateAction($albumSlug, $photoSlug, Request $request)
+    public function updateAction($albumSlug, $photoId, Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $album = $entityManager->getRepository('CoreGalleryBundle:Album')->findOneBy(array('slug' => $albumSlug));
-        $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->findOneBy(array('slug' => $photoSlug));
+        $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($photoId);
 
         if (!$photo) {
             throw $this->createNotFoundException('Photo Not Found');
@@ -86,10 +86,10 @@ class PhotoController extends Controller
     }
 
 
-    public function deleteAction($albumSlug, $photoSlug)
+    public function deleteAction($albumSlug, $photoId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->findOneBy(array('slug' => $photoSlug));
+        $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($photoId);
 
         if (!$photo) {
             throw $this->createNotFoundException('Photo Not Found');

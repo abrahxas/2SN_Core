@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\BlogBundle\Entity;
+namespace Core\CommentBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 

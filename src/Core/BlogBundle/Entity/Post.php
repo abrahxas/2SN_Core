@@ -52,7 +52,7 @@ class Post
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="Core\BlogBundle\Entity\Comment", mappedBy="post", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Core\CommentBundle\Entity\Comment", mappedBy="post", cascade={"remove"})
      */
     protected $comments;
 
@@ -224,10 +224,10 @@ class Post
     /**
      * Add comments
      *
-     * @param \Core\BlogBundle\Entity\Comment $comments
+     * @param \Core\CommentBundle\Entity\Comment $comments
      * @return Post
      */
-    public function addComment(\Core\BlogBundle\Entity\Comment $comments)
+    public function addComment(\Core\CommentBundle\Entity\Comment $comments)
     {
         $this->comments[] = $comments;
 
@@ -237,9 +237,9 @@ class Post
     /**
      * Remove comments
      *
-     * @param \Core\BlogBundle\Entity\Comment $comments
+     * @param \Core\CommentBundle\Entity\Comment $comments
      */
-    public function removeComment(\Core\BlogBundle\Entity\Comment $comments)
+    public function removeComment(\Core\CommentBundle\Entity\Comment $comments)
     {
         $this->comments->removeElement($comments);
     }
