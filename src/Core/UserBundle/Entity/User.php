@@ -4,7 +4,7 @@ namespace Core\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
-use FOS\MessageBundle\Model\ParticipantInterface;
+// use FOS\MessageBundle\Model\ParticipantInterface;
 
 /**
  * User
@@ -12,7 +12,7 @@ use FOS\MessageBundle\Model\ParticipantInterface;
  * @ORM\Table(name="user")
  * @ORM\Entity
  */
-class User extends BaseUser implements ParticipantInterface
+class User extends BaseUser
 {
     /**
      * @var integer
@@ -142,7 +142,7 @@ class User extends BaseUser implements ParticipantInterface
     /**
      * Get albums
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAlbums()
     {
