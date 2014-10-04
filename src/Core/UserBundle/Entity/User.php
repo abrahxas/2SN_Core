@@ -26,7 +26,7 @@ class User extends BaseUser
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="birthDate", type="datetime", nullable=true)
+     * @ORM\Column(name="birth_date", type="datetime", nullable=true)
      */
     private $birthDate = null;
 
