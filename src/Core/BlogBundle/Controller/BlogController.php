@@ -12,7 +12,8 @@ class BlogController extends Controller
     public function indexAction()
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $posts = $entityManager->getRepository('CoreBlogBundle:Post')->findAll();
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        $posts = $entityManager->getRepository('CoreBlogBundle:Post')->findBy(array('user' => $user));
 
         return $this->render('CoreBlogBundle:default:index.html.twig', array(
             'posts' => $posts

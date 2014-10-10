@@ -51,13 +51,13 @@ class Album
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="Photo", mappedBy="Album")
+     * @ORM\OneToMany(targetEntity="Photo", mappedBy="album", cascade={"remove"})
      */
     private $photos;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="album")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id"))
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="albums")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $user;
 
