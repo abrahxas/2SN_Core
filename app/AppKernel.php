@@ -22,11 +22,13 @@ class AppKernel extends Kernel
             new Vich\UploaderBundle\VichUploaderBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\RestBundle\FOSRestBundle(),
+            new FOS\MessageBundle\FOSMessageBundle(),
             //Custom
             new Core\UserBundle\CoreUserBundle(),
             new Core\BlogBundle\CoreBlogBundle(),
             new Core\GalleryBundle\CoreGalleryBundle(),
             new Core\CommentBundle\CoreCommentBundle(),
+            new Core\MessageBundle\CoreMessageBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

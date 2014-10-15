@@ -39,3 +39,7 @@ users:
     resource: Core\UserBundle\Controller\UsersController
     prefix : /api
 
+fos_message:
+    resource: "@FOSMessageBundle/Resources/config/routing.xml"
+    prefix: /message
+
