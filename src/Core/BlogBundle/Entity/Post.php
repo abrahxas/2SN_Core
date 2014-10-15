@@ -47,7 +47,7 @@ class Post
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="posts")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id"))
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $user;
 
