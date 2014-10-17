@@ -4,6 +4,7 @@ namespace Core\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use FOS\MessageBundle\Model\ParticipantInterface;
 
 /**
  * User
@@ -11,7 +12,7 @@ use FOS\UserBundle\Model\User as BaseUser;
  * @ORM\Table(name="user")
  * @ORM\Entity
  */
-class User extends BaseUser
+class User extends BaseUser implements ParticipantInterface
 {
     /**
      * @var integer
@@ -48,16 +49,16 @@ class User extends BaseUser
     public function __construct()
     {
       $this->albums = new \Doctrine\Common\Collections\ArrayCollection();
-      $albumMur = new \Core\GalleryBundle\Entity\Album();
-      $albumMur->setName('Mur');
-      $albumMur->setUser($this);
-      $this->addAlbum($albumMur);
+      $albumWall = new \Core\GalleryBundle\Entity\Album();
+      $albumWall->setName('Wall');
+      $albumWall->setUser($this);
+      $this->addAlbum($albumWall);
 
       $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
-      $postMur = new \Core\BlogBundle\Entity\Post();
-      $postMur->setContent('Hey Welcome !');
-      $postMur->setUser($this);
-      $this->addPost($postMur);
+      $postWall = new \Core\BlogBundle\Entity\Post();
+      $postWall->setContent('Hey Welcome !');
+      $postWall->setUser($this);
+      $this->addPost($postWall);
 
       parent::__construct();
     }
