@@ -27,7 +27,7 @@ class AppKernel extends Kernel
             new Core\BlogBundle\CoreBlogBundle(),
             new Core\GalleryBundle\CoreGalleryBundle(),
             new Core\CommentBundle\CoreCommentBundle(),
-            new Core\FriendGroupsBundle\FriendGroupsBundle(),
+            new Core\FriendListBundle\CoreFriendListBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

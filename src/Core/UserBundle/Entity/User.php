@@ -4,6 +4,7 @@ namespace Core\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use Core\FriendListBundle\Entity\FriendGroups;
 // use FOS\MessageBundle\Model\ParticipantInterface;
 
 /**
@@ -31,6 +32,12 @@ class User extends BaseUser
     private $birthDate = null;
 
     /**
+     *@var friendGroups[]
+     * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\FriendGroups", mappedBy="user", cascade="persist")
+     */
+    protected $friendGroups;
+
+    /**
      * @ORM\OneToMany(targetEntity="Core\BlogBundle\Entity\Post", mappedBy="user")
      */
     protected $posts;
@@ -48,6 +55,20 @@ class User extends BaseUser
     {
 //        $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
         parent::__construct();
+
+        $this->friendGroups = new \Doctrine\Common\Collections\ArrayCollection();
+
+        $generalGroup = new FriendGroups();
+        $generalGroup->setUser($this);
+        $generalGroup->setName('general');
+        
+        $this->addFriendGroup($generalGroup);
+
+        $waitGroup = new FriendGroups();
+        $waitGroup->setUser($this);
+        $waitGroup->setName('wait');
+        
+        $this->addFriendGroup($waitGroup);
     }
 
     /**
@@ -147,5 +168,38 @@ class User extends BaseUser
     public function getAlbums()
     {
         return $this->albums;
+    }
+
+    /**
+     * Add friendGroups
+     *
+     * @param \Core\FriendListBundle\Entity\FriendGroups $friendGroups
+     * @return User
+     */
+    public function addFriendGroup(\Core\FriendListBundle\Entity\FriendGroups $friendGroups)
+    {
+        $this->friendGroups[] = $friendGroups;
+
+        return $this;
+    }
+
+    /**
+     * Remove friendGroups
+     *
+     * @param \Core\FriendListBundle\Entity\FriendGroups $friendGroups
+     */
+    public function removeFriendGroup(\Core\FriendListBundle\Entity\FriendGroups $friendGroups)
+    {
+        $this->friendGroups->removeElement($friendGroups);
+    }
+
+    /**
+     * Get friendGroups
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFriendGroups()
+    {
+        return $this->friendGroups;
     }
 }

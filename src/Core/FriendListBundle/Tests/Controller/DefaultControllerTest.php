@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\FriendGroupsBundle\Tests\Controller;
+namespace Core\FriendListBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
