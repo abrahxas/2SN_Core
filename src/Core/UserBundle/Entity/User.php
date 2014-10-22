@@ -54,32 +54,33 @@ class User extends BaseUser
      */
     public function __construct()
     {
-      $this->albums = new \Doctrine\Common\Collections\ArrayCollection();
-      $albumMur = new \Core\GalleryBundle\Entity\Album();
-      $albumMur->setName('Mur');
-      $albumMur->setUser($this);
-      $this->addAlbum($albumMur);
+          $this->albums = new \Doctrine\Common\Collections\ArrayCollection();
+          $albumMur = new \Core\GalleryBundle\Entity\Album();
+          $albumMur->setName('Mur');
+          $albumMur->setUser($this);
+          $this->addAlbum($albumMur);
 
-      $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
-      $postMur = new \Core\BlogBundle\Entity\Post();
-      $postMur->setContent('Hey Welcome !');
-      $postMur->setUser($this);
-      $this->addPost($postMur);
+          $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
+          $postMur = new \Core\BlogBundle\Entity\Post();
+          $postMur->setContent('Hey Welcome !');
+          $postMur->setUser($this);
+          $this->addPost($postMur);
 
-      parent::__construct();
+      
         $this->friendGroups = new \Doctrine\Common\Collections\ArrayCollection();
 
         $generalGroup = new FriendGroups();
         $generalGroup->setUser($this);
         $generalGroup->setName('general');
-        
+
         $this->addFriendGroup($generalGroup);
 
         $waitGroup = new FriendGroups();
         $waitGroup->setUser($this);
         $waitGroup->setName('wait');
-        
+
         $this->addFriendGroup($waitGroup);
+        parent::__construct();
     }
 
     /**
