@@ -5,13 +5,13 @@ namespace Core\UserBundle\Controller;
 use Core\UserBundle\Entity\User;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\View;
-use FOS\RestBundle\View\View as ViewV;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use FOS\RestBundle\Controller\Annotations\Post;
 
 Class UsersController extends FOSRestController
 {
@@ -39,8 +39,9 @@ Class UsersController extends FOSRestController
     /**
      * @return array
      * @View()
+     * @Post("/registration")
      */
-	public function postUserAction(Request $request)
+	public function registrationAction(Request $request)
     {
 	    $formFactory = $this->container->get('fos_user.registration.form.factory');
 	    $userManager = $this->container->get('fos_user.user_manager');
@@ -62,10 +63,28 @@ Class UsersController extends FOSRestController
 	    if ('POST' === $request->getMethod()) {
             $form->bind($jsonPost);
 	        if ($form->isValid()) {
+                $username = $jsonPost['username'];
+                $password = $jsonPost['plainPassword']['first'];
+                $newUser = array(
+                    'username' => $username,
+                    'password' => $password
+                    );
+                $jsonLogin = json_encode($newUser);
 	            $event = new FormEvent($form, $request);
 	            $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
 	            $userManager->updateUser($user);
-	            $response = new Response("Yeah registration done", 201);
+                $url = "http://localhost:8888/2SN_Core/web/app_dev.php/api/login_check";
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonLogin);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen($jsonLogin))
+                );
+                $result = curl_exec($ch);
+	            $response = new Response($result);
+
 	            return $response;
 	        }
 	    }
@@ -81,7 +100,6 @@ Class UsersController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $em->remove($user);
         $em->flush();
-        // @todo user exist
         $response = new Response("delete done", 200);
         return $response;
     }
