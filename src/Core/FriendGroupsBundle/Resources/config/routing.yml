@@ -1,3 +1,0 @@
-friend_groups_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: FriendGroupsBundle:Default:index }
