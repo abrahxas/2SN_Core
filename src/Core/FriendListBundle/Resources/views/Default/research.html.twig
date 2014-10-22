@@ -1,0 +1,11 @@
+<html>
+<head></head>
+<body>
+	{{form(form) }}
+	{% if friends is defined %}
+		{% for friend  in friends%}
+			{{friend.username}}
+		{% endfor %}
+	{% endif %}
+</body>
+</html>

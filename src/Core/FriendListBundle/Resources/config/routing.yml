@@ -1,0 +1,35 @@
+core_friendList_homepage:
+    path:     /friendList
+    defaults: { _controller: CoreFriendListBundle:FriendList:index }
+
+core_friendList_create:
+    path:     /friendList/add
+    defaults: { _controller: CoreFriendListBundle:FriendList:add }
+
+core_friendList_delete:
+    path:     /friendList/delete/{friendGroupId}
+    defaults: { _controller: CoreFriendListBundle:FriendList:delete }
+
+core_friendList_update:
+    path:     /friendList/update/{friendGroupId}
+    defaults: { _controller: CoreFriendListBundle:FriendList:update }
+
+core_friendList_addfriend:
+    path:     /friendList/addfriend
+    defaults: { _controller: CoreFriendListBundle:Friend:add}
+
+core_friendList_valid:
+    path:     /friendList/valid/{friendId}
+    defaults: { _controller: CoreFriendListBundle:Friend:valid}
+
+core_friendList_moove:
+    path:     /friendList/moove/{friendId}/{friendGroupId}
+    defaults: { _controller: CoreFriendListBundle:Friend:mooveFriendInGroup}
+
+core_friend_delete:
+    path:     /friendList/moove/{friendId}
+    defaults: { _controller: CoreFriendListBundle:Friend:delete}
+
+core_friend_userResearch:
+    path:     /friendList/research
+    defaults: { _controller: CoreFriendListBundle:Friend:userResearch}

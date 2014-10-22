@@ -1,5 +1,8 @@
 core_comment:
     resource: "@CoreCommentBundle/Resources/config/routing.yml"
+
+core_friendList:
+    resource: "@CoreFriendListBundle/Resources/config/routing.yml"
     prefix:   /
 
 core_blog:
@@ -8,10 +11,6 @@ core_blog:
 
 app_gallery:
     resource: "@CoreGalleryBundle/Resources/config/routing.yml"
-
-friend_groups:
-    resource: "@FriendGroupsBundle/Resources/config/routing.yml"
-    prefix:   /
 
 app_user:
     resource: "@CoreUserBundle/Resources/config/routing.yml"

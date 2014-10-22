@@ -1,0 +1,27 @@
+<html>
+<head></head>
+<body>
+FriendList
+<br>
+<br>
+<a href="{{path('core_friendList_create')}}">add friend Group</a>
+<br>
+<br>
+Listing friend group
+<br>
+<br>
+
+{% for friendList in friendLists %}
+	<div style="background-color: #313131;padding: 2%;margin-bottom: 2%;width: 30%;">
+	    <div style="background-color: white">
+	    	<a href="{{path('core_friendList_update', {'friendGroupId' : friendList.id} )}}">update friend List</a>
+	    	<a href="{{path('core_friendList_delete' , {'friendGroupId' : friendList.id})}}">delete friend List</a><br/>
+	    	{{ friendList.name }}
+	    		{% render(controller('CoreFriendListBundle:Friend:indexByGroup',{'friendGroupName' : friendList.name})) %}	    		
+	    </div>
+	</div>
+{% endfor %}
+<a href="{{path('core_friendList_addfriend')}}">make a friend request</a>
+<a href="{{path('core_friend_userResearch')}}">research friends</a>
+</body>
+</html>
