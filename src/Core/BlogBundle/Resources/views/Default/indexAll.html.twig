@@ -1,0 +1,20 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+{% for post in posts %}
+<div style="background-color: #D9CC3B; width: 20%;margin-bottom: 5%;padding: 3%">
+    <div style="background-color: white;">
+        <a style="float:left" href="{{ path('core_post_update', {'id': post.id}) }}">update post</a>
+        <a style="float:right" href="{{ path('core_post_delete', {'id': post.id}) }}">delete post</a>
+        <br>
+        {% if (post.imageName != null) %}
+            <img src="{{ asset('uploads/posts/' ~ post.imageName)}}" />
+        {% endif %}
+        <br>
+        <a href="{{ path('core_post_show', {'id': post.id}) }}">{{ post.content }}</a>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock body %}

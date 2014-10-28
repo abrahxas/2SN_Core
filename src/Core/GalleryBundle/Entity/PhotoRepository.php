@@ -12,4 +12,8 @@ use Doctrine\ORM\EntityRepository;
  */
 class PhotoRepository extends EntityRepository
 {
+    public function findAll()
+    {
+        return $this->findBy(array(), array('created_at' => 'DESC'));
+    }
 }

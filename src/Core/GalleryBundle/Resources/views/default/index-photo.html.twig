@@ -1,11 +1,11 @@
 {% for photo in photos %}
     <div style="width: 20%; background-color: #0088CC;padding: 1%;margin-bottom: 2%">
         <div style="background-color: white">
-            <a href="{{ path('core_photo_update', {'albumSlug': albumSlug,'photoId': photo.id}) }}">update</a>
-            <a href="{{ path('core_photo_delete', {'albumSlug': albumSlug,'photoId': photo.id}) }}">delete</a>
+            <a href="{{ path('core_photo_update', {'albumSlug': app.request.get('albumSlug'),'photoId': photo.id}) }}">update</a>
+            <a href="{{ path('core_photo_delete', {'albumSlug': app.request.get('albumSlug'),'photoId': photo.id}) }}">delete</a>
             <br>
             <br>
-            <a href="{{ path('core_photo_show', {'albumSlug': albumSlug,'photoId': photo.id}) }}">{{ photo.imageName }}</a>
+            <a href="{{ path('core_photo_show', {'albumSlug': app.request.get('albumSlug'),'photoId': photo.id}) }}">{{ photo.imageName }}</a>
             <br>
             <br>
             {{ photo.content }}

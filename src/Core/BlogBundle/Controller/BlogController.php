@@ -20,6 +20,16 @@ class BlogController extends Controller
         ));
     }
 
+    public function indexAllAction()
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $posts = $entityManager->getRepository('CoreBlogBundle:Post')->findAll();
+
+        return $this->render('CoreBlogBundle:default:indexAll.html.twig', array(
+            'posts' => $posts
+        ));
+    }
+
     public function addPostAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
@@ -41,10 +51,10 @@ class BlogController extends Controller
         ));
     }
 
-    public function showPostAction($id)
+    public function showPostAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($id);
+        $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($request->get('id'));
 
         if (!$post) {
             throw $this->createNotFoundException('Post Not Found');
@@ -82,10 +92,10 @@ class BlogController extends Controller
         ));
     }
 
-    public function deletePostAction($id)
+    public function deletePostAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($id);
+        $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($request->get('id'));
 
         if (!$post) {
             throw $this->createNotFoundException('Post Not Found');

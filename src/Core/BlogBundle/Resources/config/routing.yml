@@ -2,10 +2,14 @@ core_blog_homepage:
     path:     /blog
     defaults: { _controller: CoreBlogBundle:Blog:index }
 
+core_blog_all:
+    path:     /blog/all
+    defaults: { _controller: CoreBlogBundle:Blog:indexAll }
+
 #Routing POST
 
 core_post_add:
-    path:     /blog/add-post
+    path:     /blog/add
     defaults: { _controller: CoreBlogBundle:Blog:addPost }
 
 core_post_show:
@@ -13,9 +17,9 @@ core_post_show:
     defaults: { _controller: CoreBlogBundle:Blog:showPost }
 
 core_post_update:
-    path:     /blog/update-post/{id}
+    path:     /blog/update/{id}
     defaults: { _controller: CoreBlogBundle:Blog:updatePost }
 
 core_post_delete:
-    path:     /blog/delete-post/{id}
+    path:     /blog/delete/{id}
     defaults: { _controller: CoreBlogBundle:Blog:deletePost }

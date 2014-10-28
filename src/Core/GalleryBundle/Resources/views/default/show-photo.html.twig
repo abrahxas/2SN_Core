@@ -13,7 +13,7 @@ SHOW PHOTO
 <img src="{{ asset('uploads/photo/' ~ photo.imageName)}}" />
 <br>
 <br>
-<a href="{{ path('core_photo_comment_create', {'albumSlug': app.request.get('albumSlug'), 'photoId': photo.id}) }}">Poster un commentaire</a>
+<a href="{{ path('core_photo_comment_add', {'albumSlug': app.request.get('albumSlug'), 'photoId': photo.id}) }}">Poster un commentaire</a>
 <br>
 <br>
 </body>
