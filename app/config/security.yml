@@ -29,22 +29,14 @@ security:
             pattern:  /api/login
             stateless: true
             anonymous: true
-
         api:
             pattern:   ^/api
             stateless: true
-            lexik_jwt:
-                authorization_header:
-                    enabled: true
-                    prefix:  Bearer
-                query_parameter:
-                    enabled: true
-                    name:    bearer
-
+            lexik_jwt: ~
 
     access_control:
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/registration, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/resetting, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
