@@ -68,33 +68,27 @@ Class UsersController extends FOSRestController
 	    if ('POST' === $request->getMethod()) {
             $form->bind($jsonPost);
 	        if ($form->isValid()) {
-                // $username = $jsonPost['username'];
-                // $password = $jsonPost['plainPassword']['first'];
-                // $newUser = array(
-                //     'username' => $username,
-                //     'password' => $password
-                //     );
-                // $jsonLogin = json_encode($newUser);
+                $username = $jsonPost['username'];
+                $password = $jsonPost['plainPassword']['first'];
+                $newUser = array(
+                    'username' => $username,
+                    'password' => $password
+                    );
+                $jsonLogin = json_encode($newUser);
 	            $event = new FormEvent($form, $request);
 	            $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
 	            $userManager->updateUser($user);
-             //    $url = "http://localhost:8888/2SN_Core/web/app_dev.php/api/login_check";
-             //    $ch = curl_init($url);
-             //    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-             //    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonLogin);
-             //    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-             //    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-             //        'Content-Type: application/json',
-             //        'Content-Length: ' . strlen($jsonLogin))
-             //    );
-             //    $result = curl_exec($ch);
-	            // $response = new Response($result);
-                if (null === $response = $event->getResponse()) {
-                    $url = $this->container->get('router')->generate('fos_user_registration_confirmed');
-                    $response = new RedirectResponse($url);
-                }
-
-                $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+                $url = "http://localhost:8888/ETNA/2SN_Core/web/app_dev.php/api/login_check";
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonLogin);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen($jsonLogin))
+                );
+                $result = curl_exec($ch);
+	            $response = new Response($result);
 
                 return $response;
 	        }
