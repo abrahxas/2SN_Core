@@ -23,11 +23,6 @@
 # PHPUnit
 /app/phpunit.xml
 
-# Composer
-/composer.phar
-/composer.lock
-
-
 ### OSX ###
 .DS_Store
 .AppleDouble
