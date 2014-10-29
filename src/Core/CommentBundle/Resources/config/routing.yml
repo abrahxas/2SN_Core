@@ -1,38 +1,32 @@
 #Routing Gallery
-
 core_comment_blog_homepage:
     path:     /comment/post/{postId}
     defaults: { _controller: CoreCommentBundle:Comment:index }
-    requirements:
-      postId: \d+
 
 core_comment_photo_homepage:
     path:     /comment/photo/{photoId}
     defaults: { _controller: CoreCommentBundle:Comment:index }
 
-#Routing photo COMMENT
-core_photo_comment_create:
-    path:     /gallery/{albumSlug}/{photoId}/comment-create
-    defaults: { _controller: CoreCommentBundle:Comment:add }
+#Routing COMMENT
+core_comment_all:
+    path:     /comment/all
+    defaults: { _controller: CoreCommentBundle:Comment:indexAll }
 
-core_photo_comment_update:
-    path:     /gallery/{photoId}/comment-update/{id}
+core_comment_update:
+    path:     /comment/update/{id}
     defaults: { _controller: CoreCommentBundle:Comment:update }
 
-core_photo_comment_delete:
-    path:     /gallery/{photoId}/comment-delete/{id}
+core_comment_delete:
+    path:     /comment/delete/{id}
     defaults: { _controller: CoreCommentBundle:Comment:delete }
 
 
-#Routing blog COMMENT
+#Routing ADD PHOTO COMMENT
+core_photo_comment_add:
+    path:     /gallery/{albumSlug}/{photoId}/comment-add
+    defaults: { _controller: CoreCommentBundle:Comment:add }
+
+#Routing ADD BLOG COMMENT
 core_post_comment_add:
-    path:     /blog/{postId}/add-comment
+    path:     /blog/{postId}/comment-add
     defaults: { _controller: CoreCommentBundle:Comment:add }
-
-core_post_comment_update:
-    path:     /blog/{postId}/update-comment/{id}
-    defaults: { _controller: CoreCommentBundle:Comment:update }
-
-core_post_comment_delete:
-    path:     /blog/{postId}/delete-comment/{id}
-    defaults: { _controller: CoreCommentBundle:Comment:delete }

@@ -9,41 +9,52 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class CommentController extends Controller
 {
-  public function indexAction($postId = null, $photoId = null)
+  public function indexAction(Request $request)
   {
     $entityManager = $this->getDoctrine()->getManager();
-    if ($postId != null)
-      $comments = $entityManager->getRepository('CoreCommentBundle:Comment')->findBy(array('post' => $postId), array('createdAt' => 'DESC'));
+    if ($request->get('postId') != null)
+      $comments = $entityManager->getRepository('CoreCommentBundle:Comment')->findBy(array('post' => $request->get('postId')), array('createdAt' => 'DESC'));
     else
-      $comments = $entityManager->getRepository('CoreCommentBundle:Comment')->findBy(array('photo' => $photoId), array('createdAt' => 'DESC'));
+      $comments = $entityManager->getRepository('CoreCommentBundle:Comment')->findBy(array('photo' => $request->get('photoId')), array('createdAt' => 'DESC'));
 
     return $this->render('CoreCommentBundle:default:index.html.twig', array(
       'comments' => $comments
     ));
   }
 
-  public function addAction($postId = null, $photoId = null, Request $request)
+  public function indexAllAction()
+  {
+    $entityManager = $this->getDoctrine()->getManager();
+    $comments = $entityManager->getRepository('CoreCommentBundle:Comment')->findAll();
+
+    return $this->render('CoreCommentBundle:default:indexAll.html.twig', array(
+        'comments' => $comments
+    ));
+  }
+
+  public function addAction(Request $request)
   {
     $entityManager = $this->getDoctrine()->getManager();
     $user = $this->container->get('security.context')->getToken()->getUser();
     $form = $this->createForm(new CommentType(), $comment = new Comment());
-    if ($postId != null)
-      $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($postId);
+
+    if ($request->get('postId') != null)
+      $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($request->get('postId'));
     else
-      $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($photoId);
+      $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($request->get('photoId'));
 
     if ($request->isMethod('POST')) {
       $form->handleRequest($request);
       if ($form->isValid()) {
         $comment->setUser($user);
-        ($postId != null) ? $comment->setPost($post) : $comment->setPhoto($photo);
+        ($request->get('postId') != null) ? $comment->setPost($post) : $comment->setPhoto($photo);
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        if ($postId != null)
-          return $this->redirect($this->generateUrl('core_comment_blog_homepage', array('postId' => $post->getId())));
+        if ($request->get('postId') != null)
+          return $this->redirect($this->generateUrl('core_comment_blog_homepage', array('postId' => $request->get('postId'))));
         else
-          return $this->redirect($this->generateUrl('core_comment_photo_homepage', array('photoId' => $photo->getId())));
+          return $this->redirect($this->generateUrl('core_comment_photo_homepage', array('photoId' => $request->get('photoId'))));
       }
     }
 
@@ -52,16 +63,12 @@ class CommentController extends Controller
     ));
   }
 
-  public function updateAction($postId = null , $photoId = null, $id, Request $request)
+  public function updateAction(Request $request)
   {
     $entityManager = $this->getDoctrine()->getManager();
     $user = $this->container->get('security.context')->getToken()->getUser();
-    $comment = $entityManager->getRepository('CoreCommentBundle:Comment')->find($id);
+    $comment = $entityManager->getRepository('CoreCommentBundle:Comment')->find($request->get('id'));
     $form = $this->createForm(new CommentType(), $comment);
-    if ($postId != null)
-      $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($postId);
-    else
-      $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($photoId);
 
     if (!$comment) {
       throw $this->createNotFoundException('Comment Not Found');
@@ -71,15 +78,17 @@ class CommentController extends Controller
       $form->handleRequest($request);
       if ($form->isValid()) {
         $comment->setUser($user);
-        ($postId != null) ? $comment->setPost($post) : $comment->setPhoto($photo);
         $comment->setUpdatedAt(new \DateTime());
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        if ($postId != null)
-          return $this->redirect($this->generateUrl('core_comment_blog_homepage', array('postId' => $post->getId())));
+        if ($request->get('postId') != null)
+          return $this->redirect($this->generateUrl('core_comment_blog_homepage', array('postId' => $request->get('postId'))));
+        elseif($request->get('photoId') != null)
+          return $this->redirect($this->generateUrl('core_comment_photo_homepage', array('photoId' => $request->get('photoId'))));
         else
-          return $this->redirect($this->generateUrl('core_comment_photo_homepage', array('photoId' => $photo->getId())));
+          return $this->redirect($this->generateUrl('core_comment_all'));
+
       }
     }
 
@@ -88,10 +97,10 @@ class CommentController extends Controller
     ));
   }
 
-  public function deleteAction($postId = null, $photoId = null, $id)
+  public function deleteAction(Request $request)
   {
     $entityManager = $this->getDoctrine()->getManager();
-    $comment = $entityManager->getRepository('CoreCommentBundle:Comment')->find($id);
+    $comment = $entityManager->getRepository('CoreCommentBundle:Comment')->find($request->get('id'));
 
     if (!$comment) {
       throw $this->createNotFoundException('Comment Not Found');
@@ -100,9 +109,11 @@ class CommentController extends Controller
     $entityManager->remove($comment);
     $entityManager->flush();
 
-    if ($postId != null)
-      return $this->redirect($this->generateUrl('core_comment_blog_homepage', array('postId' => $postId)));
+    if ($request->get('postId') != null)
+      return $this->redirect($this->generateUrl('core_comment_blog_homepage', array('postId' => $request->get('postId'))));
+    elseif ($request->get('photoId') != null)
+      return $this->redirect($this->generateUrl('core_comment_photo_homepage', array('photoId' => $request->get('photoId'))));
     else
-      return $this->redirect($this->generateUrl('core_comment_photo_homepage', array('photoId' => $photoId)));
+      return $this->redirect($this->generateUrl('core_comment_all'));
   }
 }

@@ -4,14 +4,13 @@ core_gallery_homepage:
     path:     /gallery
     defaults: { _controller: CoreGalleryBundle:Album:index }
 
-
 #Routing Album
 core_album_delete:
     path:     /gallery/album-delete/{albumSlug}
     defaults: { _controller: CoreGalleryBundle:Album:delete }
 
 core_album_create:
-    path:     /gallery/album-create
+    path:     /gallery/album-add
     defaults: { _controller: CoreGalleryBundle:Album:add }
 
 core_album_show:
@@ -22,20 +21,25 @@ core_album_update:
     path:     /gallery/album-update/{albumSlug}
     defaults: { _controller: CoreGalleryBundle:Album:update }
 
-
 #Routing PHOTO
+core_photo_all:
+    path:  /gallery/photo/all
+    defaults: { _controller: CoreGalleryBundle:Photo:indexAll }
+
+core_photo_delete:
+    path:     /gallery/photo-delete/{photoId}
+    defaults: { _controller: CoreGalleryBundle:Photo:delete }
+
+core_photo_update:
+    path:     /gallery/photo-update/{photoId}
+    defaults: { _controller: CoreGalleryBundle:Photo:update }
+
 core_photo_create:
-    path:     /gallery/{albumSlug}/photo-create
+    path:     /gallery/{albumSlug}/photo-add
     defaults: { _controller: CoreGalleryBundle:Photo:add }
 
 core_photo_show:
     path:     /gallery/{albumSlug}/{photoId}
     defaults: { _controller: CoreGalleryBundle:Photo:show }
 
-core_photo_update:
-    path:     /gallery/{albumSlug}/photo-update/{photoId}
-    defaults: { _controller: CoreGalleryBundle:Photo:update }
 
-core_photo_delete:
-    path:     /gallery/{albumSlug}/photo-delete/{photoId}
-    defaults: { _controller: CoreGalleryBundle:Photo:delete }
