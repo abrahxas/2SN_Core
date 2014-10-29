@@ -10,6 +10,7 @@ use Core\FriendListBundle\Entity\User;
 use Core\FriendListBundle\Form\Type\FriendGroupsType;
 use Core\FriendListBundle\Form\Type\AddFriendsType;
 use Core\FriendListBundle\Form\Type\ResearchFriendsType;
+use Core\FriendListBundle\Form\Type\SelectGroupType;
 
 class FriendController extends Controller
 {
@@ -33,12 +34,11 @@ class FriendController extends Controller
         ));
     }
 
-    public function indexByGroupAction($friendGroupName)
+    public function indexByGroupAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();        
         $conn = $this->container->get('database_connection');
-
         $query = "SELECT fd.name, fd.friendgroup_id, fd.sender, fd.id
                 FROM friend fd
                 inner join friendGroups fg on fg.id = fd.friendgroup_id
@@ -46,36 +46,31 @@ class FriendController extends Controller
                 where u.id = ? and fg.name = ?";
         $stmt = $conn->prepare($query);
         $stmt->bindValue(1, $user->getId());
-        $stmt->bindValue(2, $friendGroupName);
+        $stmt->bindValue(2, $request->get('friendGroupName'));
         $stmt->execute();
 
-        if ($friendGroupName == 'wait')
-        {
+        if ($request->get('friendGroupName') == 'wait'){
             return $this->render('CoreFriendListBundle:default:indexFriend.html.twig', array(
             'friends' => $stmt
             ));
-        }else{
+        } else {
             return $this->render('CoreFriendListBundle:default:moove.html.twig', array(
             'friends' => $stmt
             ));
         } 
     }
 
-    public function validAction($friendId)
+    public function validAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
         $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user'=>$user,'name'=>'general'));
-
-        $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendId);
-
+        $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($request->get('friendId'));
         $senderUser = $entityManager->getRepository('CoreUserBundle:User')->findOneBy(array('username'=>$friend->getSender()));
         $senderGeneralGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user'=>$senderUser,'name'=>'general'));
-
         $senderFriend = $entityManager->getRepository('CoreFriendListBundle:Friend')->findOneBy(array('sender'=>$senderUser->getUsername(),'friend'=>$user->getId()));
 
-        if($friend->getSender() != $user->getUsername())
-        {
+        if($friend->getSender() != $user->getUsername()){
             $friend->setFriendGroup($friendGroup);
             $entityManager->persist($friend);
 
@@ -87,19 +82,27 @@ class FriendController extends Controller
         return $this->redirect($this->generateUrl('core_friendList_homepage'));
     }
 
-    public function mooveFriendInGroupAction($friendId, $friendGroupId)
+    public function mooveFriendInGroupAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-        $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendId);
-        $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->find($friendGroupId);
+        $form = $this->createForm(new SelectGroupType($user));
 
-        $friend->setFriendGroup($friendGroup);
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+            if ($form->isValid()){
+                $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($request->get('friendId'));
+                $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user'=>$user,'name'=>$form->get('name')->getData()->getName()));
+                $friend->setFriendGroup($friendGroup);
+                $entityManager->persist($friend);
+                $entityManager->flush();
 
-        $entityManager->persist($friend);
-        $entityManager->flush();
-
-        return $this->redirect($this->generateUrl('core_friendList_homepage'));
+                return $this->redirect($this->generateUrl('core_friendList_homepage'));
+            }
+        }
+        return $this->render('CoreFriendListBundle:default:selectgroup.html.twig', array(
+                    'form' => $form->createView(),
+                ));
     }
 
 
@@ -113,19 +116,20 @@ class FriendController extends Controller
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
             if ($form->isValid()) {
-
                 $friend->setFriendGroup($friendGroup);
                 $friend->setSender($user);
                 $receivingUser = $entityManager->getRepository('CoreUserBundle:User')->findOneBy(array('username'=>$form->get('name')->getdata()));
+                
+                if(!$receivingUser)
+                    throw $this->createNotFoundException('Friend not exist');
+                
                 $friend->setFriend($receivingUser);
-
                 $receivingfriend = new Friend();
                 $receivingfriendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user'=>$receivingUser,'name'=>'wait'));
                 $receivingfriend->setFriendGroup($receivingfriendGroup);
                 $receivingfriend->setName($user->getUsername());
                 $receivingfriend->setSender($user);
                 $receivingfriend->setFriend($user);  
-
                 $conn = $this->container->get('database_connection');
 
                 $query = "SELECT fd.name, fd.friendgroup_id
@@ -137,21 +141,16 @@ class FriendController extends Controller
                 $stmt->bindValue(1, $user->getId());
                 $stmt->execute();
 
-                foreach ($stmt as $f)
-                {
+                foreach ($stmt as $f){
                     if($f['name'] == $receivingUser->getUsername())
-                    {
-                        return $this->redirect($this->generateUrl('core_friendList_homepage'));
-                    }
+                        return $this->redirect($this->generateUrl('core_friendList_homepage'));        
                 }
 
-                if($receivingUser->getUsername() != $user->getUsername())
-                {
+                if($receivingUser->getUsername() != $user->getUsername()){
                     $entityManager->persist($friend);
                     $entityManager->persist($receivingfriend);
                     $entityManager->flush();
                 }
-
                 return $this->redirect($this->generateUrl('core_friendList_homepage'));
             }
         }
@@ -161,12 +160,11 @@ class FriendController extends Controller
         ));
     }
 
-    public function deleteAction($friendId)
+    public function deleteAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-        $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendId);
-        
+        $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($request->get('friendId'));
         $conn = $this->container->get('database_connection');
 
         $query = "SELECT fd.id
@@ -184,10 +182,8 @@ class FriendController extends Controller
 
         $friendDelete = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendId);
         if (!$friend) 
-        {
             throw $this->createNotFoundException('Friend Not Found');
-        }
-
+        
         $entityManager->remove($friendDelete);
         $entityManager->remove($friend);
         $entityManager->flush();

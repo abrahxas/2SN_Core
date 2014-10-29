@@ -23,11 +23,11 @@ core_friendList_valid:
     defaults: { _controller: CoreFriendListBundle:Friend:valid}
 
 core_friendList_moove:
-    path:     /friendList/moove/{friendId}/{friendGroupId}
+    path:     /friendList/moove/{friendId}
     defaults: { _controller: CoreFriendListBundle:Friend:mooveFriendInGroup}
 
 core_friend_delete:
-    path:     /friendList/moove/{friendId}
+    path:     /friendList/delete/{friendId}
     defaults: { _controller: CoreFriendListBundle:Friend:delete}
 
 core_friend_userResearch:

@@ -1,5 +1,5 @@
 {% for friend in friends %}
 	<br>
-	<a href="{{path('core_friendList_moove', {'friendId' : friend.id , 'friendGroupId' : 13} )}}">{{ friend.name }}</a>
+	<a href="{{path('core_friendList_moove', {'friendId' : friend.id} )}}">{{ friend.name }}</a>
 	<a href="{{path('core_friend_delete', {'friendId' : friend.id} )}}">Delete</a>
 {% endfor %}
