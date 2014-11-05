@@ -31,7 +31,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        ['CoreBlogBundle', 'CoreGalleryBundle']
+    bundles:        ['CoreBlogBundle', 'CoreGalleryBundle', 'CoreUserBundle']
 #    java: /usr/bin/java
     filters:
         cssrewrite: ~

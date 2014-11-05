@@ -5,6 +5,8 @@ namespace Core\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use Core\FriendListBundle\Entity\FriendGroups;
+use Symfony\Component\HttpFoundation\File\File;
+
 /**
  * User
  *
@@ -28,6 +30,13 @@ class User extends BaseUser
      * @ORM\Column(name="birth_date", type="datetime", nullable=true)
      */
     private $birthDate = null;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image_profile", type="string", nullable=true)
+     */
+    private $imageProfile;
 
     /**
      *@var friendGroups[]
@@ -59,6 +68,11 @@ class User extends BaseUser
         $albumWall->setUser($this);
         $this->addAlbum($albumWall);
 
+        $albumProfile = new \Core\GalleryBundle\Entity\Album();
+        $albumProfile->setName('Profile');
+        $albumProfile->setUser($this);
+        $this->addAlbum($albumProfile);
+
         $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
         $postWall = new \Core\BlogBundle\Entity\Post();
         $postWall->setContent('Hey Welcome !');
@@ -70,14 +84,15 @@ class User extends BaseUser
         $generalGroup = new FriendGroups();
         $generalGroup->setUser($this);
         $generalGroup->setName('general');
-
         $this->addFriendGroup($generalGroup);
 
         $waitGroup = new FriendGroups();
         $waitGroup->setUser($this);
         $waitGroup->setName('wait');
-
         $this->addFriendGroup($waitGroup);
+
+        $this->imageProfile = 'anon_user.png';
+
         parent::__construct();
     }
 
@@ -211,5 +226,28 @@ class User extends BaseUser
     public function getFriendGroups()
     {
         return $this->friendGroups;
+    }
+
+    /**
+     * Set imageProfile
+     *
+     * @param string $imageProfile
+     * @return User
+     */
+    public function setImageProfile($imageProfile)
+    {
+        $this->imageProfile = $imageProfile;
+
+        return $this;
+    }
+
+    /**
+     * Get imageProfile
+     *
+     * @return string 
+     */
+    public function getImageProfile()
+    {
+        return $this->imageProfile;
     }
 }
