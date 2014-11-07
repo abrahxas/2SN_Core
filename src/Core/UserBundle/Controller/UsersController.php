@@ -15,9 +15,6 @@ use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-use Lexik\Bundle\JWTAuthenticationBundle\Event;
-use Symfony\Component\Security\Core\User\UserInterface;
-
 Class UsersController extends FOSRestController
 {
     /**
@@ -39,6 +36,16 @@ Class UsersController extends FOSRestController
     public function getUserAction(User $user)
     {
         return array('user' => $user);
+    }
+
+    /**
+     * @return array
+     * @View()
+     */
+    public function getUserMeAction()
+    {
+        $usr = $this->get('security.context')->getToken()->getUser();
+        return array('user' => $usr);
     }
 
     /**
@@ -78,7 +85,7 @@ Class UsersController extends FOSRestController
 	            $event = new FormEvent($form, $request);
 	            $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
 	            $userManager->updateUser($user);
-                $url = "http://localhost:8888/ETNA/2SN_Core/web/app_dev.php/api/login_check";
+                $url = "http://localhost:8888/2SN_Core/web/app_dev.php/api/login_check";
                 $ch = curl_init($url);
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonLogin);
