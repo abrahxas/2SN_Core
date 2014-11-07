@@ -51,7 +51,7 @@ class Album
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="Photo", mappedBy="album", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Photo", mappedBy="album", cascade={"persist"})
      */
     private $photos;
 
