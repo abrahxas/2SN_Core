@@ -45,3 +45,7 @@ blogs:
     type: rest
     resource: Core\BlogBundle\Controller\BlogsController
     prefix : /api
+comments:
+    type: rest
+    resource: Core\CommentBundle\Controller\CommentsController
+    prefix : /api
