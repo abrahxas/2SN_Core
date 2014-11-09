@@ -48,4 +48,11 @@ blogs:
 comments:
     type: rest
     resource: Core\CommentBundle\Controller\CommentsController
+albums:
+    type: rest
+    resource: Core\GalleryBundle\Controller\AlbumsController
+    prefix : /api
+photos:
+    type: rest
+    resource: Core\GalleryBundle\Controller\PhotosController
     prefix : /api
