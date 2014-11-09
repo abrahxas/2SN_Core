@@ -36,3 +36,7 @@ users:
     type: rest
     resource: Core\UserBundle\Controller\UsersController
     prefix : /api
+blogs:
+    type: rest
+    resource: Core\BlogBundle\Controller\BlogsController
+    prefix : /api
