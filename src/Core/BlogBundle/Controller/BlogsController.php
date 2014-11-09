@@ -53,10 +53,10 @@ Class BlogsController extends FOSRestController
                 $post->setUser($user);
                 $entityManager->persist($post);
                 $entityManager->flush();
-                return 'OK';
+                return array('code' => 200, 'text' => 'OK');
             }
         }
-        return array(400, $form);
+        return array('code' => 400, $form);
     }
 
     /**
@@ -97,11 +97,11 @@ Class BlogsController extends FOSRestController
                 $post->setUpdatedAt(new \DateTime());
                 $entityManager->persist($post);
                 $entityManager->flush();
-                return 'Update OK';
+                return array('code' => 200, 'text' => 'Update OK');
             }
         }
 
-        return 'Error';
+        return array ('code' => 400, 'text' => 'Error');
     }
 
     /**
