@@ -40,3 +40,7 @@ blogs:
     type: rest
     resource: Core\BlogBundle\Controller\BlogsController
     prefix : /api
+friendLists:
+    type: rest
+    resource: Core\FriendListBundle\Controller\FriendListsController
+    prefix : /api
