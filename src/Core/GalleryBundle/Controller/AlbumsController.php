@@ -52,7 +52,7 @@ class AlbumsController extends FOSRestController
         $jsonPost = json_decode($request->getContent(), true);
 
         if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
+            $form->bind($jsonPost);
             if ($form->isValid()) {
                 $album->setUser($user);
                 $entityManager->persist($album);
@@ -80,7 +80,7 @@ class AlbumsController extends FOSRestController
         }
         $jsonPost = json_decode($request->getContent(), true);
         if ($request->isMethod('PUT')) {
-            $form->handleRequest($request);
+            $form->bind($jsonPost);
             if ($form->isValid()) {
                 $album->setUser($user);
                 $album->setUpdatedAt(new \DateTime());
