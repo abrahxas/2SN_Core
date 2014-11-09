@@ -16,6 +16,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FriendListsController extends FOSRestController
 {
+    /**
+    * @return array
+    * @View()
+    */
     public function getFriendListsAction()
     {
         $entityManager = $this->getDoctrine()->getManager();
@@ -25,6 +29,10 @@ class FriendListsController extends FOSRestController
         return array('friendLists' => $friendLists);
     }
 
+    /**
+    * @return array
+    * @View()
+    */
     public function postFriendListsAction(Request $request)
     {
     	$entityManager = $this->getDoctrine()->getManager();
@@ -49,7 +57,11 @@ class FriendListsController extends FOSRestController
         return array('code' => 400, $form);
     }
 
-    public function putFriendListsAction(Request $request, friendGroupId)
+    /**
+    * @return array
+    * @View()
+    */
+    public function putFriendListsAction(Request $request, $friendGroupId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -76,6 +88,10 @@ class FriendListsController extends FOSRestController
         return array('code' => 400, $form);
     }
 
+    /**
+    * @return array
+    * @View()
+    */
     public function deleteFriendListsAction($friendGroupId)
     {
         $entityManager = $this->getDoctrine()->getManager();
