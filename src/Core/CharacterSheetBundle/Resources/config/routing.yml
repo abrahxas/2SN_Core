@@ -1,0 +1,20 @@
+core_characterSheet_homepage:
+    path:     /characterSheet
+    defaults: { _controller: CoreCharacterSheetBundle:CharacterSheet:index }
+
+core_characterSheet_delete:
+    path:     /characterSheet/delete/{characterSheetId}
+    defaults: { _controller: CoreCharacterSheetBundle:CharacterSheet:delete }
+
+core_characterSheet_create:
+    path:     /characterSheet/add
+    defaults: { _controller: CoreCharacterSheetBundle:CharacterSheet:add }
+
+core_characterSheet_show:
+    path:     /characterSheet/{characterSheetId}
+    defaults: { _controller: CoreCharacterSheetBundle:CharacterSheet:show }
+
+core_characterSheet_update:
+    path:     /characterSheet/update/{characterSheetId}
+    defaults: { _controller: CoreCharacterSheetBundle:CharacterSheet:update }
+

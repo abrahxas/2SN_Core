@@ -1,5 +1,10 @@
+core_characterSheet:
+    resource: "@CoreCharacterSheetBundle/Resources/config/routing.yml"
+    prefix:   /
+
 core_comment:
     resource: "@CoreCommentBundle/Resources/config/routing.yml"
+    prefix:   /
 
 core_friendList:
     resource: "@CoreFriendListBundle/Resources/config/routing.yml"

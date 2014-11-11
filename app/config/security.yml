@@ -12,7 +12,7 @@ security:
 
     firewalls:
         main:
-            pattern: ^/api
+            # pattern: ^/api
             logout:
                 path:        /api/logout
                 target:      /api/login
@@ -39,4 +39,4 @@ security:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/resetting, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
+        # - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
