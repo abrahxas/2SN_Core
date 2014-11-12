@@ -3,7 +3,6 @@
 namespace Core\GalleryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Album
@@ -28,13 +27,6 @@ class Album
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
-
-    /**
-     * @var string
-     * @Gedmo\Slug(fields={"name"}, separator="-", unique=true)
-     * @ORM\Column(name="slug", type="string", length=255)
-     */
-    private $slug;
 
     /**
      * @var \DateTime
@@ -167,29 +159,6 @@ class Album
     public function getUser()
     {
         return $this->user;
-    }
-
-    /**
-     * Set slug
-     *
-     * @param string $slug
-     * @return Album
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string
-     */
-    public function getSlug()
-    {
-        return $this->slug;
     }
 
     /**
