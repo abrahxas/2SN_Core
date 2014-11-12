@@ -54,12 +54,6 @@ class Comment
      */
     private $post;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Core\GalleryBundle\Entity\Photo", inversedBy="comment")
-     * @ORM\JoinColumn(name="photo_id", referencedColumnName="id", onDelete="CASCADE"))
-     */
-    private $photo;
-
     public function __construct()
     {
         $this->createdAt = new \Datetime();
@@ -189,28 +183,5 @@ class Comment
     public function getPost()
     {
         return $this->post;
-    }
-
-    /**
-     * Set photo
-     *
-     * @param \Core\GalleryBundle\Entity\Photo $photo
-     * @return Comment
-     */
-    public function setPhoto(\Core\GalleryBundle\Entity\Photo $photo = null)
-    {
-      $this->photo = $photo;
-
-      return $this;
-    }
-
-    /**
-     * Get photo
-     *
-     * @return \Core\GalleryBundle\Entity\Photo
-     */
-    public function getPhoto()
-    {
-      return $this->photo;
     }
 }
