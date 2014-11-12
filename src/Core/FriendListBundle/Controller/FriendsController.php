@@ -16,6 +16,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FriendsController extends FOSRestController
 {
+    /**
+    * @return array
+    * @View()
+    */
     public function getFriendsAction()
     {
         $entityManager = $this->getDoctrine()->getManager();
@@ -38,22 +42,24 @@ class FriendsController extends FOSRestController
     * @return array
     * @View()
     */
-    public function postFriendsAction(Request $request)
+    public function postFriendsAction(Request $request, $friendId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
         $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user'=>$user,'name'=>'wait'));
         $form = $this->createForm(new AddFriendsType(), $friend = new Friend());
+        $jsonPost = json_decode($request->getContent(), true);
 
         if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
+            $form->bind($jsonPost);
             if ($form->isValid()) {
+                $receivingUser = $entityManager->getRepository('CoreUserBundle:User')->find($friendId);
                 $friend->setFriendGroup($friendGroup);
+                $friend->setName($receivingUser->getUsername());
                 $friend->setSender($user);
-                $receivingUser = $entityManager->getRepository('CoreUserBundle:User')->findOneBy(array('username'=>$form->get('name')->getdata()));
                 
                 if(!$receivingUser)
-                    throw $this->createNotFoundException('Friend not exist');
+                    throw $this->createNotFoundException('Friend' . $friendId . 'not exist');
                 
                 $friend->setFriend($receivingUser);
                 $receivingfriend = new Friend();
@@ -83,24 +89,21 @@ class FriendsController extends FOSRestController
                     $entityManager->persist($receivingfriend);
                     $entityManager->flush();
                 }
-                return $this->redirect($this->generateUrl('core_friendList_homepage'));
+                return array('code' => 200, 'text' => 'POST OK');
             }
         }
-
-        return $this->render('CoreFriendListBundle:default:addfriends.html.twig', array(
-            'form' => $form->createView(),
-        ));
+        return array ('code' => 400, $form);
     }
 
     /**
     * @return array
     * @View()
     */
-    public function deleteFriendsAction(Request $request)
+    public function deleteFriendsAction($friendId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-        $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($request->get('friendId'));
+        $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendId);
         $conn = $this->container->get('database_connection');
 
         $query = "SELECT fd.id
@@ -123,11 +126,15 @@ class FriendsController extends FOSRestController
         $entityManager->remove($friendDelete);
         $entityManager->remove($friend);
         $entityManager->flush();
+        return array('code' => 200, 'text' => 'DELETE DONE');
 
-        return $this->redirect($this->generateUrl('core_friendList_homepage'));
     }
 
-    public function indexByGroupAction(Request $request)
+    /**
+    * @return array
+    * @View()
+    */
+    public function getBygroupfriendsAction($friendGroupId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();        
@@ -136,29 +143,25 @@ class FriendsController extends FOSRestController
                 FROM friend fd
                 inner join friendGroups fg on fg.id = fd.friendgroup_id
                 inner join user u on u.id = fg.user_id
-                where u.id = ? and fg.name = ?";
+                where u.id = ? and fg.id = ?";
         $stmt = $conn->prepare($query);
         $stmt->bindValue(1, $user->getId());
-        $stmt->bindValue(2, $request->get('friendGroupName'));
+        $stmt->bindValue(2, $friendGroupId);
         $stmt->execute();
 
-        if ($request->get('friendGroupName') == 'wait'){
-            return $this->render('CoreFriendListBundle:default:indexFriend.html.twig', array(
-            'friends' => $stmt
-            ));
-        } else {
-            return $this->render('CoreFriendListBundle:default:moove.html.twig', array(
-            'friends' => $stmt
-            ));
-        } 
+        return array('friends' => $stmt);
     }
 
-    public function validAction(Request $request)
+    /**
+    * @return array
+    * @View()
+    */
+    public function postValidfriendAction($friendId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
         $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user'=>$user,'name'=>'general'));
-        $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($request->get('friendId'));
+        $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendId);
         $senderUser = $entityManager->getRepository('CoreUserBundle:User')->findOneBy(array('username'=>$friend->getSender()));
         $senderGeneralGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user'=>$senderUser,'name'=>'general'));
         $senderFriend = $entityManager->getRepository('CoreFriendListBundle:Friend')->findOneBy(array('sender'=>$senderUser->getUsername(),'friend'=>$user->getId()));
@@ -171,11 +174,16 @@ class FriendsController extends FOSRestController
             $entityManager->persist($senderFriend);
 
             $entityManager->flush();
+            return array('code' => 200, 'text' => 'OK ON EST TROP AMI!');
         }
-        return $this->redirect($this->generateUrl('core_friendList_homepage'));
+        return array('code' => 400, 'text' => 'Only receiver can accept');
     }
 
-    public function moveFriendInGroupAction(Request $request)
+    /**
+    * @return array
+    * @View()
+    */
+    public function postFriendGroupAction(Request $request, $friendId, $friendGroupId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -184,47 +192,15 @@ class FriendsController extends FOSRestController
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
             if ($form->isValid()){
-                $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($request->get('friendId'));
-                $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user'=>$user,'name'=>$form->get('name')->getData()->getName()));
+                $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendId);
+                $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->find($friendGroupId);
                 $friend->setFriendGroup($friendGroup);
                 $entityManager->persist($friend);
                 $entityManager->flush();
 
-                return $this->redirect($this->generateUrl('core_friendList_homepage'));
+                return array('code' => 200, 'text' => 'MOVE OK');
             }
         }
-        return $this->render('CoreFriendListBundle:default:selectgroup.html.twig', array(
-                    'form' => $form->createView(),
-                ));
-    }
-
-    public function userResearchAction(Request $request)
-    {
-        $entityManager = $this->getDoctrine()->getManager();  
-        $conn = $this->container->get('database_connection');
-        $form = $this->createForm(new ResearchFriendsType());
-
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
-
-            if ($form->isValid()) 
-            {
-                $query = "SELECT us.username
-                FROM user us
-                WHERE us.username LIKE :username ";
-                $stmt = $conn->prepare($query);
-                $stmt->bindValue('username', '%'.$form->get('username')->getData().'%');
-                $stmt->execute();
-
-                return $this->render('CoreFriendListBundle:default:research.html.twig', array(
-                'form' => $form->createView(),
-                'friends'=>$stmt
-            ));
-            }
-        }
-        
-        return $this->render('CoreFriendListBundle:default:research.html.twig', array(
-            'form' => $form->createView(),
-        ));
+        return array('code' => 400, $form);
     }
 }

@@ -20,7 +20,7 @@ class FriendListsController extends FOSRestController
     * @return array
     * @View()
     */
-    public function getFriendListsAction()
+    public function getFriendlistsAction()
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -33,7 +33,7 @@ class FriendListsController extends FOSRestController
     * @return array
     * @View()
     */
-    public function postFriendListsAction(Request $request)
+    public function postFriendlistsAction(Request $request)
     {
     	$entityManager = $this->getDoctrine()->getManager();
     	$user = $this->container->get('security.context')->getToken()->getUser();
@@ -43,9 +43,7 @@ class FriendListsController extends FOSRestController
     		$form->bind($jsonPost);
     		if($form->isValid()){
                 if($this->GroupExist($form->get('name')->getData())){
-                    return $this->render('CoreFriendListBundle:default:add.html.twig', array(
-                        'form'=> $form->createView()
-                    ));
+                    return array('code' => 400, 'message' => 'Group already exist!');
                 }
     			$friendGroups->setUser($user);
     			$entityManager->persist($friendGroups);
@@ -61,7 +59,7 @@ class FriendListsController extends FOSRestController
     * @return array
     * @View()
     */
-    public function putFriendListsAction(Request $request, $friendGroupId)
+    public function putFriendlistsAction(Request $request, $friendGroupId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -75,9 +73,7 @@ class FriendListsController extends FOSRestController
             $form->bind($jsonPost);
             if ($form->isValid()) {
                 if($this->GroupExist($form->get('name')->getData())){
-                    return $this->render('CoreFriendListBundle:default:add.html.twig', array(
-                        'form' => $form->createView(),
-                    ));
+                    return array('code' => 400, 'message' => 'Group already exist!');
                 }
                 $friendGroup->setUser($user);
                 $entityManager->persist($friendGroup);
@@ -92,7 +88,7 @@ class FriendListsController extends FOSRestController
     * @return array
     * @View()
     */
-    public function deleteFriendListsAction($friendGroupId)
+    public function deleteFriendlistsAction($friendGroupId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -127,7 +123,7 @@ class FriendListsController extends FOSRestController
             return true;
     }
 
-    public function moveFriendInGroupAction($friendId, $friendGroupId)
+    public function postFriendMoveAction($friendId, $friendGroupId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -137,7 +133,7 @@ class FriendListsController extends FOSRestController
         $entityManager->persist($friend);
         $entityManager->flush();
 
-        return $this->redirect($this->generateUrl('core_friendList_homepage'));
+        return array('code' => 200, 'text' => 'MOVE OK');
     }
 
 }
