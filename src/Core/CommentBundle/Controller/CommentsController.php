@@ -15,13 +15,10 @@ class CommentsController extends FOSRestController
     * @return array
     * @View()
     */
-  public function getCommentsAction(Request $request)
+  public function getCommentsAction($postId)
   {
     $entityManager = $this->getDoctrine()->getManager();
-    if ($request->get('postId') != null)
-      $comments = $entityManager->getRepository('CoreCommentBundle:Comment')->findBy(array('post' => $request->get('postId')), array('createdAt' => 'DESC'));
-    else
-      $comments = $entityManager->getRepository('CoreCommentBundle:Comment')->findBy(array('photo' => $request->get('photoId')), array('createdAt' => 'DESC'));
+    $comments = $entityManager->getRepository('CoreCommentBundle:Comment')->findBy(array('post' => $postId), array('createdAt' => 'DESC'));
 
     return array('comments' => $comments);
   }
@@ -42,30 +39,24 @@ class CommentsController extends FOSRestController
     * @return array
     * @View()
     */
-  public function postCommentsAction(Request $request)
+  public function postCommentsAction(Request $request, $postId)
   {
     $entityManager = $this->getDoctrine()->getManager();
     $user = $this->container->get('security.context')->getToken()->getUser();
     $form = $this->createForm(new CommentType(), $comment = new Comment());
 
-    if ($request->get('postId') != null)
-      $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($request->get('postId'));
-    else
-      $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($request->get('photoId'));
+    $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($postId);
 
     $jsonPost = json_decode($request->getContent(), true);
     if ($request->isMethod('POST')) {
       $form->bind($jsonPost);
       if ($form->isValid()) {
         $comment->setUser($user);
-        ($request->get('postId') != null) ? $comment->setPost($post) : $comment->setPhoto($photo);
+        $comment->setPost($post);
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        if ($request->get('postId') != null)
-          return array('code' => 200, 'text' => 'Post comment OK');
-        else
-          return array('code' => 200, 'text' => 'Photo comment OK');
+        return array('code' => 200, 'text' => 'Post comment OK');
       }
     }
 
