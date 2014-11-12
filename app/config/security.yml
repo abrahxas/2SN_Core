@@ -12,7 +12,7 @@ security:
 
     firewalls:
         main:
-            pattern: ^/api
+            # pattern: ^/api
             logout:
                 path:        /api/logout
                 target:      /api/login

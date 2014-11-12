@@ -1,5 +1,10 @@
+core_characterSheet:
+    resource: "@CoreCharacterSheetBundle/Resources/config/routing.yml"
+    prefix:   /
+
 core_comment:
     resource: "@CoreCommentBundle/Resources/config/routing.yml"
+    prefix:   /
 
 core_friendList:
     resource: "@CoreFriendListBundle/Resources/config/routing.yml"
@@ -50,4 +55,8 @@ albums:
 photos:
     type: rest
     resource: Core\GalleryBundle\Controller\PhotosController
+    prefix : /api
+CharacterSheets:
+    type: rest
+    resource: Core\CharacterSheetBundle\Controller\CharacterSheetsController
     prefix : /api

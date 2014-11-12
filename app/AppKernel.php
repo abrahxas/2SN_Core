@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new Core\GalleryBundle\CoreGalleryBundle(),
             new Core\CommentBundle\CoreCommentBundle(),
             new Core\FriendListBundle\CoreFriendListBundle(),
+            new Core\CharacterSheetBundle\CoreCharacterSheetBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

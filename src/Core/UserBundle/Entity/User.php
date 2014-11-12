@@ -56,6 +56,11 @@ class User extends BaseUser
      */
     protected $albums;
 
+    /**
+     * @var \Core\CharacterSheetBundle\Entity\CharacterSheet[]
+     * @ORM\OneToMany(targetEntity="Core\CharacterSheetBundle\Entity\CharacterSheet", mappedBy="user", cascade={"persist"})
+     */
+    protected $characterSheets;
 
     /**
      * Constructor
@@ -193,6 +198,39 @@ class User extends BaseUser
     public function getAlbums()
     {
         return $this->albums;
+    }
+
+    /**
+     * Add characterSheet
+     *
+     * @param \Core\GalleryBundle\Entity\Album $characterSheet
+     * @return User
+     */
+    public function addCharacterSheet(\Core\CharacterSheetBundle\Entity\CharacterSheet $characterSheet)
+    {
+        $this->characterSheet[] = $characterSheet;
+
+        return $this;
+    }
+
+    /**
+     * Remove characterSheet
+     *
+     * @param \Core\CharacterSheetBundle\Entity\CharacterSheet $characterSheet
+     */
+    public function removeCharacterSheet(\Core\CharacterSheetBundle\Entity\CharacterSheet $characterSheet)
+    {
+        $this->characterSheet->removeElement($characterSheet);
+    }
+
+    /**
+     * Get characterSheet
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCharacterSheets()
+    {
+        return $this->characterSheet;
     }
 
     /**
