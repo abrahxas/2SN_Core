@@ -65,11 +65,6 @@ class Photo
      */
     private $album;
 
-    /**
-     * @ORM\OneToMany(targetEntity="\Core\CommentBundle\Entity\Comment", mappedBy="photo")
-     */
-    private $comments;
-
     public function __construct()
     {
         $this->createdAt = new \Datetime();
@@ -227,38 +222,5 @@ class Photo
     public function getImageName()
     {
         return $this->imageName;
-    }
-
-    /**
-     * Add comments
-     *
-     * @param \Core\CommentBundle\Entity\Comment $comments
-     * @return Photo
-     */
-    public function addCommentsPhoto(\Core\CommentBundle\Entity\Comment $comments)
-    {
-        $this->comments[] = $comments;
-
-        return $this;
-    }
-
-    /**
-     * Remove comments
-     *
-     * @param \Core\CommentBundle\Entity\Comment $comments
-     */
-    public function removeCommentsPhoto(\Core\CommentBundle\Entity\Comment $comments)
-    {
-        $this->comments->removeElement($comments);
-    }
-
-    /**
-     * Get commentsPhoto
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCommentsPhoto()
-    {
-        return $this->comments;
     }
 }
