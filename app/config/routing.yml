@@ -59,4 +59,11 @@ photos:
 CharacterSheets:
     type: rest
     resource: Core\CharacterSheetBundle\Controller\CharacterSheetsController
+friendLists:
+    type: rest
+    resource: Core\FriendListBundle\Controller\FriendListsController
+    prefix : /api
+friends:
+    type: rest
+    resource: Core\FriendListBundle\Controller\FriendsController
     prefix : /api
