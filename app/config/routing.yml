@@ -56,3 +56,7 @@ photos:
     type: rest
     resource: Core\GalleryBundle\Controller\PhotosController
     prefix : /api
+CharacterSheets:
+    type: rest
+    resource: Core\CharacterSheetBundle\Controller\CharacterSheetsController
+    prefix : /api

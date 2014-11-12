@@ -302,4 +302,50 @@ class CharacterSheet
     {
         return $this->sheetFile;
     }
+
+    /**
+     * Set details
+     *
+     * @param string $details
+     * @return CharacterSheet
+     */
+    public function setDetails($details)
+    {
+        $this->details = $details;
+
+        return $this;
+    }
+
+    /**
+     * Get details
+     *
+     * @return string 
+     */
+    public function getDetails()
+    {
+        return $this->details;
+    }
+
+    /**
+     * Set background
+     *
+     * @param string $background
+     * @return CharacterSheet
+     */
+    public function setBackground($background)
+    {
+        $this->background = $background;
+
+        return $this;
+    }
+
+    /**
+     * Get background
+     *
+     * @return string 
+     */
+    public function getBackground()
+    {
+        return $this->background;
+    }
 }
