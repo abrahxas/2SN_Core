@@ -16,6 +16,8 @@ class CharacterSheetType extends AbstractType
     {
         $builder
             ->add('fullName', 'text')
+            ->add('details', 'text')
+            ->add('background', 'textarea')
             ->add('imageFile', 'file')
             ->add('sheetFile', 'file')
             ->add('save', 'submit')

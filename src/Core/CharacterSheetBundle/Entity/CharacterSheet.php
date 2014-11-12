@@ -32,7 +32,21 @@ class CharacterSheet
     private $fullName;
 
     /**
-     * @Vich\UploadableField(mapping="photo", fileNameProperty="imageName")
+     * @var string
+     *
+     * @ORM\Column(name="details", type="string", length=255)
+     */
+    private $details;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="background", type="text")
+     */
+    private $background;
+
+    /**
+     * @Vich\UploadableField(mapping="photo", fileNameProperty="image_name")
      *
      * @var File $imageFile
      */
@@ -41,12 +55,12 @@ class CharacterSheet
     /**
      * @var string
      *
-     * @ORM\Column(name="imageName", type="string", length=255)
+     * @ORM\Column(name="image_name", type="string", length=255)
      */
     private $imageName;
 
     /**
-     * @Vich\UploadableField(mapping="characterSheet", fileNameProperty="sheetName")
+     * @Vich\UploadableField(mapping="characterSheet", fileNameProperty="sheet_name")
      *
      * @var File $sheetFile
      */
@@ -55,7 +69,7 @@ class CharacterSheet
     /**
      * @var string
      *
-     * @ORM\Column(name="sheetName", type="string", length=255)
+     * @ORM\Column(name="sheet_name", type="string", length=255)
      */
     private $sheetName;
 
