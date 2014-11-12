@@ -57,7 +57,7 @@ class Post
     protected $comments;
 
     /**
-     * @Vich\UploadableField(mapping="post", fileNameProperty="imageName")
+     * @Vich\UploadableField(mapping="post", fileNameProperty="image_name")
      * @var File $imageFile
      */
     protected $imageFile;
