@@ -32,7 +32,7 @@ class Photo
     private $content;
 
     /**
-     * @Vich\UploadableField(mapping="photo", fileNameProperty="image_name")
+     * @Vich\UploadableField(mapping="photo", fileNameProperty="imageName")
      *
      * @var File $imageFile
      */

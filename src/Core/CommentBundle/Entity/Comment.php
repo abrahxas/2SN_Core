@@ -43,13 +43,13 @@ class Comment
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="posts")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="comments")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\BlogBundle\Entity\Post", inversedBy="comment")
+     * @ORM\ManyToOne(targetEntity="Core\BlogBundle\Entity\Post", inversedBy="comments")
      * @ORM\JoinColumn(name="post_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $post;
