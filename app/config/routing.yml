@@ -41,28 +41,37 @@ users:
     type: rest
     resource: Core\UserBundle\Controller\UsersController
     prefix : /api
+
 blogs:
     type: rest
     resource: Core\BlogBundle\Controller\BlogsController
     prefix : /api
+
 comments:
     type: rest
     resource: Core\CommentBundle\Controller\CommentsController
+    prefix: /api
+
 albums:
     type: rest
     resource: Core\GalleryBundle\Controller\AlbumsController
     prefix : /api
+
 photos:
     type: rest
     resource: Core\GalleryBundle\Controller\PhotosController
     prefix : /api
+
 CharacterSheets:
     type: rest
     resource: Core\CharacterSheetBundle\Controller\CharacterSheetsController
+    prefix: /api
+
 friendLists:
     type: rest
     resource: Core\FriendListBundle\Controller\FriendListsController
-    prefix : /api
+    prefix : /ap
+
 friends:
     type: rest
     resource: Core\FriendListBundle\Controller\FriendsController
