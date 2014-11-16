@@ -51,6 +51,12 @@ class User extends BaseUser
     protected $posts;
 
     /**
+     * @var \Core\CommentBundle\Entity\Comment[]
+     * @ORM\OneToMany(targetEntity="Core\CommentBundle\Entity\Comment", mappedBy="user", cascade={"persist"})
+     */
+    protected $comments;
+
+    /**
      * @var \Core\GalleryBundle\Entity\Album[]
      * @ORM\OneToMany(targetEntity="Core\GalleryBundle\Entity\Album", mappedBy="user", cascade={"persist"})
      */
