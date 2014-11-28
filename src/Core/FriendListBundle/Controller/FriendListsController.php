@@ -93,17 +93,17 @@ class FriendListsController extends FOSRestController
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
         $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->find($friendGroupId);
-        $mooveGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user'=>$user,'name'=>'general'));
-        $friendListmoove = $entityManager->getRepository('CoreFriendListBundle:Friend')->findBy(array('friendgroup'=>$$request->get('friendGroupId')));
+        $moveGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user'=>$user,'name'=>'general'));
+        $friendListmove = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendGroupId);
 
         if (!$friendGroup)
             throw $this->createNotFoundException('Friend Group Not Found');
 
         if($friendGroup->getName() == 'wait' || $friendGroup->getName() == 'general')
-            return $this->redirect($this->generateUrl('core_friendList_homepage'));
+            return ('code' => 400, 'text' => 'NOPE');
 
-        foreach ($friendListmoove as $friend){
-            $this->mooveFriendInGroupAction($friend->getId(), $mooveGroup->getId());
+        foreach ($friendListmove as $friend){
+            $this->postFriendMoveAction($friend->getId(), $moveGroup->getId());
         }
         $entityManager->remove($friendGroup);
         $entityManager->flush();
@@ -111,6 +111,10 @@ class FriendListsController extends FOSRestController
         return array('code' => 200, 'text' => 'DELETE OK');
     }
 
+    /**
+    * @return array
+    * @View()
+    */
     public function GroupExist($nameGroup)
     {
         $entityManager = $this->getDoctrine()->getManager();
@@ -123,6 +127,10 @@ class FriendListsController extends FOSRestController
             return true;
     }
 
+    /**
+    * @return array
+    * @View()
+    */
     public function postFriendMoveAction($friendId, $friendGroupId)
     {
         $entityManager = $this->getDoctrine()->getManager();

@@ -70,7 +70,7 @@ CharacterSheets:
 friendLists:
     type: rest
     resource: Core\FriendListBundle\Controller\FriendListsController
-    prefix : /ap
+    prefix : /api
 
 friends:
     type: rest

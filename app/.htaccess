@@ -1,5 +1,6 @@
 <IfModule mod_authz_core.c>
     Require all denied
+    Header set Access-Control-Allow-Origin *
 </IfModule>
 <IfModule !mod_authz_core.c>
     Order deny,allow
