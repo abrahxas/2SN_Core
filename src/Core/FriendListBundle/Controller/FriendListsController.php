@@ -20,10 +20,10 @@ class FriendListsController extends FOSRestController
     * @return array
     * @View()
     */
-    public function getFriendlistsAction()
+    public function getFriendlistsAction($userId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
         $friendLists = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findBy(array('user' => $user));
 
         return array('friendLists' => $friendLists);
@@ -100,7 +100,7 @@ class FriendListsController extends FOSRestController
             throw $this->createNotFoundException('Friend Group Not Found');
 
         if($friendGroup->getName() == 'wait' || $friendGroup->getName() == 'general')
-            return ('code' => 400, 'text' => 'NOPE');
+            return array('code' => 400, 'text' => 'NOPE');
 
         foreach ($friendListmove as $friend){
             $this->postFriendMoveAction($friend->getId(), $moveGroup->getId());
