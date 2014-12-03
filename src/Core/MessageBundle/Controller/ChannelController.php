@@ -171,7 +171,3 @@ class ChannelController extends Controller
         $entityManager->flush();
     }
 }
-
-
-
-
