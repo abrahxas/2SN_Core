@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Message
  *
- * @ORM\Table()
+ * @ORM\Table(name = "message")
  * @ORM\Entity(repositoryClass="Core\MessageBundle\Entity\MessageRepository")
  */
 class Message
@@ -22,10 +22,16 @@ class Message
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\ChatroomBundle\Entity\Channel", inversedBy="message")
-     * @ORM\JoinColumn(name="chatroom_id", referencedColumnName="id"))
+     * @ORM\ManyToOne(targetEntity="Core\MessageBundle\Entity\Channel", inversedBy="messages")
+     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $channel;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="sender")
+     * @ORM\JoinColumn(name="sender_id", referencedColumnName="id", onDelete="CASCADE"))
+     */
+    private $sender;
 
     /**
      * @var string
@@ -71,10 +77,10 @@ class Message
     /**
      * Set channel
      *
-     * @param \Core\ChatroomBundle\Entity\Channel $channel
+     * @param \Core\MessageBundle\Entity\Channel $channel
      * @return Message
      */
-    public function setChannel(\Core\ChatroomBundle\Entity\Channel $channel = null)
+    public function setChannel(\Core\MessageBundle\Entity\Channel $channel = null)
     {
         $this->channel = $channel;
 
@@ -84,10 +90,33 @@ class Message
     /**
      * Get channel
      *
-     * @return \Core\ChatroomBundle\Entity\Channel 
+     * @return \Core\MessageBundle\Entity\Channel 
      */
     public function getChannel()
     {
         return $this->channel;
+    }
+
+    /**
+     * Set sender
+     *
+     * @param \Core\UserBundle\Entity\User $sender
+     * @return Message
+     */
+    public function setSender(\Core\UserBundle\Entity\User $sender = null)
+    {
+        $this->sender = $sender;
+
+        return $this;
+    }
+
+    /**
+     * Get sender
+     *
+     * @return \Core\UserBundle\Entity\User 
+     */
+    public function getSender()
+    {
+        return $this->sender;
     }
 }

@@ -1,0 +1,35 @@
+core_gamesession_homepage:
+    path:     /gameSession
+    defaults: { _controller: CoreGameSessionBundle:GameSession:index }
+
+core_gamesession_create:
+    path:     /gameSession/create
+    defaults: { _controller: CoreGameSessionBundle:GameSession:create }
+
+core_gamesession_addguest:
+    path:     /gameSession/guest/{GameSessionId}-add
+    defaults: { _controller: CoreGameSessionBundle:GameSession:addGuest }
+
+core_gamesession_invitation:
+    path:     /gameSession/invitation
+    defaults: { _controller: CoreGameSessionBundle:GameSession:invitation }
+
+core_gamesession_validation:
+    path:     /gameSession/{GameSessionId}-validation/{invitationId}
+    defaults: { _controller: CoreGameSessionBundle:GameSession:validation }
+
+core_gamesession_delete:
+    path:     /gameSession/{GameSessionId}-delete
+    defaults: { _controller: CoreGameSessionBundle:GameSession:delete }
+
+core_gamesession_leave:
+    path:     /gameSession/{GameSessionId}-leave
+    defaults: { _controller: CoreGameSessionBundle:GameSession:leaveGameSession }
+
+core_gamesession_detail:
+    path:     /gameSession/{GameSessionId}-detail
+    defaults: { _controller: CoreGameSessionBundle:GameSession:detailGameSession }
+
+core_gamesession_invitation_delete:
+    path:     /gameSession/invitation/{GameSessionId}-delete
+    defaults: { _controller: CoreGameSessionBundle:GameSession:deleteInvitation }

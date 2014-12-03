@@ -1,0 +1,24 @@
+<html>
+<head></head>
+<body>
+Invitation
+<br>
+<br>
+
+{% for Invitation in listInvitation %}
+	<div style="background-color: #313131;padding: 2%;margin-bottom: 2%;width: 30%;">
+	    <div style="background-color: white">
+	    	<p>Game session : {{ Invitation.gameSession.name }}</p> <br>
+	    	<p>Description : {{ Invitation.gameSession.description }}</p>
+	    	<p>Master : {{ Invitation.gameSession.master.username }}</p>
+	    	<p>
+	    		<a href="{{path('core_gamesession_validation', {'GameSessionId':Invitation.gameSession.id, 'invitationId': Invitation.id} )}}">Validation</a>
+	    	</p>
+	    	<p>
+	    		<a href="{{path('core_gamesession_invitation_delete', {'GameSessionId':Invitation.gameSession.id, 'invitationId': Invitation.id} )}}">Refuse</a>
+	    	</p>
+	    </div>
+	</div>
+{% endfor %}
+</body>
+</html>
