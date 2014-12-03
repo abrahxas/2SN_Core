@@ -43,22 +43,16 @@ class Comment
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="posts")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="comments")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\BlogBundle\Entity\Post", inversedBy="comment")
+     * @ORM\ManyToOne(targetEntity="Core\BlogBundle\Entity\Post", inversedBy="comments")
      * @ORM\JoinColumn(name="post_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $post;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Core\GalleryBundle\Entity\Photo", inversedBy="comment")
-     * @ORM\JoinColumn(name="photo_id", referencedColumnName="id", onDelete="CASCADE"))
-     */
-    private $photo;
 
     public function __construct()
     {
@@ -189,28 +183,5 @@ class Comment
     public function getPost()
     {
         return $this->post;
-    }
-
-    /**
-     * Set photo
-     *
-     * @param \Core\GalleryBundle\Entity\Photo $photo
-     * @return Comment
-     */
-    public function setPhoto(\Core\GalleryBundle\Entity\Photo $photo = null)
-    {
-      $this->photo = $photo;
-
-      return $this;
-    }
-
-    /**
-     * Get photo
-     *
-     * @return \Core\GalleryBundle\Entity\Photo
-     */
-    public function getPhoto()
-    {
-      return $this->photo;
     }
 }

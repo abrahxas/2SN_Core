@@ -31,7 +31,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        ['CoreBlogBundle', 'CoreGalleryBundle']
+    bundles:        ['CoreBlogBundle', 'CoreGalleryBundle', 'CoreUserBundle']
 #    java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -93,13 +93,6 @@ sensio_framework_extra:
     view: { annotations: false }
     router: { annotations: false }
 
-# Sluggable config
-stof_doctrine_extensions:
-    default_locale:  "%locale%"
-    orm:
-        default:
-            sluggable: true
-
 vich_uploader:
     db_driver: orm
     mappings:
@@ -109,3 +102,13 @@ vich_uploader:
         photo:
             uri_prefix:         /uploads/photo
             upload_destination: %kernel.root_dir%/../web//uploads/photo
+        characterSheet:
+            uri_prefix:         /uploads/characterSheet
+            upload_destination: %kernel.root_dir%/../web//uploads/characterSheet
+
+lexik_jwt_authentication:
+    private_key_path: %kernel.root_dir%/var/jwt/private.pem   # ssh private key path
+    public_key_path:  %kernel.root_dir%/var/jwt/public.pem    # ssh public key path
+    pass_phrase:      'totobolo'                              # ssh key pass phrase
+    token_ttl:        86400                                   # token ttl - defaults to 86400
+    encoder_service:  lexik_jwt_authentication.jwt_encoder    # token encoder / decoder service - defaults to the jwt encoder (based on the namshi/jose library)

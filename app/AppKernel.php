@@ -18,10 +18,10 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             //Contrib
             new FOS\UserBundle\FOSUserBundle(),
-            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Vich\UploaderBundle\VichUploaderBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\RestBundle\FOSRestBundle(),
+            new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle(),
             //Custom
             new Core\UserBundle\CoreUserBundle(),
             new Core\BlogBundle\CoreBlogBundle(),
@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new Core\FriendListBundle\CoreFriendListBundle(),
             new Core\MessageBundle\CoreMessageBundle(),
             new Core\GameSessionBundle\CoreGameSessionBundle(),
+            new Core\CharacterSheetBundle\CoreCharacterSheetBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

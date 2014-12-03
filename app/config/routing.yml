@@ -1,9 +1,13 @@
 core_game_session:
     resource: "@CoreGameSessionBundle//Resources/config/routing.yml"
+    
+core_characterSheet:
+    resource: "@CoreCharacterSheetBundle/Resources/config/routing.yml"
     prefix:   /
 
 core_comment:
     resource: "@CoreCommentBundle/Resources/config/routing.yml"
+    prefix:   /
 
 core_message:
     resource: "@CoreMessageBundle/Resources/config/routing.yml"
@@ -32,10 +36,6 @@ fos_user_profile:
     resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
     prefix: /api/profile
 
-fos_user_register:
-    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
-    prefix: /api/register
-
 fos_user_resetting:
     resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
     prefix: /api/resetting
@@ -49,3 +49,37 @@ users:
     resource: Core\UserBundle\Controller\UsersController
     prefix : /api
 
+blogs:
+    type: rest
+    resource: Core\BlogBundle\Controller\BlogsController
+    prefix : /api
+
+comments:
+    type: rest
+    resource: Core\CommentBundle\Controller\CommentsController
+    prefix: /api
+
+albums:
+    type: rest
+    resource: Core\GalleryBundle\Controller\AlbumsController
+    prefix : /api
+
+photos:
+    type: rest
+    resource: Core\GalleryBundle\Controller\PhotosController
+    prefix : /api
+
+CharacterSheets:
+    type: rest
+    resource: Core\CharacterSheetBundle\Controller\CharacterSheetsController
+    prefix: /api
+
+friendLists:
+    type: rest
+    resource: Core\FriendListBundle\Controller\FriendListsController
+    prefix : /api
+
+friends:
+    type: rest
+    resource: Core\FriendListBundle\Controller\FriendsController
+    prefix : /api

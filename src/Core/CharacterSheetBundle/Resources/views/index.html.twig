@@ -1,0 +1,15 @@
+{% for characterSheet in characterSheets %}
+    <div style="background-color: #9C1F06; width: 15%;margin-bottom: 5%;padding: 3%">
+        <div style="background-color: white;">
+            <a style="float:left" href="{{ path('core_characterSheet_update', {'characterSheetId': characterSheet.id}) }}">up characterSheet</a>
+            <a style="float:right" href="{{ path('core_characterSheet_delete', {'characterSheetId': characterSheet.id}) }}">del characterSheet</a>
+            <br>
+            <br>
+            {{ characterSheet.fullname }}
+            <br>
+            {{ characterSheet.imageName }}
+            <br>
+            {{ characterSheet.sheetName }}
+        </div>
+    </div>
+{% endfor %}

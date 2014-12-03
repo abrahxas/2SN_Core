@@ -41,7 +41,7 @@ class Photo
     /**
      * @var string
      *
-     * @ORM\Column(name="imageName", type="string", length=255)
+     * @ORM\Column(name="image_name", type="string", length=255)
      */
     private $imageName;
 
@@ -64,11 +64,6 @@ class Photo
      * @ORM\JoinColumn(name="album_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $album;
-
-    /**
-     * @ORM\OneToMany(targetEntity="\Core\CommentBundle\Entity\Comment", mappedBy="photo")
-     */
-    private $comments;
 
     public function __construct()
     {
@@ -227,38 +222,5 @@ class Photo
     public function getImageName()
     {
         return $this->imageName;
-    }
-
-    /**
-     * Add comments
-     *
-     * @param \Core\CommentBundle\Entity\Comment $comments
-     * @return Photo
-     */
-    public function addCommentsPhoto(\Core\CommentBundle\Entity\Comment $comments)
-    {
-        $this->comments[] = $comments;
-
-        return $this;
-    }
-
-    /**
-     * Remove comments
-     *
-     * @param \Core\CommentBundle\Entity\Comment $comments
-     */
-    public function removeCommentsPhoto(\Core\CommentBundle\Entity\Comment $comments)
-    {
-        $this->comments->removeElement($comments);
-    }
-
-    /**
-     * Get commentsPhoto
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCommentsPhoto()
-    {
-        return $this->comments;
     }
 }

@@ -5,6 +5,7 @@ namespace Core\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use Core\FriendListBundle\Entity\FriendGroups;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * User
@@ -33,6 +34,15 @@ class User extends BaseUser
     /**
      *@var Core\FriendListBundle\Entity\friendGroup[]
      * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\FriendGroups", mappedBy="user", cascade={"persist"})
+     * @var string
+     *
+     * @ORM\Column(name="image_profile", type="string", nullable=true)
+     */
+    private $imageProfile;
+
+    /**
+     *@var friendGroups[]
+     * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\FriendGroups", mappedBy="user", cascade="persist")
      */
     protected $friendGroups;
 
@@ -49,6 +59,12 @@ class User extends BaseUser
     protected $posts;
 
     /**
+     * @var \Core\CommentBundle\Entity\Comment[]
+     * @ORM\OneToMany(targetEntity="Core\CommentBundle\Entity\Comment", mappedBy="user", cascade={"persist"})
+     */
+    protected $comments;
+
+    /**
      * @var \Core\GalleryBundle\Entity\Album[]
      * @ORM\OneToMany(targetEntity="Core\GalleryBundle\Entity\Album", mappedBy="user", cascade={"persist"})
      */
@@ -59,7 +75,11 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Core\GameSessionBundle\Entity\GameSession", mappedBy="master", cascade={"persist"})
      */
     protected $gameSessions;
-
+    /**
+     * @var \Core\CharacterSheetBundle\Entity\CharacterSheet[]
+     * @ORM\OneToMany(targetEntity="Core\CharacterSheetBundle\Entity\CharacterSheet", mappedBy="user", cascade={"persist"})
+     */
+    protected $characterSheets;
 
     /**
      * Constructor
@@ -71,6 +91,11 @@ class User extends BaseUser
         $albumWall->setName('Wall');
         $albumWall->setUser($this);
         $this->addAlbum($albumWall);
+
+        $albumProfile = new \Core\GalleryBundle\Entity\Album();
+        $albumProfile->setName('Profile');
+        $albumProfile->setUser($this);
+        $this->addAlbum($albumProfile);
 
         $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
         $postWall = new \Core\BlogBundle\Entity\Post();
@@ -85,14 +110,15 @@ class User extends BaseUser
         $generalGroup = new FriendGroups();
         $generalGroup->setUser($this);
         $generalGroup->setName('general');
-
         $this->addFriendGroup($generalGroup);
 
         $waitGroup = new FriendGroups();
         $waitGroup->setUser($this);
         $waitGroup->setName('wait');
-
         $this->addFriendGroup($waitGroup);
+
+        $this->imageProfile = 'anon_user.png';
+
         parent::__construct();
     }
 
@@ -265,6 +291,39 @@ class User extends BaseUser
     /**
      * Add gameSessions
      *
+     * @param \Core\GalleryBundle\Entity\Album $characterSheet
+     * @return User
+     */
+    public function addCharacterSheet(\Core\CharacterSheetBundle\Entity\CharacterSheet $characterSheet)
+    {
+        $this->characterSheet[] = $characterSheet;
+
+        return $this;
+    }
+
+    /**
+     * Remove characterSheet
+     *
+     * @param \Core\CharacterSheetBundle\Entity\CharacterSheet $characterSheet
+     */
+    public function removeCharacterSheet(\Core\CharacterSheetBundle\Entity\CharacterSheet $characterSheet)
+    {
+        $this->characterSheet->removeElement($characterSheet);
+    }
+
+    /**
+     * Get characterSheet
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCharacterSheets()
+    {
+        return $this->characterSheet;
+    }
+
+    /**
+     * Add friendGroups
+     *
      * @param \Core\GameSessionBundle\Entity\GameSession $gameSessions
      * @return User
      */
@@ -293,5 +352,28 @@ class User extends BaseUser
     public function getGameSessions()
     {
         return $this->gameSessions;
+    }
+
+    /**
+     * Set imageProfile
+     *
+     * @param string $imageProfile
+     * @return User
+     */
+    public function setImageProfile($imageProfile)
+    {
+        $this->imageProfile = $imageProfile;
+
+        return $this;
+    }
+
+    /**
+     * Get imageProfile
+     *
+     * @return string 
+     */
+    public function getImageProfile()
+    {
+        return $this->imageProfile;
     }
 }

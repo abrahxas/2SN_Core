@@ -115,4 +115,21 @@ class PhotoController extends Controller
         else
             return $this->redirect($this->generateUrl('core_photo_all'));
     }
+
+    public function addPhotoProfileAction($albumSlug, $photoId)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($photoId);
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        if (!$photo) {
+            throw $this->createNotFoundException('Photo ' . $request->get('photoId') . ' Not Found');
+        }
+
+        $user->setImageProfile($photo->getImageName());
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $this->redirect($this->generateUrl('core_album_show', array('albumSlug' => $albumSlug)));
+    }
 }
