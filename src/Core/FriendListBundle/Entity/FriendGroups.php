@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * friendGroups
  *
- * @ORM\Table(name="friendGroups")
+ * @ORM\Table(name="friend_groups")
  * @ORM\Entity
  */
 class FriendGroups
@@ -31,12 +31,12 @@ class FriendGroups
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="friendGroups")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id"))
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id"), onDelete="CASCADE")
      */
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\Friend" ,mappedBy="friendGroups")
+     * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\Friend" ,mappedBy="friend" ,cascade={"persist"})
      */
     protected $friends;
 

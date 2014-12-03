@@ -30,13 +30,13 @@ class Friend
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\FriendListBundle\Entity\FriendGroups", inversedBy="friend")
-     * @ORM\JoinColumn(name="friendgroup_id", referencedColumnName="id"))
+     * @ORM\JoinColumn(name="friendgroup_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $friendgroup;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="friend")
-     * @ORM\JoinColumn(name="friend_id", referencedColumnName="id"))
+     * @ORM\JoinColumn(name="friend_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $friend;
 

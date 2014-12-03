@@ -84,9 +84,9 @@ class FriendListController extends Controller
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-        $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->find($$request->get('friendGroupId'));
+        $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->find($request->get('friendGroupId'));
         $mooveGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user'=>$user,'name'=>'general'));
-        $friendListmoove = $entityManager->getRepository('CoreFriendListBundle:Friend')->findBy(array('friendgroup'=>$$request->get('friendGroupId')));
+        $friendListmoove = $entityManager->getRepository('CoreFriendListBundle:Friend')->findBy(array('friendgroup'=>$request->get('friendGroupId')));
 
         if (!$friendGroup)
             throw $this->createNotFoundException('Friend Group Not Found');
