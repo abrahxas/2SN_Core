@@ -55,23 +55,11 @@ class Channel
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\ChatroomBundle\Entity\Chatroom", inversedBy="channel")
-     * @ORM\JoinColumn(name="chatroom_id", referencedColumnName="id"))
-     */
-    private $chatroom;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="channel")
      * @ORM\JoinColumn(name="participant_id", referencedColumnName="id"))
      */
     private $participants;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Message", mappedBy="channel", cascade={"remove"})
-     */
-    private $messages;
-
-   
     /**
      * Constructor
      */
@@ -100,19 +88,7 @@ class Channel
     public function setName($name)
     {
         $this->name = $name;
-        return $this;
-    }
 
-    /**
-     * Set user
-     *
-     * @param \Core\UserBundle\Entity\User $user
-     * @return Channel
-     */
-
-    public function setUser(\Core\UserBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
         return $this;
     }
 
@@ -132,30 +108,10 @@ class Channel
      * @param \Core\UserBundle\Entity\User $users
      * @return Channel
      */
-
     public function addUser(\Core\UserBundle\Entity\User $users)
     {
         $this->users[] = $users;
-    }
-    /**
-     * Get user
-     *
-     * @return \Core\UserBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
 
-    /**
-     * Set chatroom
-     *
-     * @param \Core\ChatroomBundle\Entity\Chatroom $chatroom
-     * @return Channel
-     */
-    public function setChatroom(\Core\ChatroomBundle\Entity\Chatroom $chatroom = null)
-    {
-        $this->chatroom = $chatroom;
         return $this;
     }
 
@@ -177,39 +133,6 @@ class Channel
     public function getUsers()
     {
         return $this->users;
-    }
-    
-    /**
-     * Get chatroom
-     *
-     * @return \Core\ChatroomBundle\Entity\Chatroom 
-     */
-    public function getChatroom()
-    {
-        return $this->chatroom;
-    }
-
-    /**
-     * Set participants
-     *
-     * @param \Core\UserBundle\Entity\User $participants
-     * @return Channel
-     */
-    public function setParticipants(\Core\UserBundle\Entity\User $participants = null)
-    {
-        $this->participants = $participants;
-
-        return $this;
-    }
-
-    /**
-     * Get participants
-     *
-     * @return \Core\UserBundle\Entity\User 
-     */
-    public function getParticipants()
-    {
-        return $this->participants;
     }
 
     /**
@@ -266,5 +189,51 @@ class Channel
     public function getGameSession()
     {
         return $this->gameSession;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Core\UserBundle\Entity\User $user
+     * @return Channel
+     */
+    public function setUser(\Core\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Core\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set participants
+     *
+     * @param \Core\UserBundle\Entity\User $participants
+     * @return Channel
+     */
+    public function setParticipants(\Core\UserBundle\Entity\User $participants = null)
+    {
+        $this->participants = $participants;
+
+        return $this;
+    }
+
+    /**
+     * Get participants
+     *
+     * @return \Core\UserBundle\Entity\User 
+     */
+    public function getParticipants()
+    {
+        return $this->participants;
     }
 }

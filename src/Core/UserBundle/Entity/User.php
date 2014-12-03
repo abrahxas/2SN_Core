@@ -289,7 +289,7 @@ class User extends BaseUser
     }
 
     /**
-     * Add gameSessions
+     * Add characterSheet
      *
      * @param \Core\GalleryBundle\Entity\Album $characterSheet
      * @return User
