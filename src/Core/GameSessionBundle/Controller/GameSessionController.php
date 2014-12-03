@@ -13,6 +13,7 @@ use Core\MessageBundle\Entity\Channel;
 use Core\GameSessionBundle\Entity\Guest;
 use Core\UserBundle\Entity\User;
 use Core\GameSessionBundle\Entity\Player;
+use Core\GameSessionBundle\Form\Type\SelectCharacterSheetType;
 
 class GameSessionController extends Controller
 {
@@ -158,36 +159,48 @@ class GameSessionController extends Controller
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
+        $form = $this->createForm(new SelectCharacterSheetType($user), $newPlayer = new player());
 
-        if ($request->isMethod('Get')) 
+
+        if ($request->isMethod('Post')) 
         {
-            $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($request->get('GameSessionId'));
-            $invitation = $entityManager->getRepository('CoreGameSessionBundle:Guest')->find($request->get('invitationId'));
+            $form->handleRequest($request);
+            if($form->isValid())
+            {
+                $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($request->get('GameSessionId'));
+                $invitation = $entityManager->getRepository('CoreGameSessionBundle:Guest')->find($request->get('invitationId'));
 
-            $guest = $invitation->getGuest();
+                $guest = $invitation->getGuest();
 
-            $player = new player();
-            $player->setGameSession($gameSession);
-            $player->setUser($guest);
+                $newPlayer->setGameSession($gameSession);
+                $newPlayer->setUser($guest);
+                $CharacterSheet = $entityManager->getRepository('CoreCharacterSheetBundle:CharacterSheet')->find($form->get('CharacterSheet')->getData());
+                $newPlayer->setCharacterSheet($CharacterSheet);
 
-            $entityManager->persist($player);
-            $entityManager->flush();
+                $entityManager->persist($newPlayer);
+                $entityManager->flush();
 
-            $channels = $gameSession->getChannels();
-            $channel = $channels[0];
+                $channels = $gameSession->getChannels();
+                $channel = $channels[0];
 
-            $channel->addUser($guest);
-            $guest->addChannel($channel);
-            
-            $entityManager->flush();
-            $gameSession->addPlayer($player);
+                $channel->addUser($guest);
+                $guest->addChannel($channel);
+                
+                $entityManager->flush();
+                $gameSession->addPlayer($newPlayer);
 
-            $entityManager->persist($gameSession);
-            $entityManager->remove($invitation);
-            $entityManager->flush();
+                $entityManager->persist($gameSession);
+                $entityManager->remove($invitation);
+                $entityManager->flush();
+
+                return $this->redirect($this->generateUrl('core_gamesession_invitation'));
+            }
+                
         }
       
-        return $this->redirect($this->generateUrl('core_gamesession_invitation'));
+        return $this->render('CoreGameSessionBundle:default:selectCharacterSheet.html.twig', array(
+            'form'=> $form->createView()
+        ));
     }
 
     public function deleteAction(Request $request)

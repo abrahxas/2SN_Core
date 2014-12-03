@@ -5,6 +5,7 @@ namespace Core\GameSessionBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Core\GameSessionBundle\Entity\GameSession;
 use Core\UserBundle\Entity\User;
+use Core\CharacterSheetBundle\Entity\CharacterSheet;
 
 /**
  * Player
@@ -35,9 +36,11 @@ class Player
      */
     private $user;
 
-  
-
-
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\CharacterSheetBundle\Entity\CharacterSheet", inversedBy="players")
+     * @ORM\JoinColumn(name="charactersheet_id", referencedColumnName="id", onDelete="CASCADE"))
+     */
+    private $characterSheet;
 
     /**
      * Get id
@@ -93,5 +96,28 @@ class Player
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Get characterSheet
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCharacterSheet()
+    {
+        return $this->characterSheet;
+    }
+
+    /**
+     * Set characterSheet
+     *
+     * @param \Core\CharacterSheetBundle\Entity\CharacterSheet $characterSheet
+     * @return Player
+     */
+    public function setCharacterSheet(\Core\CharacterSheetBundle\Entity\CharacterSheet $characterSheet = null)
+    {
+        $this->characterSheet = $characterSheet;
+
+        return $this;
     }
 }

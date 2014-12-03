@@ -75,6 +75,7 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Core\GameSessionBundle\Entity\GameSession", mappedBy="master", cascade={"persist"})
      */
     protected $gameSessions;
+
     /**
      * @var \Core\CharacterSheetBundle\Entity\CharacterSheet[]
      * @ORM\OneToMany(targetEntity="Core\CharacterSheetBundle\Entity\CharacterSheet", mappedBy="user", cascade={"persist"})
@@ -106,6 +107,7 @@ class User extends BaseUser
         $this->friendGroups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->channels = new \Doctrine\Common\Collections\ArrayCollection();
         $this->gameSessions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->characterSheets = new \Doctrine\Common\Collections\ArrayCollection();
 
         $generalGroup = new FriendGroups();
         $generalGroup->setUser($this);
