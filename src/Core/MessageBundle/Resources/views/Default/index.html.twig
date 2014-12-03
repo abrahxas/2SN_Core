@@ -23,7 +23,7 @@ List Channel
 	    		Remove Participant
 	    	</a>
 	    	<br>
-	    	<a href="{{path('core_message_addparticipant',{'friendId' : 3, 'channelId': channel.id})}}">Add Participant</a><br>
+	    	<a href="{{path('core_message_addparticipant',{'friendId' : 1, 'channelId': channel.id})}}">Add Participant</a><br>
 	    	<a href="{{path('core_message_addmessage',{'channelId': channel.id})}}">Add Message</a><br>
 	    	{% render(controller('CoreMessageBundle:Message:indexMessage',{'channelId' : channel.id})) %}
 	    </div>
@@ -40,16 +40,6 @@ Listing friend group
 <br>
 <br>
 
-{% for friendList in friendLists %}
-	<div style="background-color: #313131;padding: 2%;margin-bottom: 2%;width: 30%;">
-	    <div style="background-color: white">
-	    	<a href="{{path('core_friendList_update', {'friendGroupId' : friendList.id} )}}">update friend List</a>
-	    	<a href="{{path('core_friendList_delete' , {'friendGroupId' : friendList.id})}}">delete friend List</a><br/>
-	    	{{ friendList.name }}
-	    		{% render(controller('CoreFriendListBundle:Friend:indexByGroup',{'friendGroupName' : friendList.name})) %}	    		
-	    </div>
-	</div>
-{% endfor %}
 <a href="{{path('core_friendList_addfriend')}}">make a friend request</a>
 <a href="{{path('core_friend_userResearch')}}">research friends</a>
 </body>

@@ -12,34 +12,30 @@ use Core\MessageBundle\Entity\Channel;
 use Core\MessageBundle\Entity\Message;
 use Symfony\Component\HttpFoundation\Request;
 
-class ChannelController extends Controller
+class ChannelsController extends Controller
 {
-    public function indexAction()
+    /**
+    *@return array
+    *$View()
+    */
+    public function getChannelsAction()
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
         $channels = $user->getChannels();
-        $conn = $this->container->get('database_connection');
-        $query = "SELECT fd.name, fd.friend_id as id
-                FROM friend fd
-                inner join friend_groups fg on fg.id = fd.friendgroup_id
-                inner join user u on u.id = fg.user_id
-                where u.id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bindValue(1, $user->getId());
-        $stmt->execute();
-
-        return $this->render('CoreMessageBundle:default:index.html.twig', array(
-            'channels' => $channels,
-            'friends' => $stmt
-        ));
+       
+        return array('channels' => $channels);
     }
 
-     public function addChannelAction(Request $request)
+    /**
+    *@return array
+    *$View()
+    */
+     public function postChannelAction($friendId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-        $newParticipant = $entityManager->getRepository('CoreUserBundle:User')->find($request->get('friendId'));
+        $newParticipant = $entityManager->getRepository('CoreUserBundle:User')->find($friendId);
 
         $channel = new Channel();
         $channel->addUser($user);
@@ -56,16 +52,20 @@ class ChannelController extends Controller
 
         $entityManager->flush();
 
-        return $this->redirect($this->generateUrl('core_message_homepage'));
+        return array('code'=>200, 'text' => 'POST OK');
     }
 
-    public function addParticipantAction(Request $request)
+    /**
+    *@return array
+    *$View()
+    */
+    public function postParticipantFriendAction(Request $request,$channelId, $friendId)
     {
     	$entityManager = $this->getDoctrine()->getManager();
     	$user = $this->container->get('security.context')->getToken()->getUser();
-        
-        $channel = $entityManager->getRepository('CoreMessageBundle:Channel')->find($request->get('channelId'));
-        $newUser = $entityManager->getRepository('CoreUserBundle:User')->find($request->get('friendId'));
+        $jsonPost = json_decode($request->getContent(),true);
+        $channel = $entityManager->getRepository('CoreMessageBundle:Channel')->find($channelId);
+        $newUser = $entityManager->getRepository('CoreUserBundle:User')->find($friendId);
 
         $listParticipant = $channel->getUsers();
 
@@ -74,21 +74,25 @@ class ChannelController extends Controller
             if($newUser->getId() == $participant->getId())
                 return $this->redirect($this->generateUrl('core_message_homepage'));
         }
-        
+
         $channel->addUser($newUser);
         $channel->setName($channel->getName()."_".$newUser->getUserName());
         $newUser->addChannel($channel);
         $entityManager->persist($channel);
         $entityManager->flush();
 
-    	return $this->redirect($this->generateUrl('core_message_homepage'));
+    	return array('code'=>200, 'text' => 'POST OK');
     }
 
-    public function deleteChannelAction(Request $request)
+    /**
+    *@return array
+    *$View()
+    */
+    public function deleteChannelAction(Request $request, $channelId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser(); 
-        $channel = $entityManager->getRepository('CoreMessageBundle:Channel')->find($request->get('channelId'));
+        $channel = $entityManager->getRepository('CoreMessageBundle:Channel')->find($channelId);
         
         if (!$channel) 
             throw $this->createNotFoundException('Channel Not Found');
@@ -130,15 +134,19 @@ class ChannelController extends Controller
             } 
         }
         $entityManager->flush();
-        return $this->redirect($this->generateUrl('core_message_homepage'));
+        return array('code'=>200, 'text' => 'DELETE OK');
     }
 
-    public function removeParticipantAction(Request $request)
+    /**
+    *@return array
+    *$View()
+    */
+    public function removeParticipantAction(Request $request,$channelId,$participantId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-        $channel = $entityManager->getRepository('CoreMessageBundle:Channel')->find($request->get('channelId'));
-        $deleteparticipant = $entityManager->getRepository('CoreUserBundle:User')->find($request->get('participantId'));
+        $channel = $entityManager->getRepository('CoreMessageBundle:Channel')->find($channelId);
+        $deleteparticipant = $entityManager->getRepository('CoreUserBundle:User')->find($participantId);
 
         if($channel->getUsers()[0]->getId() == $user->getId())
         {
@@ -154,7 +162,7 @@ class ChannelController extends Controller
 
         $entityManager->persist($channel);
         $entityManager->flush();
-        return $this->redirect($this->generateUrl('core_message_homepage'));
+        return array('code'=>200, 'text' => 'DELETE OK');
     }
     
     private function changeChannelName(Channel $channel)

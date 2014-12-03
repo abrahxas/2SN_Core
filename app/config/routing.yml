@@ -83,3 +83,13 @@ friends:
     type: rest
     resource: Core\FriendListBundle\Controller\FriendsController
     prefix : /api
+
+messages:
+    type: rest
+    resource: Core\MessageBundle\Controller\MessagesController
+    prefix : /api
+
+channels:
+    type: rest
+    resource: Core\MessageBundle\Controller\ChannelsController
+    prefix : /api

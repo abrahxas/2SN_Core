@@ -49,18 +49,6 @@ class Channel
     private $gameSession;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="channel")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id"))
-     */
-    private $user;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="channel")
-     * @ORM\JoinColumn(name="participant_id", referencedColumnName="id"))
-     */
-    private $participants;
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -191,49 +179,4 @@ class Channel
         return $this->gameSession;
     }
 
-    /**
-     * Set user
-     *
-     * @param \Core\UserBundle\Entity\User $user
-     * @return Channel
-     */
-    public function setUser(\Core\UserBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \Core\UserBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set participants
-     *
-     * @param \Core\UserBundle\Entity\User $participants
-     * @return Channel
-     */
-    public function setParticipants(\Core\UserBundle\Entity\User $participants = null)
-    {
-        $this->participants = $participants;
-
-        return $this;
-    }
-
-    /**
-     * Get participants
-     *
-     * @return \Core\UserBundle\Entity\User 
-     */
-    public function getParticipants()
-    {
-        return $this->participants;
-    }
 }

@@ -77,10 +77,10 @@ class Message
     /**
      * Set channel
      *
-     * @param \Core\ChatroomBundle\Entity\Channel $channel
+     * @param \Core\MessageBundle\Entity\Channel $channel
      * @return Message
      */
-    public function setChannel(\Core\ChatroomBundle\Entity\Channel $channel = null)
+    public function setChannel(\Core\MessageBundle\Entity\Channel $channel = null)
     {
         $this->channel = $channel;
 
