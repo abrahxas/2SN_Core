@@ -6,10 +6,12 @@ Description : {{GameSession.description}}<br>
 Players :<br>
 
 {% for player in GameSession.players %}
-	<div style="background-color: #313131;padding: 2%;margin-bottom: 2%;width: 30%;">
 	    	{{ player.user.username }}<br>
-	</div>
 {% endfor %}
-	    	
+<br>
+channels:<br>
+{% for channel in GameSession.channels %}
+	    	{{ channel.name }}<br>
+{% endfor %}
 </body>
 </html>

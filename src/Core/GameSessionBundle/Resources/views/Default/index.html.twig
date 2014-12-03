@@ -15,6 +15,8 @@ Game Session
 	    <div style="background-color: white">
 	    	<p>Name : <a href="{{path('core_gamesession_detail', {'GameSessionId' : GameSession.id})}}">{{ GameSession.name }}</a></p>   <br>
 	    	<p>Description : {{ GameSession.description }}</p>
+	    	<p><a href="{{path('core_gamesession_update',{'GameSessionId' : GameSession.id})}}">Update Game Session</a></p>
+	    	
 	    	<p><a href="{{path('core_gamesession_delete',{'GameSessionId' : GameSession.id})}}">Delete Game Session</a></p>
 	    	<p>
 	    		Guests : <br>

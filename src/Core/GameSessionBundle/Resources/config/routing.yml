@@ -37,3 +37,7 @@ core_gamesession_invitation_delete:
 core_gamesession_addcharactersheet:
     path:     /gameSession/invitation/{GameSessionId}-addcharactersheet
     defaults: { _controller: CoreGameSessionBundle:GameSession:validation }
+
+core_gamesession_update:
+    path:     /gameSession/{GameSessionId}-update
+    defaults: { _controller: CoreGameSessionBundle:GameSession:update }

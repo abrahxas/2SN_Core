@@ -276,6 +276,29 @@ class GameSessionController extends Controller
         return $this->redirect($this->generateUrl('core_gamesession_invitation'));
     }
 
+    public function updateAction(Request $request)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($request->get('GameSessionId'));
+        $form = $this->createForm(new CreateGameSessionType(),$gameSession);
+
+        if($request->isMethod('POST')){
+            $form->handleRequest($request);
+            if($form->isValid()){
+                $gameSession->setMaster($user);
+                $gameSession->setName($form->get('name')->getData());
+                $gameSession->setDescription($form->get('description')->getData());
+                $entityManager->persist($gameSession);
+                $entityManager->flush();
+
+                return $this->redirect($this->generateUrl('core_gamesession_homepage'));
+            }
+        }
+        return $this->render('CoreGameSessionBundle:default:createGameSession.html.twig', array(
+            'form'=> $form->createView()
+        ));
+    }
 }
 
 
