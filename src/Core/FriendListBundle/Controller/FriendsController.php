@@ -20,10 +20,10 @@ class FriendsController extends FOSRestController
     * @return array
     * @View()
     */
-    public function getFriendsAction()
+    public function getFriendsAction($userId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->container->get('security.context')->getToken()->getUser();        
+        $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);       
         $conn = $this->container->get('database_connection');
 
         $query = "SELECT fd.name, fd.friendgroup_id
