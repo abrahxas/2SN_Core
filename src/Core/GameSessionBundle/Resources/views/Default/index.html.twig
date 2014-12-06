@@ -1,0 +1,63 @@
+<html>
+<head></head>
+<body>
+Game Session 
+<br>
+<br>
+<h1>MASTER</h1><br>
+<a href="{{path('core_gamesession_create')}}">add Game Session</a>
+
+<br>
+<br>
+
+{% for GameSession in listGameSessionMaster %}
+	<div style="background-color: #313131;padding: 2%;margin-bottom: 2%;width: 30%;">
+	    <div style="background-color: white">
+	    	<p>Name : <a href="{{path('core_gamesession_detail', {'GameSessionId' : GameSession.id})}}">{{ GameSession.name }}</a></p>   <br>
+	    	<p>Description : {{ GameSession.description }}</p>
+	    	<p><a href="{{path('core_gamesession_update',{'GameSessionId' : GameSession.id})}}">Update Game Session</a></p>
+	    	
+	    	<p><a href="{{path('core_gamesession_delete',{'GameSessionId' : GameSession.id})}}">Delete Game Session</a></p>
+	    	<p>
+	    		Guests : <br>
+	    		{% for guest in GameSession.guests %}
+	    			{{ guest.guest.username}}<br>
+	    		{% endfor %}
+	    	</p>
+	    	<p>
+	    		Players : <br>
+	    		{% for player in GameSession.players %}
+	    			{{ player.user.username }}<br>
+	    		{% endfor %}
+	    	</p>
+	    	<p><a href="{{path('core_gamesession_addguest', {'GameSessionId' : GameSession.id} )}}">Add Guest</a></p>
+	    </div>
+	</div>
+{% endfor %}
+<br>
+<br>
+<h1>Player :</h1>
+<br>
+{% for GameSessionP in listGameSessionPlayer %}
+	<div style="background-color: #313131;padding: 2%;margin-bottom: 2%;width: 30%;">
+	    <div style="background-color: white">
+	    	<p>Name : <a href="{{path('core_gamesession_detail', {'GameSessionId' : GameSessionP.id})}}">{{ GameSessionP.name }}</a></p>   <br>
+	    	<p>Description : {{ GameSessionP.description }}</p>
+	    	<p><a href="{{path('core_gamesession_leave',{'GameSessionId' : GameSessionP.id})}}">Leave Game Session</a></p>
+	    	<p>
+	    		Guests : <br>
+	    		{% for guest in GameSessionP.guests %}
+	    			{{ guest.guest.username}}<br>
+	    		{% endfor %}
+	    	</p>
+	    	<p>
+	    		Players : <br>
+	    		{% for player in GameSessionP.players %}
+	    			{{ player.user.username }}<br>
+	    		{% endfor %}
+	    	</p>
+	    </div>
+	</div>
+{% endfor %}
+</body>
+</html>

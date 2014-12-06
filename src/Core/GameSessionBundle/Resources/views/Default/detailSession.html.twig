@@ -1,0 +1,17 @@
+<html>
+<head></head>
+<body>
+Game Session : {{GameSession.name}}<br>
+Description : {{GameSession.description}}<br>
+Players :<br>
+
+{% for player in GameSession.players %}
+	    	{{ player.user.username }}<br>
+{% endfor %}
+<br>
+channels:<br>
+{% for channel in GameSession.channels %}
+	    	{{ channel.name }}<br>
+{% endfor %}
+</body>
+</html>

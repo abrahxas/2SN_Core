@@ -1,0 +1,27 @@
+core_message_homepage:
+    path:     /channels
+    defaults: { _controller: CoreMessageBundle:Channel:index }
+
+core_message_addchannel:
+    path:     /channels/add
+    defaults: { _controller: CoreMessageBundle:Channel:addChannel }
+
+core_message_addparticipant:
+    path:     /channels/participant/{friendId}-add
+    defaults: { _controller: CoreMessageBundle:Channel:addParticipant }
+
+core_message_removeparticipant:
+    path:     /channels/participant/{channelId}/{participantId}-remove
+    defaults: { _controller: CoreMessageBundle:Channel:removeParticipant }
+
+core_message_deletechannel:
+    path:     /channels/{channelId}-delete
+    defaults: { _controller: CoreMessageBundle:Channel:deleteChannel }
+
+core_message_addmessage:
+    path:     /channels/message/{channelId}-add
+    defaults: { _controller: CoreMessageBundle:Message:addMessage }
+
+core_message_deletemessage:
+    path:     /channels/message/{messageId}-remove
+    defaults: { _controller: CoreMessageBundle:Message:deleteMessage }

@@ -1,3 +1,6 @@
+core_game_session:
+    resource: "@CoreGameSessionBundle//Resources/config/routing.yml"
+    
 core_characterSheet:
     resource: "@CoreCharacterSheetBundle/Resources/config/routing.yml"
     prefix:   /
@@ -5,6 +8,10 @@ core_characterSheet:
 core_comment:
     resource: "@CoreCommentBundle/Resources/config/routing.yml"
     prefix:   /
+
+core_message:
+    resource: "@CoreMessageBundle/Resources/config/routing.yml"
+    prefix: /
 
 core_friendList:
     resource: "@CoreFriendListBundle/Resources/config/routing.yml"
@@ -75,4 +82,14 @@ friendLists:
 friends:
     type: rest
     resource: Core\FriendListBundle\Controller\FriendsController
+    prefix : /api
+
+messages:
+    type: rest
+    resource: Core\MessageBundle\Controller\MessagesController
+    prefix : /api
+
+channels:
+    type: rest
+    resource: Core\MessageBundle\Controller\ChannelsController
     prefix : /api

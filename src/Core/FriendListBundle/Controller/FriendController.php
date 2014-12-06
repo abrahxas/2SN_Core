@@ -22,7 +22,7 @@ class FriendController extends Controller
 
         $query = "SELECT fd.name, fd.friendgroup_id
                 FROM friend fd
-                inner join friendGroups fg on fg.id = fd.friendgroup_id
+                inner join friend_groups fg on fg.id = fd.friendgroup_id
                 inner join user u on u.id = fg.user_id
                 where u.id = ?";
         $stmt = $conn->prepare($query);
@@ -41,7 +41,7 @@ class FriendController extends Controller
         $conn = $this->container->get('database_connection');
         $query = "SELECT fd.name, fd.friendgroup_id, fd.sender, fd.id
                 FROM friend fd
-                inner join friendGroups fg on fg.id = fd.friendgroup_id
+                inner join friend_groups fg on fg.id = fd.friendgroup_id
                 inner join user u on u.id = fg.user_id
                 where u.id = ? and fg.name = ?";
         $stmt = $conn->prepare($query);
@@ -134,7 +134,7 @@ class FriendController extends Controller
 
                 $query = "SELECT fd.name, fd.friendgroup_id
                         FROM friend fd
-                        inner join friendGroups fg on fg.id = fd.friendgroup_id
+                        inner join friend_groups fg on fg.id = fd.friendgroup_id
                         inner join user u on u.id = fg.user_id
                         where u.id = ?";
                 $stmt = $conn->prepare($query);

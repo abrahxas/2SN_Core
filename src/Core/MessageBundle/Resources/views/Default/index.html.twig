@@ -1,0 +1,46 @@
+<html>
+<head></head>
+<body>
+Select a friend :
+<br>
+{% for friend in friends %}
+	<div style="background-color: #313131;padding: 2%;margin-bottom: 2%;width: 30%;">
+	    <div style="background-color: white;">
+	    	<a href="{{path('core_message_addchannel',{'friendId' : friend.id })}}">{{friend.name}}</a>
+	    </div>
+	</div>
+{% endfor %}
+<br>
+<br>
+List Channel
+<br>
+{% for channel in channels %}
+	<div style="background-color: #313131;padding: 2%;margin-bottom: 2%;width: 30%;">
+	    <div style="background-color: white">
+	    	{{ channel.name }}<br>
+	    	<a href="{{path('core_message_deletechannel',{'channelId' : channel.id})}}">Delete Channel</a><br>
+	    	<a href="{{path('core_message_removeparticipant',{'channelId' : channel.id, 'participantId' : 3})}}">
+	    		Remove Participant
+	    	</a>
+	    	<br>
+	    	<a href="{{path('core_message_addparticipant',{'friendId' : 1, 'channelId': channel.id})}}">Add Participant</a><br>
+	    	<a href="{{path('core_message_addmessage',{'channelId': channel.id})}}">Add Message</a><br>
+	    	{% render(controller('CoreMessageBundle:Message:indexMessage',{'channelId' : channel.id})) %}
+	    </div>
+	</div>
+{% endfor %}
+
+FriendList
+<br>
+<br>
+<a href="{{path('core_friendList_create')}}">add friend Group</a>
+<br>
+<br>
+Listing friend group
+<br>
+<br>
+
+<a href="{{path('core_friendList_addfriend')}}">make a friend request</a>
+<a href="{{path('core_friend_userResearch')}}">research friends</a>
+</body>
+</html>

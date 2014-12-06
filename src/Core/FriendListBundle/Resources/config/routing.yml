@@ -27,7 +27,7 @@ core_friendList_moove:
     defaults: { _controller: CoreFriendListBundle:Friend:mooveFriendInGroup}
 
 core_friend_delete:
-    path:     /friendList/delete/{friendId}
+    path:     /friendList/delete/friend/{friendId}
     defaults: { _controller: CoreFriendListBundle:Friend:delete}
 
 core_friend_userResearch:

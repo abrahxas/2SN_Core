@@ -5,6 +5,8 @@ namespace Core\CharacterSheetBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Core\PlayerBundle\Entity\Player;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Album
@@ -46,7 +48,7 @@ class CharacterSheet
     private $background;
 
     /**
-     * @Vich\UploadableField(mapping="photo", fileNameProperty="image_name")
+     * @Vich\UploadableField(mapping="photo", fileNameProperty="imageName")
      *
      * @var File $imageFile
      */
@@ -60,7 +62,7 @@ class CharacterSheet
     private $imageName;
 
     /**
-     * @Vich\UploadableField(mapping="characterSheet", fileNameProperty="sheet_name")
+     * @Vich\UploadableField(mapping="characterSheet", fileNameProperty="sheetName")
      *
      * @var File $sheetFile
      */
@@ -93,10 +95,17 @@ class CharacterSheet
      */
     private $user;
 
+    /**
+     *@var \Core\GameSessionBundle\Entity\Player[]
+     * @ORM\OneToMany(targetEntity="Core\GameSessionBundle\Entity\Player", mappedBy="characterSheet",cascade={"persist"})
+     */
+    private $players;
+
     public function __construct()
     {
         $this->createdAt = new \Datetime();
         $this->updatedAt = new \Datetime();
+        $this->players = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -347,5 +356,38 @@ class CharacterSheet
     public function getBackground()
     {
         return $this->background;
+    }
+
+    /**
+     * Get players
+     *
+     * @return \Core\PlayerBundle\Entity\Player 
+     */
+    public function getPlayers()
+    {
+        return $this->players;
+    }
+
+    /**
+     * Add players
+     *
+     * @param \Core\GameSessionBundle\Entity\Player $players
+     * @return CharacterSheet
+     */
+    public function addPlayer(\Core\GameSessionBundle\Entity\Player $players)
+    {
+        $this->players[] = $players;
+
+        return $this;
+    }
+
+    /**
+     * Remove players
+     *
+     * @param \Core\GameSessionBundle\Entity\Player $players
+     */
+    public function removePlayer(\Core\GameSessionBundle\Entity\Player $players)
+    {
+        $this->players->removeElement($players);
     }
 }

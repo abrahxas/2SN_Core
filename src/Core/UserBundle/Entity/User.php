@@ -32,6 +32,8 @@ class User extends BaseUser
     private $birthDate = null;
 
     /**
+     *@var Core\FriendListBundle\Entity\friendGroup[]
+     * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\FriendGroups", mappedBy="user", cascade={"persist"})
      * @var string
      *
      * @ORM\Column(name="image_profile", type="string", nullable=true)
@@ -43,6 +45,12 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\FriendGroups", mappedBy="user", cascade="persist")
      */
     protected $friendGroups;
+
+    /**
+     *@var Core\MessageBundle\Entity\channel[]
+     * @ORM\ManyToMany(targetEntity="Core\MessageBundle\Entity\Channel", mappedBy="users", cascade={"persist"})
+     */
+    protected $channels;
 
     /**
      * @var \Core\BlogBundle\Entity\Post[]
@@ -61,6 +69,12 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Core\GalleryBundle\Entity\Album", mappedBy="user", cascade={"persist"})
      */
     protected $albums;
+
+    /**
+     * @var \Core\GameSessionBundle\Entity\GameSession[]
+     * @ORM\OneToMany(targetEntity="Core\GameSessionBundle\Entity\GameSession", mappedBy="master", cascade={"persist"})
+     */
+    protected $gameSessions;
 
     /**
      * @var \Core\CharacterSheetBundle\Entity\CharacterSheet[]
@@ -91,6 +105,9 @@ class User extends BaseUser
         $this->addPost($postWall);
 
         $this->friendGroups = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->channels = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->gameSessions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->characterSheets = new \Doctrine\Common\Collections\ArrayCollection();
 
         $generalGroup = new FriendGroups();
         $generalGroup->setUser($this);
@@ -107,10 +124,11 @@ class User extends BaseUser
         parent::__construct();
     }
 
+
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -133,11 +151,77 @@ class User extends BaseUser
     /**
      * Get birthDate
      *
-     * @return \DateTime
+     * @return \DateTime 
      */
     public function getBirthDate()
     {
         return $this->birthDate;
+    }
+
+    /**
+     * Add friendGroups
+     *
+     * @param \Core\FriendListBundle\Entity\FriendGroups $friendGroups
+     * @return User
+     */
+    public function addFriendGroup(\Core\FriendListBundle\Entity\FriendGroups $friendGroups)
+    {
+        $this->friendGroups[] = $friendGroups;
+
+        return $this;
+    }
+
+    /**
+     * Remove friendGroups
+     *
+     * @param \Core\FriendListBundle\Entity\FriendGroups $friendGroups
+     */
+    public function removeFriendGroup(\Core\FriendListBundle\Entity\FriendGroups $friendGroups)
+    {
+        $this->friendGroups->removeElement($friendGroups);
+    }
+
+    /**
+     * Get friendGroups
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFriendGroups()
+    {
+        return $this->friendGroups;
+    }
+
+    /**
+     * Add channel
+     *
+     * @param \Core\MessageBundle\Entity\Channel $channel
+     * @return User
+     */
+    public function addChannel(\Core\MessageBundle\Entity\Channel $channel)
+    {
+        $this->channels[] = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Remove channel
+     *
+     * @param \Core\MessageBundle\Entity\Channel $channel
+     */
+    public function removeChannel(\Core\MessageBundle\Entity\Channel $channel)
+    {
+        $this->channels->removeElement($channel);
+    }
+
+    /**
+     * Get channels
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChannels()
+    {
+        return $this->channels;
     }
 
     /**
@@ -166,7 +250,7 @@ class User extends BaseUser
     /**
      * Get posts
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getPosts()
     {
@@ -199,7 +283,7 @@ class User extends BaseUser
     /**
      * Get albums
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getAlbums()
     {
@@ -242,34 +326,34 @@ class User extends BaseUser
     /**
      * Add friendGroups
      *
-     * @param \Core\FriendListBundle\Entity\FriendGroups $friendGroups
+     * @param \Core\GameSessionBundle\Entity\GameSession $gameSessions
      * @return User
      */
-    public function addFriendGroup(\Core\FriendListBundle\Entity\FriendGroups $friendGroups)
+    public function addGameSession(\Core\GameSessionBundle\Entity\GameSession $gameSessions)
     {
-        $this->friendGroups[] = $friendGroups;
+        $this->gameSessions[] = $gameSessions;
 
         return $this;
     }
 
     /**
-     * Remove friendGroups
+     * Remove gameSessions
      *
-     * @param \Core\FriendListBundle\Entity\FriendGroups $friendGroups
+     * @param \Core\GameSessionBundle\Entity\GameSession $gameSessions
      */
-    public function removeFriendGroup(\Core\FriendListBundle\Entity\FriendGroups $friendGroups)
+    public function removeGameSession(\Core\GameSessionBundle\Entity\GameSession $gameSessions)
     {
-        $this->friendGroups->removeElement($friendGroups);
+        $this->gameSessions->removeElement($gameSessions);
     }
 
     /**
-     * Get friendGroups
+     * Get gameSessions
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getFriendGroups()
+    public function getGameSessions()
     {
-        return $this->friendGroups;
+        return $this->gameSessions;
     }
 
     /**

@@ -28,6 +28,8 @@ class AppKernel extends Kernel
             new Core\GalleryBundle\CoreGalleryBundle(),
             new Core\CommentBundle\CoreCommentBundle(),
             new Core\FriendListBundle\CoreFriendListBundle(),
+            new Core\MessageBundle\CoreMessageBundle(),
+            new Core\GameSessionBundle\CoreGameSessionBundle(),
             new Core\CharacterSheetBundle\CoreCharacterSheetBundle(),
         );
 
