@@ -200,14 +200,14 @@ class UsersController extends FOSRestController
 
                 return array(
                     'code' => 200,
-                    'data' => 'Change password done!'
+                    'data' => 'Change password done!',
                 );
             }
         }
 
         return array(
             'code' => 400,
-            $form
+            $form,
         );
     }
 
