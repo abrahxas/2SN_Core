@@ -3,19 +3,18 @@
 namespace Core\UserBundle\Controller;
 
 use Core\UserBundle\Entity\User;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\View;
-use FOS\UserBundle\FOSUserEvents;
+use FOS\RestBundle\Controller\FOSRestController;
+use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
+use FOS\UserBundle\FOSUserEvents;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use FOS\RestBundle\Controller\Annotations\Post;
-use FOS\UserBundle\Event\FilterUserResponseEvent;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
-Class UsersController extends FOSRestController
+class UsersController extends FOSRestController
 {
     /**
      * @return array
@@ -24,11 +23,12 @@ Class UsersController extends FOSRestController
     public function getUsersAction()
     {
         $users = $this->getDoctrine()->getRepository('CoreUserBundle:User')->findAll();
+
         return array('users' => $users);
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return array
      * @View()
      * @ParamConverter("user", class="CoreUserBundle:User")
@@ -45,6 +45,7 @@ Class UsersController extends FOSRestController
     public function getUserMeAction()
     {
         $usr = $this->get('security.context')->getToken()->getUser();
+
         return array('user' => $usr);
     }
 
@@ -53,72 +54,162 @@ Class UsersController extends FOSRestController
      * @View()
      * @Post("/register")
      */
-	public function registerAction(Request $request)
+    public function registerAction(Request $request)
     {
-	    $formFactory = $this->container->get('fos_user.registration.form.factory');
-	    $userManager = $this->container->get('fos_user.user_manager');
-	    $dispatcher = $this->container->get('event_dispatcher');
+        $formFactory = $this->get('fos_user.registration.form.factory');
+        $userManager = $this->get('fos_user.user_manager');
+        $dispatcher = $this->get('event_dispatcher');
 
-	    $user = $userManager->createUser();
-	    $user->setEnabled(true);
+        $user = $userManager->createUser();
+        $user->setEnabled(true);
 
-	    $event = new GetResponseUserEvent($user, $request);
-	    $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
+        $event = new GetResponseUserEvent($user, $request);
+        $dispatcher->dispatch(
+            FOSUserEvents::REGISTRATION_INITIALIZE,
+            $event
+        );
 
-	    if (null !== $event->getResponse()) {
-	        return $event->getResponse();
-	    }
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
+        }
 
-	    $form = $formFactory->createForm();
-	    $form->setData($user);
-	    $jsonPost = json_decode($request->getContent(), true);
-	    if ('POST' === $request->getMethod()) {
+        $form = $formFactory->createForm();
+        $form->setData($user);
+
+        $jsonPost = json_decode($request->getContent(), true);
+
+        if ($request->isMethod('POST') && !empty($jsonPost)) {
             $form->bind($jsonPost);
-	        if ($form->isValid()) {
-                $username = $jsonPost['username'];
-                $password = $jsonPost['plainPassword']['first'];
-                $newUser = array(
-                    'username' => $username,
-                    'password' => $password
-                    );
-                $jsonLogin = json_encode($newUser);
-	            $event = new FormEvent($form, $request);
-	            $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
-	            $userManager->updateUser($user);
-                $url = "http://localhost:8888/2SN_Core/web/app_dev.php/api/login_check";
-                $ch = curl_init($url);
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonLogin);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                    'Content-Type: application/json',
-                    'Content-Length: ' . strlen($jsonLogin))
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $dispatcher->dispatch(
+                    FOSUserEvents::REGISTRATION_SUCCESS,
+                    new FormEvent($form, $request)
                 );
-                $result = curl_exec($ch);
-	            $response = new Response($result);
 
-                return $response;
-	        }
-	    }
-        return array(400, $form);
-	}
+                $userManager->updateUser($user);
 
-    public function putUserAction(Request $request, User $user)
-    {
+                $subRequest = Request::create(
+                    '/api/login_check',
+                    'POST',
+                    array(
+                        'username' => $form->get('username')->getData(),
+                        'password' => $form->get('plainPassword')->getData(),
+                    )
+                );
+
+                $response = $this->get('http_kernel')->handle($subRequest);
+                $token = json_decode($response->getContent(), true);
+
+                return array(
+                    'code' => 200,
+                    'token' => reset($token),
+                );
+            }
+        }
+
+        return array('code' => 400, $form);
     }
+// { "email":"test@mail.com", "username":"test", "plainPassword":{"first":"test","second":"test"} }
 
-    public function deleteUserAction(User $user)
+    public function putUserAction(Request $request, $userId)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $entityManager->getRepository('CoreUserBundle:User')->find($id);
+        $userManager = $this->container->get('fos_user.user_manager');
+        $user = $em->getRepository('CoreUserBundle:User')->find($userId);
+
+        $dispatcher = $this->container->get('event_dispatcher');
+
+        $event = new GetResponseUserEvent($user, $request);
+        $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
+        }
+
+        $formFactory = $this->container->get('fos_user.profile.form.factory');
+
+        $form = $formFactory->createForm();
+        $form->setData($user);
+        $jsonPost = json_decode($request->getContent(), true);
+
+        if ($request->isMethod('PUT') && !empty($jsonPost)) {
+            $form->bind($jsonPost);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $userManager = $this->container->get('fos_user.user_manager');
+
+                $event = new FormEvent($form, $request);
+                $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_SUCCESS, $event);
+
+                $userManager->updateUser($user);
+
+                if (null === $response = $event->getResponse()) {
+                    return array('code' => 200, 'data' => $user);
+                }
+
+                $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+
+                return array('code' => 200 , 'data' => $user);
+            }
+        }
+
+        return array('code' => 400, $form);
+    }
+// {"username":"test", "email":"test@mail.com", "current_password":"test"}
+
+    public function deleteUserAction($userId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('CoreUserBundle:User')->find($userId);
         if (!$user) {
-            throw $this->createNotFoundException('User Not Found');
+            return array('code' => 404, 'data' => 'User not found');
         }
         $em->remove($user);
         $em->flush();
-        $response = new Response("delete done", 200);
-        return $response;
-    }
-}
 
-// { "email":"test@mail.com", "username":"test", "plainPassword":{"first":"test","second":"test"} }
+        return array('code' => 200, 'data' => 'Delete done');
+    }
+
+    public function putPasswordAction(Request $request)
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        $dispatcher = $this->container->get('event_dispatcher');
+
+        $event = new GetResponseUserEvent($user, $request);
+        $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_INITIALIZE, $event);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
+        }
+
+        $formFactory = $this->container->get('fos_user.change_password.form.factory');
+
+        $form = $formFactory->createForm();
+        $form->setData($user);
+        $jsonPost = json_decode($request->getContent(), true);
+
+        if ($request->isMethod('PUT') && !empty($jsonPost)) {
+            $form->bind($jsonPost);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $userManager = $this->container->get('fos_user.user_manager');
+                $event = new FormEvent($form, $request);
+                $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_SUCCESS, $event);
+                $userManager->updateUser($user);
+
+                return array(
+                    'code' => 200,
+                    'data' => 'Change password done!',
+                );
+            }
+        }
+
+        return array(
+            'code' => 400,
+            $form,
+        );
+    }
+
+    //{"current_password":"test","plainPassword":{"first":"toto","second":"toto"}}
+}

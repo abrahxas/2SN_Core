@@ -72,7 +72,7 @@ class Album
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string $name
      * @return Album
      */
     public function setName($name)
@@ -95,7 +95,7 @@ class Album
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param  \DateTime $createdAt
      * @return Album
      */
     public function setCreatedAt($createdAt)
@@ -108,7 +108,7 @@ class Album
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -118,7 +118,7 @@ class Album
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
+     * @param  \DateTime $updatedAt
      * @return Album
      */
     public function setUpdatedAt($updatedAt)
@@ -131,7 +131,7 @@ class Album
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -141,7 +141,7 @@ class Album
     /**
      * Set user
      *
-     * @param \Core\UserBundle\Entity\User $user
+     * @param  \Core\UserBundle\Entity\User $user
      * @return Album
      */
     public function setUser(\Core\UserBundle\Entity\User $user = null)
@@ -154,7 +154,7 @@ class Album
     /**
      * Get user
      *
-     * @return \Core\UserBundle\Entity\User 
+     * @return \Core\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -164,7 +164,7 @@ class Album
     /**
      * Add photos
      *
-     * @param \Core\GalleryBundle\Entity\Photo $photos
+     * @param  \Core\GalleryBundle\Entity\Photo $photos
      * @return Album
      */
     public function addPhoto(\Core\GalleryBundle\Entity\Photo $photos)
@@ -187,7 +187,7 @@ class Album
     /**
      * Get photos
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getPhotos()
     {

@@ -4,11 +4,9 @@ namespace Core\GalleryBundle\Controller;
 
 use Core\GalleryBundle\Entity\Photo;
 use Core\GalleryBundle\Form\Type\PhotoType;
-use Core\GalleryBundle\Form\Type\PhotoUploadType;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class PhotosController extends FOSRestController
 {
@@ -21,7 +19,9 @@ class PhotosController extends FOSRestController
         $entityManager = $this->getDoctrine()->getManager();
         $photos = $entityManager->getRepository('CoreGalleryBundle:Photo')->findBy(array('album' => $albumId), array('createdAt' => 'DESC'));
 
-        return array('photos' => $photos);
+        return array(
+            'photos' => $photos,
+        );
     }
 
     /**
@@ -33,7 +33,9 @@ class PhotosController extends FOSRestController
         $entityManager = $this->getDoctrine()->getManager();
         $photos = $entityManager->getRepository('CoreGalleryBundle:Photo')->findAll();
 
-        return array('photos' => $photos);
+        return array(
+            'photos' => $photos,
+        );
     }
 
     /**
@@ -46,10 +48,15 @@ class PhotosController extends FOSRestController
         $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($photoId);
 
         if (!$photo) {
-            throw $this->createNotFoundException('Photo ' . $photoId . ' Not Found');
+            return array(
+                'code' => 404,
+                'data' => 'Photo '.$photoId.' Not Found',
+            );
         }
 
-        return array('photo' => $photo);
+        return array(
+            'photo' => $photo,
+        );
     }
 
     /**
@@ -61,52 +68,27 @@ class PhotosController extends FOSRestController
         $entityManager = $this->getDoctrine()->getManager();
         $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($albumId);
         $form = $this->createForm(new PhotoType(), $photo = new Photo());
-        $jsonPost = json_decode($request->getContent(), true);
 
         if ($request->isMethod('POST')) {
-            $form->bind($jsonPost);
-            if ($form->isValid()) {
+            $form->submit($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $photo->setImageFile($request->files->get('imageFile'));
                 $photo->setAlbum($album);
                 $entityManager->persist($photo);
                 $entityManager->flush();
-                return array('code' => 200, 'text' => 'POST OK');
+
+                return array(
+                    'code' => 200,
+                    'data' => $photo,
+                );
             }
         }
 
-        return array('code' => 400, $form);
+        return array(
+            'code' => 400,
+            $form,
+        );
     }
-
-    /**
-    * @return array
-    * @View()
-    */
-    public function putPhotosAction(Request $request, $albumId, $photoId)
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($albumId);
-        $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($photoId);
-
-        if (!$photo) {
-            throw $this->createNotFoundException('Photo ' . $photoId . ' Not Found');
-        }
-
-        $form = $this->createForm(new PhotoUploadType(), $photo);
-        $jsonPost = json_decode($request->getContent(), true);
-        if ($request->isMethod('PUT')) {
-            $form->bind($jsonPost);
-            if ($form->isValid()) {
-                $photo->setAlbum($album);
-                $photo->setUpdatedAt(new \DateTime());
-                $entityManager->persist($photo);
-                $entityManager->flush();
-
-                return array('code' => 200, 'text' => 'PUT OK');
-            }
-        }
-
-        return array('code' => 400, $form);
-    }
-
 
     /**
     * @return array
@@ -118,13 +100,19 @@ class PhotosController extends FOSRestController
         $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($photoId);
 
         if (!$photo) {
-            throw $this->createNotFoundException('Photo ' . $photoId . ' Not Found');
+            return array(
+                'code' => 404,
+                'data' => 'Photo not found',
+            );
         }
 
         $entityManager->remove($photo);
         $entityManager->flush();
 
-        return array('code' => 200, 'text' => 'DELETE OK');
+        return array(
+            'code' => 200,
+            'data' => 'Delete done',
+        );
     }
 
     /**
@@ -138,13 +126,19 @@ class PhotosController extends FOSRestController
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         if (!$photo) {
-            throw $this->createNotFoundException('Photo ' . $photoId . ' Not Found');
+            return array(
+                'code' => 404,
+                'data' => 'Photo '.$photoId.' Not Found',
+            );
         }
 
         $user->setImageProfile($photo->getImageName());
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return array('code' => 200, 'text' => 'POST OK');
+        return array(
+            'code' => 200,
+            'data' => $user,
+        );
     }
 }

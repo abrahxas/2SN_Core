@@ -13,22 +13,21 @@ class SelectGroupType extends AbstractType
 
     public function __construct($user)
     {
-        $this->user=$user;
+        $this->user = $user;
     }
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $user = $this->user;
         $builder
-            ->add('name','entity',array(
+            ->add('name', 'entity', array(
                 'class' => 'Core\FriendListBundle\Entity\FriendGroups',
                 'property' => 'name',
-                'query_builder' => function(EntityRepository $fg) use ($user)
-                {
+                'query_builder' => function (EntityRepository $fg) use ($user) {
                         return $fg->createQueryBuilder('fg')
                                         ->where('fg.user = :user')
                                         ->setParameter('user', $user)
@@ -47,7 +46,7 @@ class SelectGroupType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Core\FriendListBundle\Entity\FriendGroups'
+            'data_class' => 'Core\FriendListBundle\Entity\FriendGroups',
         ));
     }
 

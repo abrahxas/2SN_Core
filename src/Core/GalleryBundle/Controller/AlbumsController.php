@@ -7,7 +7,6 @@ use Core\GalleryBundle\Form\Type\AlbumType;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class AlbumsController extends FOSRestController
 {
@@ -21,7 +20,9 @@ class AlbumsController extends FOSRestController
         $user = $this->container->get('security.context')->getToken()->getUser();
         $albums = $entityManager->getRepository('CoreGalleryBundle:Album')->findBy(array('user' => $user), array('createdAt' => 'DESC'));
 
-        return array('albums', $albums);
+        return array(
+            'albums' => $albums,
+        );
     }
 
     /**
@@ -34,10 +35,15 @@ class AlbumsController extends FOSRestController
         $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($albumId);
 
         if (!$album) {
-            throw $this->createNotFoundException('Album Not Found');
+            return array(
+                'code' => 404,
+                'data' => 'Album not found',
+            );
         }
 
-        return array('album' => $album);
+        return array(
+            'album' => $album,
+        );
     }
 
     /**
@@ -51,17 +57,24 @@ class AlbumsController extends FOSRestController
         $form = $this->createForm(new AlbumType(), $album = new Album());
         $jsonPost = json_decode($request->getContent(), true);
 
-        if ($request->isMethod('POST')) {
+        if ($request->isMethod('POST') && !empty($jsonPost)) {
             $form->bind($jsonPost);
-            if ($form->isValid()) {
+            if ($form->isSubmitted() && $form->isValid()) {
                 $album->setUser($user);
                 $entityManager->persist($album);
                 $entityManager->flush();
-                return array('code' => 200, 'text' => 'POST OK');
+
+                return array(
+                    'code' => 200,
+                    'data' => $album,
+                );
             }
         }
 
-        return array('code' => 400, $form);
+        return array(
+            'code' => 400,
+            $form,
+        );
     }
 
     /**
@@ -76,21 +89,31 @@ class AlbumsController extends FOSRestController
         $form = $this->createForm(new AlbumType(), $album);
 
         if (!$album) {
-            throw $this->createNotFoundException('Album Not Found');
+            return array(
+                'code' => 404,
+                'data' => 'Album not found',
+            );
         }
         $jsonPost = json_decode($request->getContent(), true);
-        if ($request->isMethod('PUT')) {
+        if ($request->isMethod('PUT') && !empty($jsonPost)) {
             $form->bind($jsonPost);
-            if ($form->isValid()) {
+            if ($form->isSubmitted() && $form->isValid()) {
                 $album->setUser($user);
                 $album->setUpdatedAt(new \DateTime());
                 $entityManager->persist($album);
                 $entityManager->flush();
-                return array('code' => 200, 'text' => 'PUT OK');
+
+                return array(
+                    'code' => 200,
+                    'data' => $album,
+                );
             }
         }
 
-        return array('code' => 400, $form);
+        return array(
+            'code' => 400,
+            $form,
+        );
     }
 
     /**
@@ -103,12 +126,18 @@ class AlbumsController extends FOSRestController
         $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($albumId);
 
         if (!$album) {
-            throw $this->createNotFoundException('Album Not Found');
+            return array(
+                'code' => 404,
+                'data' => 'Album not found',
+            );
         }
 
         $entityManager->remove($album);
         $entityManager->flush();
 
-        return array('code' => 200, 'text' => 'DELETE OK');
+        return array(
+            'code' => 200,
+            'text' => 'Delete done',
+        );
     }
 }

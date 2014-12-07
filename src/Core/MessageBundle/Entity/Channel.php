@@ -3,7 +3,7 @@
 namespace Core\MessageBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use \Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Core\GameSessionBundle\Entity\GameSession;
 
 /**
@@ -29,7 +29,7 @@ class Channel
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="Core\UserBundle\Entity\User", inversedBy="channels")
      * @ORM\JoinColumn(name="users_id", referencedColumnName="id", onDelete="CASCADE"))
@@ -37,7 +37,7 @@ class Channel
     private $users;
 
     /**
-     * 
+     *
      * @ORM\OneToMany(targetEntity="Message", mappedBy="channel", cascade={"persist"})
      */
     private $messages;
@@ -60,7 +60,7 @@ class Channel
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -70,7 +70,7 @@ class Channel
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string  $name
      * @return Channel
      */
     public function setName($name)
@@ -83,7 +83,7 @@ class Channel
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -93,7 +93,7 @@ class Channel
     /**
      * Add users
      *
-     * @param \Core\UserBundle\Entity\User $users
+     * @param  \Core\UserBundle\Entity\User $users
      * @return Channel
      */
     public function addUser(\Core\UserBundle\Entity\User $users)
@@ -116,7 +116,7 @@ class Channel
     /**
      * Get users
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getUsers()
     {
@@ -126,7 +126,7 @@ class Channel
     /**
      * Add messages
      *
-     * @param \Core\MessageBundle\Entity\Message $messages
+     * @param  \Core\MessageBundle\Entity\Message $messages
      * @return Channel
      */
     public function addMessage(\Core\MessageBundle\Entity\Message $messages)
@@ -149,7 +149,7 @@ class Channel
     /**
      * Get messages
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getMessages()
     {
@@ -159,7 +159,7 @@ class Channel
     /**
      * Set gameSession
      *
-     * @param \Core\GameSessionBundle\Entity\GameSession $gameSession
+     * @param  \Core\GameSessionBundle\Entity\GameSession $gameSession
      * @return Channel
      */
     public function setGameSession(\Core\GameSessionBundle\Entity\GameSession $gameSession = null)
@@ -172,11 +172,10 @@ class Channel
     /**
      * Get gameSession
      *
-     * @return \Core\GameSessionBundle\Entity\GameSession 
+     * @return \Core\GameSessionBundle\Entity\GameSession
      */
     public function getGameSession()
     {
         return $this->gameSession;
     }
-
 }

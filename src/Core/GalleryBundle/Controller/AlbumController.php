@@ -16,7 +16,7 @@ class AlbumController extends Controller
         $albums = $entityManager->getRepository('CoreGalleryBundle:Album')->findBy(array('user' => $user), array('createdAt' => 'DESC'));
 
         return $this->render('CoreGalleryBundle:default:index.html.twig', array(
-            'albums' => $albums
+            'albums' => $albums,
         ));
     }
 
@@ -46,6 +46,7 @@ class AlbumController extends Controller
                 $album->setUser($user);
                 $entityManager->persist($album);
                 $entityManager->flush();
+
                 return $this->redirect($this->generateUrl('core_gallery_homepage'));
             }
         }
@@ -73,6 +74,7 @@ class AlbumController extends Controller
                 $album->setUpdatedAt(new \DateTime());
                 $entityManager->persist($album);
                 $entityManager->flush();
+
                 return $this->redirect($this->generateUrl('core_gallery_homepage'));
             }
         }

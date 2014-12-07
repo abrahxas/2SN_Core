@@ -5,7 +5,6 @@ namespace Core\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use Core\FriendListBundle\Entity\FriendGroups;
-use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * User
@@ -42,7 +41,7 @@ class User extends BaseUser
 
     /**
      *@var friendGroups[]
-     * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\FriendGroups", mappedBy="user", cascade="persist")
+     * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\FriendGroups", mappedBy="user", cascade={"all"})
      */
     protected $friendGroups;
 
@@ -124,11 +123,10 @@ class User extends BaseUser
         parent::__construct();
     }
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -138,7 +136,7 @@ class User extends BaseUser
     /**
      * Set birthDate
      *
-     * @param \DateTime $birthDate
+     * @param  \DateTime $birthDate
      * @return User
      */
     public function setBirthDate($birthDate)
@@ -151,7 +149,7 @@ class User extends BaseUser
     /**
      * Get birthDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getBirthDate()
     {
@@ -161,7 +159,7 @@ class User extends BaseUser
     /**
      * Add friendGroups
      *
-     * @param \Core\FriendListBundle\Entity\FriendGroups $friendGroups
+     * @param  \Core\FriendListBundle\Entity\FriendGroups $friendGroups
      * @return User
      */
     public function addFriendGroup(\Core\FriendListBundle\Entity\FriendGroups $friendGroups)
@@ -184,7 +182,7 @@ class User extends BaseUser
     /**
      * Get friendGroups
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFriendGroups()
     {
@@ -194,7 +192,7 @@ class User extends BaseUser
     /**
      * Add channel
      *
-     * @param \Core\MessageBundle\Entity\Channel $channel
+     * @param  \Core\MessageBundle\Entity\Channel $channel
      * @return User
      */
     public function addChannel(\Core\MessageBundle\Entity\Channel $channel)
@@ -217,7 +215,7 @@ class User extends BaseUser
     /**
      * Get channels
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getChannels()
     {
@@ -227,7 +225,7 @@ class User extends BaseUser
     /**
      * Add posts
      *
-     * @param \Core\BlogBundle\Entity\Post $posts
+     * @param  \Core\BlogBundle\Entity\Post $posts
      * @return User
      */
     public function addPost(\Core\BlogBundle\Entity\Post $posts)
@@ -250,7 +248,7 @@ class User extends BaseUser
     /**
      * Get posts
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getPosts()
     {
@@ -260,7 +258,7 @@ class User extends BaseUser
     /**
      * Add albums
      *
-     * @param \Core\GalleryBundle\Entity\Album $albums
+     * @param  \Core\GalleryBundle\Entity\Album $albums
      * @return User
      */
     public function addAlbum(\Core\GalleryBundle\Entity\Album $albums)
@@ -283,7 +281,7 @@ class User extends BaseUser
     /**
      * Get albums
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAlbums()
     {
@@ -293,7 +291,7 @@ class User extends BaseUser
     /**
      * Add characterSheet
      *
-     * @param \Core\GalleryBundle\Entity\Album $characterSheet
+     * @param  \Core\GalleryBundle\Entity\Album $characterSheet
      * @return User
      */
     public function addCharacterSheet(\Core\CharacterSheetBundle\Entity\CharacterSheet $characterSheet)
@@ -326,7 +324,7 @@ class User extends BaseUser
     /**
      * Add friendGroups
      *
-     * @param \Core\GameSessionBundle\Entity\GameSession $gameSessions
+     * @param  \Core\GameSessionBundle\Entity\GameSession $gameSessions
      * @return User
      */
     public function addGameSession(\Core\GameSessionBundle\Entity\GameSession $gameSessions)
@@ -349,7 +347,7 @@ class User extends BaseUser
     /**
      * Get gameSessions
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getGameSessions()
     {
@@ -359,7 +357,7 @@ class User extends BaseUser
     /**
      * Set imageProfile
      *
-     * @param string $imageProfile
+     * @param  string $imageProfile
      * @return User
      */
     public function setImageProfile($imageProfile)
@@ -372,7 +370,7 @@ class User extends BaseUser
     /**
      * Get imageProfile
      *
-     * @return string 
+     * @return string
      */
     public function getImageProfile()
     {

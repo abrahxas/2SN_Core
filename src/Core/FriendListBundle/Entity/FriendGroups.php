@@ -3,7 +3,6 @@
 namespace Core\FriendListBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * friendGroups
@@ -50,7 +49,7 @@ class FriendGroups
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -60,7 +59,7 @@ class FriendGroups
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string       $name
      * @return FriendGroups
      */
     public function setName($name)
@@ -73,7 +72,7 @@ class FriendGroups
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -83,7 +82,7 @@ class FriendGroups
     /**
      * Set user
      *
-     * @param \Core\UserBundle\Entity\User $user
+     * @param  \Core\UserBundle\Entity\User $user
      * @return FriendGroups
      */
     public function setUser(\Core\UserBundle\Entity\User $user = null)
@@ -96,7 +95,7 @@ class FriendGroups
     /**
      * Get user
      *
-     * @return \Core\UserBundle\Entity\User 
+     * @return \Core\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -106,7 +105,7 @@ class FriendGroups
     /**
      * Add friends
      *
-     * @param \Core\FriendListBundle\Entity\Friend $friends
+     * @param  \Core\FriendListBundle\Entity\Friend $friends
      * @return FriendGroups
      */
     public function addFriend(\Core\FriendListBundle\Entity\Friend $friends)
@@ -129,7 +128,7 @@ class FriendGroups
     /**
      * Get friends
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFriends()
     {

@@ -40,11 +40,10 @@ class Message
      */
     private $contents;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -54,7 +53,7 @@ class Message
     /**
      * Set contents
      *
-     * @param string $contents
+     * @param  string  $contents
      * @return Message
      */
     public function setContents($contents)
@@ -67,7 +66,7 @@ class Message
     /**
      * Get contents
      *
-     * @return string 
+     * @return string
      */
     public function getContents()
     {
@@ -77,7 +76,7 @@ class Message
     /**
      * Set channel
      *
-     * @param \Core\MessageBundle\Entity\Channel $channel
+     * @param  \Core\MessageBundle\Entity\Channel $channel
      * @return Message
      */
     public function setChannel(\Core\MessageBundle\Entity\Channel $channel = null)
@@ -90,7 +89,7 @@ class Message
     /**
      * Get channel
      *
-     * @return \Core\MessageBundle\Entity\Channel 
+     * @return \Core\MessageBundle\Entity\Channel
      */
     public function getChannel()
     {
@@ -99,7 +98,7 @@ class Message
     /**
      * Set sender
      *
-     * @param \Core\UserBundle\Entity\User $sender
+     * @param  \Core\UserBundle\Entity\User $sender
      * @return Message
      */
     public function setSender(\Core\UserBundle\Entity\User $sender = null)
@@ -112,7 +111,7 @@ class Message
     /**
      * Get sender
      *
-     * @return \Core\UserBundle\Entity\User 
+     * @return \Core\UserBundle\Entity\User
      */
     public function getSender()
     {

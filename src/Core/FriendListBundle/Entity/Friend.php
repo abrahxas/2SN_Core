@@ -41,16 +41,15 @@ class Friend
     private $friend;
 
     /**
-     *@var collection 
+     *@var collection
      * @ORM\Column(name="sender", type="string", length=255)
      */
     private $sender;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -60,7 +59,7 @@ class Friend
     /**
      * Set friendgroup
      *
-     * @param \Core\FriendListBundle\Entity\FriendGroups $friendgroup
+     * @param  \Core\FriendListBundle\Entity\FriendGroups $friendgroup
      * @return Friend
      */
     public function setFriendgroup(\Core\FriendListBundle\Entity\FriendGroups $friendgroup = null)
@@ -73,7 +72,7 @@ class Friend
     /**
      * Get friendgroup
      *
-     * @return \Core\FriendListBundle\Entity\FriendGroups 
+     * @return \Core\FriendListBundle\Entity\FriendGroups
      */
     public function getFriendgroup()
     {
@@ -83,7 +82,7 @@ class Friend
     /**
      * Set friend
      *
-     * @param \Core\UserBundle\Entity\User $friend
+     * @param  \Core\UserBundle\Entity\User $friend
      * @return Friend
      */
     public function setFriend(\Core\UserBundle\Entity\User $friend = null)
@@ -96,7 +95,7 @@ class Friend
     /**
      * Get friend
      *
-     * @return \Core\UserBundle\Entity\User 
+     * @return \Core\UserBundle\Entity\User
      */
     public function getFriend()
     {
@@ -106,7 +105,7 @@ class Friend
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string $name
      * @return Friend
      */
     public function setName($name)
@@ -119,7 +118,7 @@ class Friend
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -129,7 +128,7 @@ class Friend
     /**
      * Set sender
      *
-     * @param string $sender
+     * @param  string $sender
      * @return Friend
      */
     public function setSender($sender)
@@ -142,7 +141,7 @@ class Friend
     /**
      * Get sender
      *
-     * @return string 
+     * @return string
      */
     public function getSender()
     {

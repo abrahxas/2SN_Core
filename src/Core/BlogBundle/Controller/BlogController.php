@@ -16,7 +16,7 @@ class BlogController extends Controller
         $posts = $entityManager->getRepository('CoreBlogBundle:Post')->findBy(array('user' => $user));
 
         return $this->render('CoreBlogBundle:default:index.html.twig', array(
-            'posts' => $posts
+            'posts' => $posts,
         ));
     }
 
@@ -26,7 +26,7 @@ class BlogController extends Controller
         $posts = $entityManager->getRepository('CoreBlogBundle:Post')->findAll();
 
         return $this->render('CoreBlogBundle:default:indexAll.html.twig', array(
-            'posts' => $posts
+            'posts' => $posts,
         ));
     }
 
@@ -36,12 +36,13 @@ class BlogController extends Controller
         $user = $this->container->get('security.context')->getToken()->getUser();
         $form = $this->createForm(new PostType(), $post = new Post());
 
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             $form->handleRequest($request);
-            if ($form->isValid()){
+            if ($form->isValid()) {
                 $post->setUser($user);
                 $entityManager->persist($post);
                 $entityManager->flush();
+
                 return $this->redirect($this->generateUrl('core_blog_homepage'));
             }
         }
@@ -61,7 +62,7 @@ class BlogController extends Controller
         }
 
         return $this->render('CoreBlogBundle:default:show.html.twig', array(
-            'post' => $post
+            'post' => $post,
         ));
     }
 
@@ -83,6 +84,7 @@ class BlogController extends Controller
                 $post->setUpdatedAt(new \DateTime());
                 $entityManager->persist($post);
                 $entityManager->flush();
+
                 return $this->redirect($this->generateUrl('core_blog_homepage'));
             }
         }

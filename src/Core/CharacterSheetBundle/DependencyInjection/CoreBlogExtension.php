@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\BlogBundle\DependencyInjection;
+namespace Core\CharacterSheetBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;

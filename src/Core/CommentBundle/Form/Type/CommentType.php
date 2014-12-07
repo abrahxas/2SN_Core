@@ -10,7 +10,7 @@ class CommentType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -18,7 +18,6 @@ class CommentType extends AbstractType
             ->add('content')
             ->add('save', 'submit')
             ->getForm();
-        ;
     }
 
     /**
@@ -27,7 +26,7 @@ class CommentType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Core\CommentBundle\Entity\Comment'
+            'data_class' => 'Core\CommentBundle\Entity\Comment',
         ));
     }
 
