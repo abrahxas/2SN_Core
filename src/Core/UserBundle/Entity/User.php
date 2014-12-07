@@ -42,7 +42,7 @@ class User extends BaseUser
 
     /**
      *@var friendGroups[]
-     * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\FriendGroups", mappedBy="user", cascade="persist")
+     * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\FriendGroups", mappedBy="user", cascade={"all"})
      */
     protected $friendGroups;
 
