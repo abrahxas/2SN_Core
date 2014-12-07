@@ -110,6 +110,7 @@ class UsersController extends FOSRestController
 
         return array('code' => 400, $form);
     }
+// { "email":"test@mail.com", "username":"test", "plainPassword":{"first":"test","second":"test"} }
 
     public function putUserAction(Request $request, $userId)
     {
@@ -144,8 +145,7 @@ class UsersController extends FOSRestController
                 $userManager->updateUser($user);
 
                 if (null === $response = $event->getResponse()) {
-                    $url = $this->container->get('router')->generate('fos_user_profile_show');
-                    $response = new RedirectResponse($url);
+                    return array('code' => 200, 'data' => $user);
                 }
 
                 $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
@@ -156,6 +156,7 @@ class UsersController extends FOSRestController
 
         return array('code' => 400, $form);
     }
+// {"username":"test", "email":"test@mail.com", "current_password":"test"}
 
     public function deleteUserAction($userId)
     {
@@ -169,6 +170,46 @@ class UsersController extends FOSRestController
 
         return array('code' => 200, 'data' => 'Delete done');
     }
-}
 
-// { "email":"test@mail.com", "username":"test", "plainPassword":{"first":"test","second":"test"} }
+    public function putPasswordAction(Request $request)
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        $dispatcher = $this->container->get('event_dispatcher');
+
+        $event = new GetResponseUserEvent($user, $request);
+        $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_INITIALIZE, $event);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
+        }
+
+        $formFactory = $this->container->get('fos_user.change_password.form.factory');
+
+        $form = $formFactory->createForm();
+        $form->setData($user);
+        $jsonPost = json_decode($request->getContent(), true);
+
+        if ($request->isMethod('PUT') && !empty($jsonPost)) {
+            $form->bind($jsonPost);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $userManager = $this->container->get('fos_user.user_manager');
+                $event = new FormEvent($form, $request);
+                $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_SUCCESS, $event);
+                $userManager->updateUser($user);
+
+                return array(
+                    'code' => 200,
+                    'data' => 'Change password done!'
+                );
+            }
+        }
+
+        return array(
+            'code' => 400,
+            $form
+        );
+    }
+
+    //{"current_password":"test","plainPassword":{"first":"toto","second":"toto"}}
+}
