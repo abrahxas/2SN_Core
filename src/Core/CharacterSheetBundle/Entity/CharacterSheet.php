@@ -121,7 +121,7 @@ class CharacterSheet
     /**
      * Set fullName
      *
-     * @param string $fullName
+     * @param  string $fullName
      * @return Album
      */
     public function setFullName($fullName)
@@ -144,7 +144,7 @@ class CharacterSheet
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param  \DateTime $createdAt
      * @return Album
      */
     public function setCreatedAt($createdAt)
@@ -157,7 +157,7 @@ class CharacterSheet
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -167,7 +167,7 @@ class CharacterSheet
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
+     * @param  \DateTime $updatedAt
      * @return Album
      */
     public function setUpdatedAt($updatedAt)
@@ -180,7 +180,7 @@ class CharacterSheet
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -190,7 +190,7 @@ class CharacterSheet
     /**
      * Set user
      *
-     * @param \Core\UserBundle\Entity\User $user
+     * @param  \Core\UserBundle\Entity\User $user
      * @return Album
      */
     public function setUser(\Core\UserBundle\Entity\User $user = null)
@@ -203,7 +203,7 @@ class CharacterSheet
     /**
      * Get user
      *
-     * @return \Core\UserBundle\Entity\User 
+     * @return \Core\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -213,7 +213,7 @@ class CharacterSheet
     /**
      * Set imageName
      *
-     * @param string $imageName
+     * @param  string         $imageName
      * @return CharacterSheet
      */
     public function setImageName($imageName)
@@ -226,7 +226,7 @@ class CharacterSheet
     /**
      * Get imageName
      *
-     * @return string 
+     * @return string
      */
     public function getImageName()
     {
@@ -264,7 +264,7 @@ class CharacterSheet
     /**
      * Set sheetName
      *
-     * @param string $sheetName
+     * @param  string         $sheetName
      * @return CharacterSheet
      */
     public function setSheetName($sheetName)
@@ -277,7 +277,7 @@ class CharacterSheet
     /**
      * Get sheetName
      *
-     * @return string 
+     * @return string
      */
     public function getSheetName()
     {
@@ -315,7 +315,7 @@ class CharacterSheet
     /**
      * Set details
      *
-     * @param string $details
+     * @param  string         $details
      * @return CharacterSheet
      */
     public function setDetails($details)
@@ -328,7 +328,7 @@ class CharacterSheet
     /**
      * Get details
      *
-     * @return string 
+     * @return string
      */
     public function getDetails()
     {
@@ -338,7 +338,7 @@ class CharacterSheet
     /**
      * Set background
      *
-     * @param string $background
+     * @param  string         $background
      * @return CharacterSheet
      */
     public function setBackground($background)
@@ -351,7 +351,7 @@ class CharacterSheet
     /**
      * Get background
      *
-     * @return string 
+     * @return string
      */
     public function getBackground()
     {
@@ -361,7 +361,7 @@ class CharacterSheet
     /**
      * Get players
      *
-     * @return \Core\PlayerBundle\Entity\Player 
+     * @return \Core\PlayerBundle\Entity\Player
      */
     public function getPlayers()
     {
@@ -371,7 +371,7 @@ class CharacterSheet
     /**
      * Add players
      *
-     * @param \Core\GameSessionBundle\Entity\Player $players
+     * @param  \Core\GameSessionBundle\Entity\Player $players
      * @return CharacterSheet
      */
     public function addPlayer(\Core\GameSessionBundle\Entity\Player $players)

@@ -13,22 +13,21 @@ class SelectCharacterSheetType extends AbstractType
 
     public function __construct($user)
     {
-        $this->user=$user;
+        $this->user = $user;
     }
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $user = $this->user;
         $builder
-            ->add('CharacterSheet','entity',array(
+            ->add('CharacterSheet', 'entity', array(
                 'class' => 'Core\CharacterSheetBundle\Entity\CharacterSheet',
                 'property' => 'id',
-                'query_builder' => function(EntityRepository $ch) use ($user)
-                {
+                'query_builder' => function (EntityRepository $ch) use ($user) {
                         return $ch->createQueryBuilder('ch')
                                         ->where('ch.user = :user')
                                         ->setParameter('user', $user);
@@ -45,7 +44,7 @@ class SelectCharacterSheetType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Core\GameSessionBundle\Entity\Player'
+            'data_class' => 'Core\GameSessionBundle\Entity\Player',
         ));
     }
 

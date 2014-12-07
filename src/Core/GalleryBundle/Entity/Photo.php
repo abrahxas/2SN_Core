@@ -73,7 +73,7 @@ class Photo
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -83,7 +83,7 @@ class Photo
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param  \DateTime $createdAt
      * @return Photo
      */
     public function setCreatedAt($createdAt)
@@ -96,7 +96,7 @@ class Photo
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -106,7 +106,7 @@ class Photo
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
+     * @param  \DateTime $updatedAt
      * @return Photo
      */
     public function setUpdatedAt($updatedAt)
@@ -119,7 +119,7 @@ class Photo
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -129,7 +129,7 @@ class Photo
     /**
      * Set album
      *
-     * @param \Core\GalleryBundle\Entity\Album $album
+     * @param  \Core\GalleryBundle\Entity\Album $album
      * @return Photo
      */
     public function setAlbum(\Core\GalleryBundle\Entity\Album $album = null)
@@ -142,7 +142,7 @@ class Photo
     /**
      * Get album
      *
-     * @return \Core\GalleryBundle\Entity\Album 
+     * @return \Core\GalleryBundle\Entity\Album
      */
     public function getAlbum()
     {
@@ -152,7 +152,7 @@ class Photo
     /**
      * Set content
      *
-     * @param string $content
+     * @param  string $content
      * @return Photo
      */
     public function setContent($content)
@@ -165,7 +165,7 @@ class Photo
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -200,11 +200,10 @@ class Photo
         return $this->imageFile;
     }
 
-
     /**
      * Set imageName
      *
-     * @param string $imageName
+     * @param  string $imageName
      * @return Photo
      */
     public function setImageName($imageName)
@@ -217,7 +216,7 @@ class Photo
     /**
      * Get imageName
      *
-     * @return string 
+     * @return string
      */
     public function getImageName()
     {

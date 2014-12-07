@@ -14,7 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-Class UsersController extends FOSRestController
+class UsersController extends FOSRestController
 {
     /**
      * @return array
@@ -23,11 +23,12 @@ Class UsersController extends FOSRestController
     public function getUsersAction()
     {
         $users = $this->getDoctrine()->getRepository('CoreUserBundle:User')->findAll();
+
         return array('users' => $users);
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return array
      * @View()
      * @ParamConverter("user", class="CoreUserBundle:User")
@@ -44,6 +45,7 @@ Class UsersController extends FOSRestController
     public function getUserMeAction()
     {
         $usr = $this->get('security.context')->getToken()->getUser();
+
         return array('user' => $usr);
     }
 
@@ -52,9 +54,9 @@ Class UsersController extends FOSRestController
      * @View()
      * @Post("/register")
      */
-	public function registerAction(Request $request)
+    public function registerAction(Request $request)
     {
-	    $formFactory = $this->get('fos_user.registration.form.factory');
+        $formFactory = $this->get('fos_user.registration.form.factory');
         $userManager = $this->get('fos_user.user_manager');
         $dispatcher = $this->get('event_dispatcher');
 
@@ -106,8 +108,8 @@ Class UsersController extends FOSRestController
             }
         }
 
-        return array(400, $form);
-	}
+        return array('code' => 400, $form);
+    }
 
     public function putUserAction(Request $request, $userId)
     {
@@ -151,9 +153,9 @@ Class UsersController extends FOSRestController
                 return array('code' => 200 , 'data' => $user);
             }
         }
-        return array ('code' => 400, $form);
-    }
 
+        return array('code' => 400, $form);
+    }
 
     public function deleteUserAction($userId)
     {
@@ -164,6 +166,7 @@ Class UsersController extends FOSRestController
         }
         $em->remove($user);
         $em->flush();
+
         return array('code' => 200, 'data' => 'Delete done');
     }
 }

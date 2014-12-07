@@ -3,7 +3,6 @@
 namespace Core\GameSessionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Core\GameSessionBundle\Entity\GameSession;
 use Core\UserBundle\Entity\User;
 
 /**
@@ -34,11 +33,10 @@ class Guest
      */
     private $guest;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -48,7 +46,7 @@ class Guest
     /**
      * Set gameSession
      *
-     * @param \Core\GameSessionBundle\Entity\GameSession $gameSession
+     * @param  \Core\GameSessionBundle\Entity\GameSession $gameSession
      * @return Guest
      */
     public function setGameSession(\Core\GameSessionBundle\Entity\GameSession $gameSession = null)
@@ -61,7 +59,7 @@ class Guest
     /**
      * Get gameSession
      *
-     * @return \Core\GameSessionBundle\Entity\GameSession 
+     * @return \Core\GameSessionBundle\Entity\GameSession
      */
     public function getGameSession()
     {
@@ -71,7 +69,7 @@ class Guest
     /**
      * Set guest
      *
-     * @param \Core\UserBundle\Entity\User $guest
+     * @param  \Core\UserBundle\Entity\User $guest
      * @return Guest
      */
     public function setGuest(\Core\UserBundle\Entity\User $guest)
@@ -84,7 +82,7 @@ class Guest
     /**
      * Get guest
      *
-     * @return \Core\UserBundle\Entity\User 
+     * @return \Core\UserBundle\Entity\User
      */
     public function getGuest()
     {

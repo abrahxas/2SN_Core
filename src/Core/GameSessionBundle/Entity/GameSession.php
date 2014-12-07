@@ -3,9 +3,8 @@
 namespace Core\GameSessionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use \Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Core\MessageBundle\Entity\Channel;
-use Core\GameSessionBundle\Entity\Player;
 
 /**
  * GameSession
@@ -62,7 +61,6 @@ class GameSession
      */
     private $guests;
 
-    
     /**
      * Constructor
      */
@@ -76,7 +74,7 @@ class GameSession
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -86,7 +84,7 @@ class GameSession
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string      $name
      * @return GameSession
      */
     public function setName($name)
@@ -99,7 +97,7 @@ class GameSession
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -109,7 +107,7 @@ class GameSession
     /**
      * Set description
      *
-     * @param string $description
+     * @param  string      $description
      * @return GameSession
      */
     public function setDescription($description)
@@ -122,7 +120,7 @@ class GameSession
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -132,7 +130,7 @@ class GameSession
     /**
      * Set master
      *
-     * @param \Core\UserBundle\Entity\User $master
+     * @param  \Core\UserBundle\Entity\User $master
      * @return GameSession
      */
     public function setMaster(\Core\UserBundle\Entity\User $master = null)
@@ -145,7 +143,7 @@ class GameSession
     /**
      * Get master
      *
-     * @return \Core\UserBundle\Entity\User 
+     * @return \Core\UserBundle\Entity\User
      */
     public function getMaster()
     {
@@ -155,7 +153,7 @@ class GameSession
     /**
      * Add channels
      *
-     * @param \Core\MessageBundle\Entity\Channel $channels
+     * @param  \Core\MessageBundle\Entity\Channel $channels
      * @return GameSession
      */
     public function addChannel(\Core\MessageBundle\Entity\Channel $channels)
@@ -178,7 +176,7 @@ class GameSession
     /**
      * Get channels
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getChannels()
     {
@@ -188,7 +186,7 @@ class GameSession
     /**
      * Add players
      *
-     * @param \Core\GameSessionBundle\Entity\Player $players
+     * @param  \Core\GameSessionBundle\Entity\Player $players
      * @return GameSession
      */
     public function addPlayer(\Core\GameSessionBundle\Entity\Player $players)
@@ -211,7 +209,7 @@ class GameSession
     /**
      * Get players
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getPlayers()
     {
@@ -221,7 +219,7 @@ class GameSession
     /**
      * Add guests
      *
-     * @param \Core\GameSessionBundle\Entity\Guest $guests
+     * @param  \Core\GameSessionBundle\Entity\Guest $guests
      * @return GameSession
      */
     public function addGuest(\Core\GameSessionBundle\Entity\Guest $guests)
@@ -244,7 +242,7 @@ class GameSession
     /**
      * Get guests
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getGuests()
     {

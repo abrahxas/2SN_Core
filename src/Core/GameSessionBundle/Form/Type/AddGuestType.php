@@ -10,7 +10,7 @@ class AddGuestType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -27,7 +27,7 @@ class AddGuestType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Core\UserBundle\Entity\User'
+            'data_class' => 'Core\UserBundle\Entity\User',
         ));
     }
 

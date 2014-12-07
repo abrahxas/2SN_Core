@@ -16,7 +16,7 @@ class CharacterSheetController extends Controller
         $characterSheets = $entityManager->getRepository('CoreCharacterSheetBundle:CharacterSheet')->findBy(array('user' => $user), array('createdAt' => 'DESC'));
 
         return $this->render('CoreCharacterSheetBundle::index.html.twig', array(
-            'characterSheets' => $characterSheets
+            'characterSheets' => $characterSheets,
         ));
     }
 
@@ -46,6 +46,7 @@ class CharacterSheetController extends Controller
                 $characterSheet->setUser($user);
                 $entityManager->persist($characterSheet);
                 $entityManager->flush();
+
                 return $this->redirect($this->generateUrl('core_characterSheet_homepage'));
             }
         }
@@ -73,6 +74,7 @@ class CharacterSheetController extends Controller
                 $characterSheet->setUpdatedAt(new \DateTime());
                 $entityManager->persist($characterSheet);
                 $entityManager->flush();
+
                 return $this->redirect($this->generateUrl('core_characterSheet_homepage'));
             }
         }

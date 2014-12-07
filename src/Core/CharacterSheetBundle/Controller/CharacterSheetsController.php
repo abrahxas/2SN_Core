@@ -7,7 +7,6 @@ use Core\CharacterSheetBundle\Form\Type\CharacterSheetType;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class CharacterSheetsController extends FOSRestController
 {
@@ -21,7 +20,9 @@ class CharacterSheetsController extends FOSRestController
         $user = $this->container->get('security.context')->getToken()->getUser();
         $characterSheets = $entityManager->getRepository('CoreCharacterSheetBundle:CharacterSheet')->findBy(array('user' => $user), array('createdAt' => 'DESC'));
 
-        return array('characterSheets' => $characterSheets);
+        return array(
+            'character_sheets' => $characterSheets,
+        );
     }
 
     /**
@@ -34,10 +35,15 @@ class CharacterSheetsController extends FOSRestController
         $characterSheet = $entityManager->getRepository('CoreCharacterSheetBundle:CharacterSheet')->find($characterSheetId);
 
         if (!$characterSheet) {
-            return array('code' => 404, 'data' => 'Charactersheet not found');
+            return array(
+                'code' => 404,
+                'data' => 'Charactersheet not found',
+            );
         }
 
-        return array('CharacterSheet' => $CharacterSheet);
+        return array(
+            'character_sheet' => $CharacterSheet,
+        );
     }
 
     /**
@@ -51,16 +57,24 @@ class CharacterSheetsController extends FOSRestController
         $form = $this->createForm(new CharacterSheetType(), $characterSheet = new CharacterSheet());
 
         $jsonPost = json_decode($request->getContent(), true);
-        if ($request->isMethod('POST')) {
+        if ($request->isMethod('POST') && !empty($jsonPost)) {
             $form->bind($jsonPost);
-            if ($form->isValid()) {
+            if ($form->isSubmitted() && $form->isValid()) {
                 $characterSheet->setUser($user);
                 $entityManager->persist($characterSheet);
                 $entityManager->flush();
-                return array('code' => 201, 'data' => $characterSheet);
+
+                return array(
+                    'code' => 201,
+                    'data' => $characterSheet,
+                );
             }
         }
-       return array('code' => 400, $form);
+
+        return array(
+            'code' => 400,
+            $form,
+        );
     }
 
     /**
@@ -75,21 +89,32 @@ class CharacterSheetsController extends FOSRestController
         $form = $this->createForm(new CharacterSheetType(), $characterSheet);
 
         if (!$characterSheet) {
-            return array('code' => 404, 'data' => 'Charactersheet not found');
+            return array(
+                'code' => 404,
+                'data' => 'Charactersheet not found',
+            );
         }
 
         $jsonPost = json_decode($request->getContent(), true);
-        if ($request->isMethod('PUT')) {
+        if ($request->isMethod('PUT') && !empty($jsonPost)) {
             $form->bind($jsonPost);
-            if ($form->isValid()) {
+            if ($form->isSubmitted() && $form->isValid()) {
                 $characterSheet->setUser($user);
                 $characterSheet->setUpdatedAt(new \DateTime());
                 $entityManager->persist($characterSheet);
                 $entityManager->flush();
-                return array('code' => 200, 'data' => $CharacterSheet);
+
+                return array(
+                    'code' => 200,
+                    'data' => $CharacterSheet,
+                );
             }
         }
-       return array('code' => 400, $form);
+
+        return array(
+            'code' => 400,
+            $form,
+        );
     }
 
     /**
@@ -102,12 +127,18 @@ class CharacterSheetsController extends FOSRestController
         $characterSheet = $entityManager->getRepository('CoreCharacterSheetBundle:CharacterSheet')->find($characterSheetId);
 
         if (!$characterSheet) {
-            return array('code' => 404, 'data' => 'Charactersheet not found');
+            return array(
+                'code' => 404,
+                'data' => 'Charactersheet not found',
+            );
         }
 
         $entityManager->remove($characterSheet);
         $entityManager->flush();
 
-        return array('code' => 200, 'data' => 'Delete done');
+        return array(
+            'code' => 200,
+            'data' => 'Delete done',
+        );
     }
 }

@@ -17,4 +17,3 @@ core_characterSheet_show:
 core_characterSheet_update:
     path:     /characterSheet/update/{characterSheetId}
     defaults: { _controller: CoreCharacterSheetBundle:CharacterSheet:update }
-

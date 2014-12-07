@@ -3,7 +3,6 @@
 namespace Core\GameSessionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Core\GameSessionBundle\Entity\GameSession;
 use Core\UserBundle\Entity\User;
 use Core\CharacterSheetBundle\Entity\CharacterSheet;
 
@@ -45,7 +44,7 @@ class Player
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -55,7 +54,7 @@ class Player
     /**
      * Set gameSession
      *
-     * @param \Core\GameSessionBundle\Entity\GameSession $gameSession
+     * @param  \Core\GameSessionBundle\Entity\GameSession $gameSession
      * @return Player
      */
     public function setGameSession(\Core\GameSessionBundle\Entity\GameSession $gameSession)
@@ -68,7 +67,7 @@ class Player
     /**
      * Get gameSession
      *
-     * @return \Core\GameSessionBundle\Entity\GameSession 
+     * @return \Core\GameSessionBundle\Entity\GameSession
      */
     public function getGameSession()
     {
@@ -78,7 +77,7 @@ class Player
     /**
      * Set user
      *
-     * @param \Core\UserBundle\Entity\User $user
+     * @param  \Core\UserBundle\Entity\User $user
      * @return Player
      */
     public function setUser(\Core\UserBundle\Entity\User $user)
@@ -91,7 +90,7 @@ class Player
     /**
      * Get user
      *
-     * @return \Core\UserBundle\Entity\User 
+     * @return \Core\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -101,7 +100,7 @@ class Player
     /**
      * Get characterSheet
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCharacterSheet()
     {
@@ -111,7 +110,7 @@ class Player
     /**
      * Set characterSheet
      *
-     * @param \Core\CharacterSheetBundle\Entity\CharacterSheet $characterSheet
+     * @param  \Core\CharacterSheetBundle\Entity\CharacterSheet $characterSheet
      * @return Player
      */
     public function setCharacterSheet(\Core\CharacterSheetBundle\Entity\CharacterSheet $characterSheet = null)

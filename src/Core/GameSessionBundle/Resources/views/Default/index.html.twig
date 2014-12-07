@@ -1,7 +1,7 @@
 <html>
 <head></head>
 <body>
-Game Session 
+Game Session
 <br>
 <br>
 <h1>MASTER</h1><br>
@@ -16,7 +16,7 @@ Game Session
 	    	<p>Name : <a href="{{path('core_gamesession_detail', {'GameSessionId' : GameSession.id})}}">{{ GameSession.name }}</a></p>   <br>
 	    	<p>Description : {{ GameSession.description }}</p>
 	    	<p><a href="{{path('core_gamesession_update',{'GameSessionId' : GameSession.id})}}">Update Game Session</a></p>
-	    	
+
 	    	<p><a href="{{path('core_gamesession_delete',{'GameSessionId' : GameSession.id})}}">Delete Game Session</a></p>
 	    	<p>
 	    		Guests : <br>

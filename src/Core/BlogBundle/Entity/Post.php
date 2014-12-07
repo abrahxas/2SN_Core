@@ -88,7 +88,7 @@ class Post
     /**
      * Set content
      *
-     * @param string $content
+     * @param  string $content
      * @return Post
      */
     public function setContent($content)
@@ -111,7 +111,7 @@ class Post
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param  \DateTime $createdAt
      * @return Post
      */
     public function setCreatedAt($createdAt)
@@ -134,7 +134,7 @@ class Post
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
+     * @param  \DateTime $updatedAt
      * @return Post
      */
     public function setUpdatedAt($updatedAt)
@@ -147,7 +147,7 @@ class Post
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -157,7 +157,7 @@ class Post
     /**
      * Set user
      *
-     * @param \Core\UserBundle\Entity\User $user
+     * @param  \Core\UserBundle\Entity\User $user
      * @return Post
      */
     public function setUser(\Core\UserBundle\Entity\User $user = null)
@@ -224,7 +224,7 @@ class Post
     /**
      * Add comments
      *
-     * @param \Core\CommentBundle\Entity\Comment $comments
+     * @param  \Core\CommentBundle\Entity\Comment $comments
      * @return Post
      */
     public function addComment(\Core\CommentBundle\Entity\Comment $comments)
@@ -247,7 +247,7 @@ class Post
     /**
      * Get comments
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getComments()
     {

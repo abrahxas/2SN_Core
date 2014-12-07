@@ -7,10 +7,8 @@ use Core\BlogBundle\Form\Type\PostType;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
-
-Class BlogsController extends FOSRestController
+class BlogsController extends FOSRestController
 {
     /**
     * @return array
@@ -21,7 +19,10 @@ Class BlogsController extends FOSRestController
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
         $posts = $entityManager->getRepository('CoreBlogBundle:Post')->findBy(array('user' => $user));
-        return array('posts' => $posts);
+
+        return array(
+            'posts' => $posts,
+        );
     }
 
     /**
@@ -33,7 +34,9 @@ Class BlogsController extends FOSRestController
         $entityManager = $this->getDoctrine()->getManager();
         $posts = $entityManager->getRepository('CoreBlogBundle:Post')->findAll();
 
-        return array('posts' => $posts);
+        return array(
+            'posts' => $posts,
+        );
     }
 
     /**
@@ -47,16 +50,24 @@ Class BlogsController extends FOSRestController
         $form = $this->createForm(new PostType(), $post = new Post());
         $jsonPost = json_decode($request->getContent(), true);
 
-        if ($request->isMethod('POST')){
+        if ($request->isMethod('POST') && !empty($jsonPost)) {
             $form->bind($jsonPost);
-            if ($form->isValid()){
+            if ($form->isSubmitted() && $form->isValid()) {
                 $post->setUser($user);
                 $entityManager->persist($post);
                 $entityManager->flush();
-                return array('code' => 201, 'data' => $post);
+
+                return array(
+                    'code' => 201,
+                    'data' => $post,
+                );
             }
         }
-        return array('code' => 400, $form);
+
+        return array(
+            'code' => 400,
+            $form,
+        );
     }
 
     /**
@@ -69,10 +80,15 @@ Class BlogsController extends FOSRestController
         $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($postId);
 
         if (!$post) {
-            return array('code' => 404, 'data' => 'Post not found');
+            return array(
+                'code' => 404,
+                'data' => 'Post not found',
+            );
         }
 
-        return array('post' => $post);
+        return array(
+            'post' => $post,
+        );
     }
 
      /**
@@ -87,20 +103,31 @@ Class BlogsController extends FOSRestController
         $form = $this->createForm(new PostType(), $post);
 
         if (!$post) {
-            return array('code' => 404, 'data' => 'Post not found');
+            return array(
+                'code' => 404,
+                'data' => 'Post not found',
+            );
         }
         $jsonPost = json_decode($request->getContent(), true);
-        if ($request->isMethod('PUT')) {
+        if ($request->isMethod('PUT') && !empty($jsonPost)) {
             $form->bind($jsonPost);
-            if ($form->isValid()) {
+            if ($form->isSubmitted() && $form->isValid()) {
                 $post->setUser($user);
                 $post->setUpdatedAt(new \DateTime());
                 $entityManager->persist($post);
                 $entityManager->flush();
-                return array('code' => 200, 'data' => $post);
+
+                return array(
+                    'code' => 200,
+                    'data' => $post,
+                );
             }
         }
-        return array ('code' => 400, $form);
+
+        return array(
+            'code' => 400,
+            $form,
+        );
     }
 
     /**
@@ -113,12 +140,18 @@ Class BlogsController extends FOSRestController
         $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($postId);
 
         if (!$post) {
-            return array('code' => 404, 'data' => 'Post not foud');
+            return array(
+                'code' => 404,
+                'data' => 'Post not foud',
+            );
         }
 
         $entityManager->remove($post);
         $entityManager->flush();
 
-        return array('code' => 200, 'data' => 'DELETE DONE');
+        return array(
+            'code' => 200,
+            'data' => 'Delete done',
+        );
     }
 }

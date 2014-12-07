@@ -73,7 +73,7 @@ class Comment
     /**
      * Set content
      *
-     * @param string $content
+     * @param  string  $content
      * @return Comment
      */
     public function setContent($content)
@@ -96,7 +96,7 @@ class Comment
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param  \DateTime $createdAt
      * @return Comment
      */
     public function setCreatedAt($createdAt)
@@ -119,7 +119,7 @@ class Comment
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
+     * @param  \DateTime $updatedAt
      * @return Comment
      */
     public function setUpdatedAt($updatedAt)
@@ -142,7 +142,7 @@ class Comment
     /**
      * Set user
      *
-     * @param \Core\UserBundle\Entity\User $user
+     * @param  \Core\UserBundle\Entity\User $user
      * @return Comment
      */
     public function setUser(\Core\UserBundle\Entity\User $user = null)
@@ -165,7 +165,7 @@ class Comment
     /**
      * Set post
      *
-     * @param \Core\BlogBundle\Entity\Post $post
+     * @param  \Core\BlogBundle\Entity\Post $post
      * @return Comment
      */
     public function setPost(\Core\BlogBundle\Entity\Post $post = null)

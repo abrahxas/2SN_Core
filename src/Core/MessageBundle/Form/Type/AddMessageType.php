@@ -10,12 +10,12 @@ class AddMessageType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('contents', 'textarea', array('attr' => array('rows' => '2','cols' => '30')) )
+            ->add('contents', 'textarea', array('attr' => array('rows' => '2', 'cols' => '30')))
             ->add('Validation', 'submit')
             ->getForm()
         ;
@@ -27,7 +27,7 @@ class AddMessageType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Core\MessageBundle\Entity\Message'
+            'data_class' => 'Core\MessageBundle\Entity\Message',
         ));
     }
 

@@ -17,7 +17,7 @@ Listing friend group
 	    	<a href="{{path('core_friendList_update', {'friendGroupId' : friendList.id} )}}">update friend List</a>
 	    	<a href="{{path('core_friendList_delete' , {'friendGroupId' : friendList.id})}}">delete friend List</a><br/>
 	    	{{ friendList.name }}
-	    		{% render(controller('CoreFriendListBundle:Friend:indexByGroup',{'friendGroupName' : friendList.name})) %}	    		
+	    		{% render(controller('CoreFriendListBundle:Friend:indexByGroup',{'friendGroupName' : friendList.name})) %}
 	    </div>
 	</div>
 {% endfor %}

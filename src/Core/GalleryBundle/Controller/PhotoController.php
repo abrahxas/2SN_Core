@@ -16,7 +16,7 @@ class PhotoController extends Controller
         $photos = $entityManager->getRepository('CoreGalleryBundle:Photo')->findBy(array('album' => $album->getId()), array('createdAt' => 'DESC'));
 
         return $this->render('CoreGalleryBundle:default:index-photo.html.twig', array(
-            'photos' => $photos
+            'photos' => $photos,
         ));
     }
 
@@ -26,7 +26,7 @@ class PhotoController extends Controller
         $photos = $entityManager->getRepository('CoreGalleryBundle:Photo')->findAll();
 
         return $this->render('CoreGalleryBundle:default:index-photoAll.html.twig', array(
-            'photos' => $photos
+            'photos' => $photos,
         ));
     }
 
@@ -36,11 +36,11 @@ class PhotoController extends Controller
         $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($request->get('photoId'));
 
         if (!$photo) {
-            throw $this->createNotFoundException('Photo ' . $request->get('photoId') . ' Not Found');
+            throw $this->createNotFoundException('Photo '.$request->get('photoId').' Not Found');
         }
 
         return $this->render('CoreGalleryBundle:default:show-photo.html.twig', array(
-            'photo' => $photo
+            'photo' => $photo,
         ));
     }
 
@@ -56,6 +56,7 @@ class PhotoController extends Controller
                 $photo->setAlbum($album);
                 $entityManager->persist($photo);
                 $entityManager->flush();
+
                 return $this->redirect($this->generateUrl('core_album_show', array('albumSlug' => $request->get('albumSlug'))));
             }
         }
@@ -72,7 +73,7 @@ class PhotoController extends Controller
         $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($request->get('photoId'));
 
         if (!$photo) {
-            throw $this->createNotFoundException('Photo ' . $request->get('photoId') . ' Not Found');
+            throw $this->createNotFoundException('Photo '.$request->get('photoId').' Not Found');
         }
 
         $form = $this->createForm(new PhotoType(), $photo);
@@ -85,10 +86,11 @@ class PhotoController extends Controller
                 $entityManager->persist($photo);
                 $entityManager->flush();
 
-                if ($request->get('albumSlug') != null)
+                if ($request->get('albumSlug') != null) {
                     return $this->redirect($this->generateUrl('core_album_show', array('albumSlug' => $request->get('albumSlug'))));
-                else
+                } else {
                     return $this->redirect($this->generateUrl('core_photo_all'));
+                }
             }
         }
 
@@ -97,23 +99,23 @@ class PhotoController extends Controller
         ));
     }
 
-
     public function deleteAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($request->get('photoId'));
 
         if (!$photo) {
-            throw $this->createNotFoundException('Photo ' . $request->get('photoId') . ' Not Found');
+            throw $this->createNotFoundException('Photo '.$request->get('photoId').' Not Found');
         }
 
         $entityManager->remove($photo);
         $entityManager->flush();
 
-        if ($request->get('albumSlug') != null)
+        if ($request->get('albumSlug') != null) {
             return $this->redirect($this->generateUrl('core_album_show', array('albumSlug' => $request->get('albumSlug'))));
-        else
+        } else {
             return $this->redirect($this->generateUrl('core_photo_all'));
+        }
     }
 
     public function addPhotoProfileAction($albumSlug, $photoId)
@@ -123,7 +125,7 @@ class PhotoController extends Controller
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         if (!$photo) {
-            throw $this->createNotFoundException('Photo ' . $request->get('photoId') . ' Not Found');
+            throw $this->createNotFoundException('Photo '.$request->get('photoId').' Not Found');
         }
 
         $user->setImageProfile($photo->getImageName());

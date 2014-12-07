@@ -45,5 +45,3 @@ core_photo_show:
 core_photo_profile:
     path: /gallery/{albumSlug}/profile/{photoId}
     defaults: { _controller: CoreGalleryBundle:Photo:addPhotoProfile }
-
-
