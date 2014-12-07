@@ -56,7 +56,7 @@ class CommentsController extends FOSRestController
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        return array('code' => 200, 'text' => 'Post comment OK');
+        return array('code' => 200, 'data' => $comment);
       }
     }
 
@@ -75,7 +75,7 @@ class CommentsController extends FOSRestController
     $form = $this->createForm(new CommentType(), $comment);
 
     if (!$comment) {
-      throw $this->createNotFoundException('Comment Not Found');
+      return array('code' => 404, 'data' => 'Comment not found');
     }
 
     $jsonPost = json_decode($request->getContent(), true);
@@ -87,7 +87,7 @@ class CommentsController extends FOSRestController
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        return array('code' => 200, 'text' => 'Update comment OK');
+        return array('code' => 200, 'data' => $comment);
       }
     }
 
@@ -104,12 +104,12 @@ class CommentsController extends FOSRestController
     $comment = $entityManager->getRepository('CoreCommentBundle:Comment')->find($commentId);
 
     if (!$comment) {
-      throw $this->createNotFoundException('Comment Not Found');
+      return array('code' => 404, 'data' => 'Comment not found');
     }
 
     $entityManager->remove($comment);
     $entityManager->flush();
 
-    return array('code' => 200, 'text' => 'Delete comment OK');
+    return array('code' => 200, 'text' => 'Delete done');
   }
 }

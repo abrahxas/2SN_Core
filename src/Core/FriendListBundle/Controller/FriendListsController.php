@@ -43,13 +43,13 @@ class FriendListsController extends FOSRestController
     		$form->bind($jsonPost);
     		if($form->isValid()){
                 if($this->GroupExist($form->get('name')->getData())){
-                    return array('code' => 400, 'message' => 'Group already exist!');
+                    return array('code' => 400, 'data' => 'GROUP ALREADY EXIST');
                 }
     			$friendGroups->setUser($user);
     			$entityManager->persist($friendGroups);
     			$entityManager->flush();
 
-                return array('code' => 200, 'text' => 'POST OK');
+                return array('code' => 200, 'data' => $friendGroups);
     		}
     	}
         return array('code' => 400, $form);
@@ -67,18 +67,18 @@ class FriendListsController extends FOSRestController
         $form = $this->createForm(new FriendGroupsType(), $friendGroup);
 
         if (!$friendGroup)
-            throw $this->createNotFoundException('Friend Group Not Found');
+            return array('code' => 404, 'data', 'data' => 'Friengroup not found');
         $jsonPost = json_decode($request->getContent(), true);
         if ($request->isMethod('PUT')) {
             $form->bind($jsonPost);
             if ($form->isValid()) {
                 if($this->GroupExist($form->get('name')->getData())){
-                    return array('code' => 400, 'message' => 'Group already exist!');
+                    return array('code' => 400, 'data' => 'Group already exist');
                 }
                 $friendGroup->setUser($user);
                 $entityManager->persist($friendGroup);
                 $entityManager->flush();
-                return array('code' => 200, 'text' => 'PUT OK');
+                return array('code' => 200, 'data' => $friendGroup);
             }
         }
         return array('code' => 400, $form);
@@ -97,10 +97,10 @@ class FriendListsController extends FOSRestController
         $friendListmove = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendGroupId);
 
         if (!$friendGroup)
-            throw $this->createNotFoundException('Friend Group Not Found');
+            return array('code' => 404, 'data' => 'Friengroup not found');
 
         if($friendGroup->getName() == 'wait' || $friendGroup->getName() == 'general')
-            return array('code' => 400, 'text' => 'NOPE');
+            return array('code' => 400, 'data' => 'Can\'t delete wait or general');
 
         foreach ($friendListmove as $friend){
             $this->postFriendMoveAction($friend->getId(), $moveGroup->getId());
@@ -108,7 +108,7 @@ class FriendListsController extends FOSRestController
         $entityManager->remove($friendGroup);
         $entityManager->flush();
 
-        return array('code' => 200, 'text' => 'DELETE OK');
+        return array('code' => 200, 'data' => 'Delete done');
     }
 
     /**
@@ -141,7 +141,7 @@ class FriendListsController extends FOSRestController
         $entityManager->persist($friend);
         $entityManager->flush();
 
-        return array('code' => 200, 'text' => 'MOVE OK');
+        return array('code' => 200, 'data' => $friendGroup);
     }
 
 }

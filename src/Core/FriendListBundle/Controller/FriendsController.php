@@ -89,7 +89,7 @@ class FriendsController extends FOSRestController
                     $entityManager->persist($receivingfriend);
                     $entityManager->flush();
                 }
-                return array('code' => 200, 'text' => 'POST OK');
+                return array('code' => 200, 'data' => $friend);
             }
         }
         return array ('code' => 400, $form);
@@ -126,7 +126,7 @@ class FriendsController extends FOSRestController
         $entityManager->remove($friendDelete);
         $entityManager->remove($friend);
         $entityManager->flush();
-        return array('code' => 200, 'text' => 'DELETE DONE');
+        return array('code' => 200, 'data' => 'Delete done');
 
     }
 
@@ -174,9 +174,9 @@ class FriendsController extends FOSRestController
             $entityManager->persist($senderFriend);
 
             $entityManager->flush();
-            return array('code' => 200, 'text' => 'OK ON EST TROP AMI!');
+            return array('code' => 200, 'data' => $friend);
         }
-        return array('code' => 400, 'text' => 'Only receiver can accept');
+        return array('code' => 400, 'data' => 'Only receiver can accept');
     }
 
     /**
@@ -198,7 +198,7 @@ class FriendsController extends FOSRestController
                 $entityManager->persist($friend);
                 $entityManager->flush();
 
-                return array('code' => 200, 'text' => 'MOVE OK');
+                return array('code' => 200, 'data' => $friend);
             }
         }
         return array('code' => 400, $form);

@@ -34,7 +34,7 @@ class AlbumsController extends FOSRestController
         $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($albumId);
 
         if (!$album) {
-            throw $this->createNotFoundException('Album Not Found');
+            return array('code' => 404, 'data' => 'Album not found');
         }
 
         return array('album' => $album);
@@ -57,7 +57,7 @@ class AlbumsController extends FOSRestController
                 $album->setUser($user);
                 $entityManager->persist($album);
                 $entityManager->flush();
-                return array('code' => 200, 'text' => 'POST OK');
+                return array('code' => 200, 'data' => $album);
             }
         }
 
@@ -76,7 +76,7 @@ class AlbumsController extends FOSRestController
         $form = $this->createForm(new AlbumType(), $album);
 
         if (!$album) {
-            throw $this->createNotFoundException('Album Not Found');
+            return array('code' => 404, 'data' => 'Album not found');
         }
         $jsonPost = json_decode($request->getContent(), true);
         if ($request->isMethod('PUT')) {
@@ -86,7 +86,7 @@ class AlbumsController extends FOSRestController
                 $album->setUpdatedAt(new \DateTime());
                 $entityManager->persist($album);
                 $entityManager->flush();
-                return array('code' => 200, 'text' => 'PUT OK');
+                return array('code' => 200, 'data' => $album);
             }
         }
 
@@ -103,12 +103,12 @@ class AlbumsController extends FOSRestController
         $album = $entityManager->getRepository('CoreGalleryBundle:Album')->find($albumId);
 
         if (!$album) {
-            throw $this->createNotFoundException('Album Not Found');
+            return array('code' => 404, 'data' => 'Album not found');
         }
 
         $entityManager->remove($album);
         $entityManager->flush();
 
-        return array('code' => 200, 'text' => 'DELETE OK');
+        return array('code' => 200, 'text' => 'Delete done');
     }
 }

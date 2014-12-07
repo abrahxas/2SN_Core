@@ -53,7 +53,7 @@ Class BlogsController extends FOSRestController
                 $post->setUser($user);
                 $entityManager->persist($post);
                 $entityManager->flush();
-                return array('code' => 200, 'text' => 'OK');
+                return array('code' => 201, 'data' => $post);
             }
         }
         return array('code' => 400, $form);
@@ -69,7 +69,7 @@ Class BlogsController extends FOSRestController
         $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($postId);
 
         if (!$post) {
-            throw $this->createNotFoundException('Post Not Found');
+            return array('code' => 404, 'data' => 'Post not found');
         }
 
         return array('post' => $post);
@@ -87,7 +87,7 @@ Class BlogsController extends FOSRestController
         $form = $this->createForm(new PostType(), $post);
 
         if (!$post) {
-            throw $this->createNotFoundException('Post Not Found');
+            return array('code' => 404, 'data' => 'Post not found');
         }
         $jsonPost = json_decode($request->getContent(), true);
         if ($request->isMethod('PUT')) {
@@ -97,11 +97,10 @@ Class BlogsController extends FOSRestController
                 $post->setUpdatedAt(new \DateTime());
                 $entityManager->persist($post);
                 $entityManager->flush();
-                return array('code' => 200, 'text' => 'Update OK');
+                return array('code' => 200, 'data' => $post);
             }
         }
-
-        return array ('code' => 400, 'text' => 'Error');
+        return array ('code' => 400, $form);
     }
 
     /**
@@ -114,12 +113,12 @@ Class BlogsController extends FOSRestController
         $post = $entityManager->getRepository('CoreBlogBundle:Post')->find($postId);
 
         if (!$post) {
-            throw $this->createNotFoundException('Post Not Found');
+            return array('code' => 404, 'data' => 'Post not foud');
         }
 
         $entityManager->remove($post);
         $entityManager->flush();
 
-        return array('reponse' => 'Delete done!');
+        return array('code' => 200, 'data' => 'DELETE DONE');
     }
 }

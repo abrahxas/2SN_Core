@@ -69,7 +69,7 @@ class PhotosController extends FOSRestController
                 $photo->setAlbum($album);
                 $entityManager->persist($photo);
                 $entityManager->flush();
-                return array('code' => 200, 'text' => 'POST OK');
+                return array('code' => 200, 'data' => $photo);
             }
         }
 
@@ -100,7 +100,7 @@ class PhotosController extends FOSRestController
                 $entityManager->persist($photo);
                 $entityManager->flush();
 
-                return array('code' => 200, 'text' => 'PUT OK');
+                return array('code' => 200, 'data' => $photo);
             }
         }
 
@@ -118,13 +118,13 @@ class PhotosController extends FOSRestController
         $photo = $entityManager->getRepository('CoreGalleryBundle:Photo')->find($photoId);
 
         if (!$photo) {
-            throw $this->createNotFoundException('Photo ' . $photoId . ' Not Found');
+            return array('code' => 404,'data' => 'Photo not found');
         }
 
         $entityManager->remove($photo);
         $entityManager->flush();
 
-        return array('code' => 200, 'text' => 'DELETE OK');
+        return array('code' => 200, 'data' => 'Delete done');
     }
 
     /**
@@ -145,6 +145,6 @@ class PhotosController extends FOSRestController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return array('code' => 200, 'text' => 'POST OK');
+        return array('code' => 200, 'data' => $user);
     }
 }
