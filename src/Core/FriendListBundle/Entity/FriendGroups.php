@@ -35,7 +35,8 @@ class FriendGroups
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\Friend" ,mappedBy="friend" ,cascade={"persist"})
+     * @var \Core\FriendListBundle\Entity\Friend[]
+     * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\Friend" ,mappedBy="friendgroup" ,cascade={"persist"})
      */
     protected $friends;
 
