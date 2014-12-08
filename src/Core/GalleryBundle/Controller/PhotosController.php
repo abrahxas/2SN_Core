@@ -73,6 +73,7 @@ class PhotosController extends FOSRestController
             $form->submit($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $photo->setImageFile($request->files->get('imageFile'));
+                $photo->setContent($request->get('content'));
                 $photo->setAlbum($album);
                 $entityManager->persist($photo);
                 $entityManager->flush();

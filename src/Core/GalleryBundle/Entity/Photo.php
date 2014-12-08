@@ -60,7 +60,7 @@ class Photo
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Album", inversedBy="photo")
+     * @ORM\ManyToOne(targetEntity="Album", inversedBy="photos")
      * @ORM\JoinColumn(name="album_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $album;

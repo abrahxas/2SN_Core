@@ -29,13 +29,13 @@ class Friend
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\FriendListBundle\Entity\FriendGroups", inversedBy="friend")
+     * @ORM\ManyToOne(targetEntity="Core\FriendListBundle\Entity\FriendGroups", inversedBy="friends")
      * @ORM\JoinColumn(name="friendgroup_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $friendgroup;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="friend")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="friends")
      * @ORM\JoinColumn(name="friend_id", referencedColumnName="id", onDelete="CASCADE"))
      */
     private $friend;
