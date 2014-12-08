@@ -41,7 +41,7 @@ class Friend
     private $friend;
 
     /**
-     *@var collection
+     * @var collection
      * @ORM\Column(name="sender", type="string", length=255)
      */
     private $sender;
