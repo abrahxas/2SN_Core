@@ -50,7 +50,7 @@ class GameSession
     protected $channels;
 
     /**
-     *@var Core\GameSessionBundle\Entity\Palyer[]
+     *@var Core\GameSessionBundle\Entity\Player[]
      * @ORM\OneToMany(targetEntity="Core\GameSessionBundle\Entity\Player", mappedBy="gameSession", cascade={"persist"})
      */
     private $players;

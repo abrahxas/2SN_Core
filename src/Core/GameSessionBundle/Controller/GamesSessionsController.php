@@ -21,10 +21,10 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function getGameSessionsAction()
+    public function getGamesessionsAction($userId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
         $listGameSessionMaster = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->findBy(array('master' => $user));
         $players = $entityManager->getRepository('CoreGameSessionBundle:Player')->findBy(array('user' => $user));
         $listGameSessionPlayer = new \Doctrine\Common\Collections\ArrayCollection();
@@ -171,7 +171,7 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function postValidationAction(Request $request, $GameSessionId, $invitationId)
+    public function postGamesessionValidationAction(Request $request, $GameSessionId, $invitationId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -244,22 +244,23 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function deletePlayerAction(Request $request)
+    public function deleteGamesSessionPlayerAction(Request $request, $GameSessionId, $PlayerId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-
-        if($request->isMethod('Get'))
+        
+        if($request->isMethod('Delete'))
         {
-            $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($request->get('GameSessionId'));
-            if($gameSession->getMaster() != $user)
-            {
-                $listGameSessionPlayer = $gameSession->getPlayers();
-                $listGameSessionChannel = $gameSession->getChannels();
+            $deletePlayer = $entityManager->getRepository('CoreGameSessionBundle:Player')->find($PlayerId);
+            $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($GameSessionId);
+            $listGameSessionPlayer = $gameSession->getPlayers();
+            $listGameSessionChannel = $gameSession->getChannels();
 
+            if($gameSession->getMaster() == $user || $deletePlayer->getUser() == $user)
+            {
                 foreach ($listGameSessionPlayer as $player) 
                 {
-                    if($player->getUser() == $user)
+                    if($player->getUser() == $deletePlayer->getuser())
                     {
                         foreach ($listGameSessionChannel as $channel) 
                         {
@@ -267,19 +268,19 @@ class GamesSessionsController extends Controller
 
                             foreach ($listParticipant as $participant) 
                             {
-                                if($participant == $user)
+                                if($participant == $deletePlayer->getUser())
                                 {
-                                    $channel->removeUser($user);
+                                    $channel->removeUser($participant);
                                     $user->removeChannel($channel);
                                 }
                             }
                         }
-                        $entityManager->remove($player);
+                        $entityManager->remove($deletePlayer->getUser());
                         $entityManager->flush();
                         return array('code' => 200, 'text'=> 'DELETE OK');
                     }
                 }
-            }    
+            }
         }
         return array('code' => 400, 'text'=> 'DELETE KO');
     }
