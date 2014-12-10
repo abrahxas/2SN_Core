@@ -11,7 +11,6 @@ use Core\FriendListBundle\Form\Type\AddFriendsType;
 use Core\FriendListBundle\Form\Type\SelectGroupType;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\View;
-use Symfony\Component\HttpFoundation\Request;
 
 class FriendsController extends Controller
 {
@@ -32,7 +31,7 @@ class FriendsController extends Controller
     * @return array
     * @View()
     */
-    public function postFriendsAction(Request $request, $userId, $friendId)
+    public function postUserFriendsAction(Request $request, $userId, $friendId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
@@ -75,7 +74,7 @@ class FriendsController extends Controller
     * @return array
     * @View()
     */
-    public function deleteFriendsAction($userId, $friendId)
+    public function deleteUserFriendsAction($userId, $friendId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
@@ -93,12 +92,12 @@ class FriendsController extends Controller
     * @return array
     * @View()
     */
-    public function getBygroupfriendsAction($userId, $friendGroupId)
+    public function getUserByfriendgroupAction($userId, $friendGroupId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
         $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->find($friendGroupId);
-        $friends = $entityManager->getRepository('CoreFriendListBundle:Friend')->findOneBy(array('user' => $user, 'friendgroup' => $friendGroup);
+        $friends = $entityManager->getRepository('CoreFriendListBundle:Friend')->findOneBy(array('user' => $user, 'friendgroup' => $friendGroup));
 
         return array('code' => 200, 'friends' => $friends);
     }
@@ -107,7 +106,7 @@ class FriendsController extends Controller
     * @return array
     * @View()
     */
-    public function postValidfriendAction($userId, $friendId)
+    public function postUserFriendValidAction($userId, $friendId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
@@ -134,7 +133,7 @@ class FriendsController extends Controller
     * @return array
     * @View()
     */
-    public function postFriendGroupAction(Request $request, $userId, $friendId, $friendGroupId)
+    public function postUserFriendGroupAction(Request $request, $userId, $friendId, $friendGroupId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);

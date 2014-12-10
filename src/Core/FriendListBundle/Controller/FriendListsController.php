@@ -54,7 +54,7 @@ class FriendListsController extends FOSRestController
     * @return array
     * @View()
     */
-    public function putFriendlistsAction(Request $request, $userId, $friendGroupId)
+    public function putUserFriendlistsAction(Request $request, $userId, $friendGroupId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
@@ -84,7 +84,7 @@ class FriendListsController extends FOSRestController
     * @return array
     * @View()
     */
-    public function deleteFriendlistsAction($userId, $friendGroupId)
+    public function deleteUserFriendlistsAction($userId, $friendGroupId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
@@ -130,7 +130,7 @@ class FriendListsController extends FOSRestController
     * @return array
     * @View()
     */
-    public function postFriendMoveAction($userId, $friendId, $friendGroupId)
+    public function postUserFriendMoveAction($userId, $friendId, $friendGroupId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
