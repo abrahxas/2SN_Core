@@ -82,6 +82,18 @@ class User extends BaseUser
     protected $characterSheets;
 
     /**
+     * @var \Core\MessageBundle\Entity\Message[]
+     * @ORM\OneToMany(targetEntity="Core\MessageBundle\Entity\Message", mappedBy="sender", cascade={"persist"})
+     */
+    protected $sender;
+
+    /**
+     * @var \Core\FriendListBundle\Entity\Friend[]
+     * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\Friend", mappedBy="friend", cascade={"persist"})
+     */
+    protected $friends;
+
+    /**
      * Constructor
      */
     public function __construct()
