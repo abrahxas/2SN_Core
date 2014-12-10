@@ -9,6 +9,9 @@ use Core\FriendListBundle\Entity\Friend;
 use Core\FriendListBundle\Entity\User;
 use Core\FriendListBundle\Form\Type\AddFriendsType;
 use Core\FriendListBundle\Form\Type\SelectGroupType;
+use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations\View;
+use Symfony\Component\HttpFoundation\Request;
 
 class FriendsController extends Controller
 {
