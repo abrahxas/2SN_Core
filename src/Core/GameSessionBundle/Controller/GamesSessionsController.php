@@ -21,7 +21,7 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function getGamesessionsAction($userId)
+    public function getGamesAction($userId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
@@ -43,7 +43,7 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function getDetailGameSessionAction($GameSessionId)
+    public function getDetailGamesAction($GameSessionId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -56,7 +56,7 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function postGameSessionAction(Request $request)
+    public function postGamesAction(Request $request)
     {
     	$entityManager = $this->getDoctrine()->getManager();
     	$user = $this->container->get('security.context')->getToken()->getUser();
@@ -68,7 +68,10 @@ class GamesSessionsController extends Controller
     		$form->bind($jsonPost);
     		if($form->isValid()){
                 $gameSession->setMaster($user);
-                $gameSession->setName($form->get('name')->getData());
+                if($form->get('name')->getData() != NULL)
+                {
+                    $gameSession->setName($form->get('name')->getData());
+                }
                 $gameSession->setDescription($form->get('description')->getData());
     			$entityManager->persist($gameSession);
     			$entityManager->flush();
@@ -99,7 +102,7 @@ class GamesSessionsController extends Controller
 
                 if($participant == $user)
                 {
-                    throw $this->createNotFoundException('You can not be Master and player at the the time');
+                    return array("code" => 404, "data" => "You can not be Master and player at the the time");
                 }
                 
                 $listGameSessionPlayer = $gameSession->getPlayers();
@@ -107,7 +110,7 @@ class GamesSessionsController extends Controller
                 foreach ($listGameSessionPlayer as $player) {
                     if($player->getUser() == $participant)
                     {
-                        throw $this->createNotFoundException('You can not invite a player already present in the part');
+                        return array("code" => 404, "data" => "You can not be Master and player at the the time");
                     }
                 }
 
@@ -115,7 +118,7 @@ class GamesSessionsController extends Controller
                 foreach ($listGameSessionGuest as $guest) {
                     if($guest->getGuest() == $participant)
                     {
-                        throw $this->createNotFoundException('An invitation is already in progress for this person');
+                        return array("code" => 404, "data" => "An invitation is already in progress for this person");
                     }
                 }
 
@@ -171,7 +174,7 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function postGamesessionValidationAction(Request $request, $GameSessionId, $invitationId)
+    public function postGamesValidationAction(Request $request, $GameSessionId, $invitationId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -222,7 +225,7 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function deleteGameSessionAction(Request $request, $GameSessionId)
+    public function deleteGamesAction(Request $request, $GameSessionId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -244,7 +247,7 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function deleteGamesSessionPlayerAction(Request $request, $GameSessionId, $PlayerId)
+    public function deleteGamesPlayerAction(Request $request, $GameSessionId, $PlayerId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -311,7 +314,7 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function postUpdateGameSessionAction(Request $request, $GameSessionId)
+    public function putUpdateGamesAction(Request $request, $GameSessionId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -320,16 +323,23 @@ class GamesSessionsController extends Controller
 
         $jsonPost = json_decode($request->getContent(),true);
 
-        if($request->isMethod('POST')){
-            $form->bind($jsonPost);
-            if($form->isValid()){
-                $gameSession->setMaster($user);
-                $gameSession->setName($form->get('name')->getData());
-                $gameSession->setDescription($form->get('description')->getData());
-                $entityManager->persist($gameSession);
-                $entityManager->flush();
+        if($user == $gameSession->getMaster())
+        {
+            if($request->isMethod('PUT'))
+            {
+                $form->bind($jsonPost);
+                if($form->isValid()){
+                    $gameSession->setMaster($user);
+                    if($form->get('name')->getData() != NULL)
+                    {
+                        $gameSession->setName($form->get('name')->getData());
+                    }
+                    $gameSession->setDescription($form->get('description')->getData());
+                    $entityManager->persist($gameSession);
+                    $entityManager->flush();
 
-                return array('code' => 200, 'text'=> 'POST OK');
+                    return array('code' => 200, 'text'=> 'POST OK');
+                }
             }
         }
         return array('code' => 400, $form);

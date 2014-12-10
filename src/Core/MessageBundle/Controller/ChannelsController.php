@@ -15,10 +15,10 @@ class ChannelsController extends Controller
     *@return array
     *$View()
     */
-    public function getChannelsAction()
+    public function getChannelsAction($userId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
         $channels = $user->getChannels();
 
         return array(
