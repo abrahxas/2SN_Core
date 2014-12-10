@@ -5,9 +5,9 @@ namespace Core\FriendListBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Friend2
+ * Friend
  *
- * @ORM\Table(name="friend2")
+ * @ORM\Table(name="friend")
  * @ORM\Entity(repositoryClass="Core\FriendListBundle\Entity\FriendRepository")
  */
 class Friend
@@ -22,6 +22,13 @@ class Friend
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Core\FriendListBundle\Entity\FriendGroups", inversedBy="friends")
      * @ORM\JoinColumn(name="friendgroup_id", referencedColumnName="id", onDelete="CASCADE"))
      */
@@ -34,8 +41,8 @@ class Friend
     private $friend;
 
     /**
-     * @var integer
-     * @ORM\Column(name="sender", type="integer")
+     * @var collection
+     * @ORM\Column(name="sender", type="string", length=255)
      */
     private $sender;
 
@@ -93,6 +100,29 @@ class Friend
     public function getFriend()
     {
         return $this->friend;
+    }
+
+    /**
+     * Set name
+     *
+     * @param  string $name
+     * @return Friend
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
