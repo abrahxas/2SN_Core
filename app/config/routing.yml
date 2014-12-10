@@ -1,6 +1,7 @@
 core_game_session:
     resource: "@CoreGameSessionBundle//Resources/config/routing.yml"
-    
+    prefix:   /
+
 core_characterSheet:
     resource: "@CoreCharacterSheetBundle/Resources/config/routing.yml"
     prefix:   /
@@ -93,3 +94,13 @@ channels:
     type: rest
     resource: Core\MessageBundle\Controller\ChannelsController
     prefix : /api
+
+GamesSessions:
+    type: rest
+    resource: Core\GameSessionBundle\Controller\GamesSessionsController
+    prefix : /api
+
+
+
+
+
