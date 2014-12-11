@@ -56,10 +56,14 @@ class CharacterSheetsController extends FOSRestController
         $user = $this->container->get('security.context')->getToken()->getUser();
         $form = $this->createForm(new CharacterSheetType(), $characterSheet = new CharacterSheet());
 
-        $jsonPost = json_decode($request->getContent(), true);
-        if ($request->isMethod('POST') && !empty($jsonPost)) {
-            $form->bind($jsonPost);
+        if ($request->isMethod('POST')) {
+            $form->bind($request);
             if ($form->isSubmitted() && $form->isValid()) {
+                $characterSheet->setSheetFile($request->files->get('sheetFile'));
+                $characterSheet->setImageFile($request->files->get('imageFile'));
+                $characterSheet->setFullName($request->get('fullName'));
+                $characterSheet->setDetails($request->get('details'));
+                $characterSheet->setBackground($request->get('background'));
                 $characterSheet->setUser($user);
                 $entityManager->persist($characterSheet);
                 $entityManager->flush();
@@ -94,13 +98,16 @@ class CharacterSheetsController extends FOSRestController
                 'data' => 'Charactersheet not found',
             );
         }
-
-        $jsonPost = json_decode($request->getContent(), true);
-        if ($request->isMethod('PUT') && !empty($jsonPost)) {
-            $form->bind($jsonPost);
+        if ($request->isMethod('PUT')) {
+            $form->bind($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $characterSheet->setUser($user);
                 $characterSheet->setUpdatedAt(new \DateTime());
+                $characterSheet->setSheetFile($request->files->get('sheetFile'));
+                $characterSheet->setImageFile($request->files->get('imageFile'));
+                $characterSheet->setFullName($request->get('fullName'));
+                $characterSheet->setDetails($request->get('details'));
+                $characterSheet->setBackground($request->get('background'));
                 $entityManager->persist($characterSheet);
                 $entityManager->flush();
 
