@@ -26,7 +26,7 @@ class GameSession
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true,options={"default" = "My Game : Give me a name, please !"})
      */
     private $name;
 
@@ -39,7 +39,7 @@ class GameSession
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=255)
+     * @ORM\Column(name="description", type="string", length=500, nullable=true)
      */
     private $description;
 
@@ -50,7 +50,7 @@ class GameSession
     protected $channels;
 
     /**
-     *@var Core\GameSessionBundle\Entity\Palyer[]
+     *@var Core\GameSessionBundle\Entity\Player[]
      * @ORM\OneToMany(targetEntity="Core\GameSessionBundle\Entity\Player", mappedBy="gameSession", cascade={"persist"})
      */
     private $players;

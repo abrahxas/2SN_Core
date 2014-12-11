@@ -15,10 +15,10 @@ class ChannelsController extends Controller
     *@return array
     *$View()
     */
-    public function getChannelsAction()
+    public function getChannelsAction($userId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
         $channels = $user->getChannels();
 
         return array(
@@ -115,6 +115,7 @@ class ChannelsController extends Controller
                 $channel->removeUser($participant);
                 $participant->removeChannel($channel);
             }
+            $entityManager->remove($channel);
         } else {
             foreach ($listParticipant as $participant) {
                 if ($user->getId() == $participant->getId()) {
@@ -143,7 +144,7 @@ class ChannelsController extends Controller
     *@return array
     *$View()
     */
-    public function removeParticipantAction(Request $request, $channelId, $participantId)
+    public function deleteFromchannelParticipantAction(Request $request, $channelId, $participantId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -154,8 +155,8 @@ class ChannelsController extends Controller
             $channel->removeUser($deleteparticipant);
             $deleteparticipant->removeChannel($channel);
         } elseif ($deleteparticipant->getId() == $user->getId()) {
+            $channel->removeUser($deleteparticipant);
             $user->removeChannel($channel);
-            $channel->removeParticipant($deleteparticipant);
         }
         $this->changeChannelName($channel);
 
