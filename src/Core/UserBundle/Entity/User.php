@@ -88,10 +88,16 @@ class User extends BaseUser
     protected $sender;
 
     /**
-     * @var \Core\FriendListBundle\Entity\Friend[]
+     * @var \Core\FiendListBundle\Entity\Friend[]
      * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\Friend", mappedBy="friend", cascade={"persist"})
      */
     protected $friends;
+
+    /**
+     * @var \Core\FiendListBundle\Entity\Friend[]
+     * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\Friend", mappedBy="user", cascade={"persist"})
+     */
+    protected $userFriend;
 
     /**
      * Constructor

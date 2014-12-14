@@ -21,222 +21,136 @@ class FriendsController extends FOSRestController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
-        $conn = $this->container->get('database_connection');
+        $friends = $entityManager->getRepository('CoreFriendListBundle:Friend')->findBy(array('friend'=> $user));
 
-        $query = "SELECT fd.name, fd.friendgroup_id
-                FROM friend fd
-                inner join friendGroups fg on fg.id = fd.friendgroup_id
-                inner join user u on u.id = fg.user_id
-                where u.id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bindValue(1, $user->getId());
-        $stmt->execute();
-
-        return array(
-            'friends' => $stmt,
-        );
+        return array('code' => 200, 'friends' => $friends);
     }
+
+//INUTIL = on recup les friend d'un friendgroup on recuperant directement le friendgroup cote front
+    //     /**
+    // * @return array
+    // * @View()
+    // */
+    // public function getUserFriendsbyfriendgroupAction($userId, $friendgroupId)
+    // {
+    //     $entityManager = $this->getDoctrine()->getManager();
+    //     $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
+    //     $friendgroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->find($friendgroupId);
+    //     $friends = $entityManager->getRepository('CoreFriendListBundle:Friend')->findBy(array('friend'=> $user, 'friendgroup' => $friendgroup));
+
+    //     return array('code' => 200, 'friends' => $friends);
+    // }
 
     /**
     * @return array
     * @View()
     */
-    public function postFriendsAction(Request $request, $friendId)
+    public function postUserFriendsAction(Request $request,$userId, $newFriendId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user' => $user, 'name' => 'wait'));
-        $form = $this->createForm(new AddFriendsType(), $friend = new Friend());
-        $jsonPost = json_decode($request->getContent(), true);
+        $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
+        $userWaitGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user' => $user, 'name' => 'wait'));
+        $newFriend = $entityManager->getRepository('CoreUserBundle:User')->find($newFriendId);
+        $newFriendWaitGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user' => $newFriend, 'name' => 'wait'));
+        $friends = $entityManager->getRepository('CoreFriendListBundle:Friend')->findBy(array('friend' => $user));
 
-        if ($request->isMethod('POST') && !empty($jsonPost)) {
-            $form->bind($jsonPost);
-            if ($form->isSubmitted() && $form->isValid()) {
-                $receivingUser = $entityManager->getRepository('CoreUserBundle:User')->find($friendId);
-                $friend->setFriendGroup($friendGroup);
-                $friend->setName($receivingUser->getUsername());
-                $friend->setSender($user);
+        //grp, friend, user, sender
+        $friend = new Friend($userWaitGroup, $user, $newFriend, $user->getUsername());
+        $userInFriend = new Friend($newFriendWaitGroup, $newFriend, $user, $user->getUsername());
 
-                if (!$receivingUser) {
-                    return array(
-                        'code' => 404,
-                        'data' => 'Friend'.$friendId.'not exist',
-                    );
-                }
-
-                $friend->setFriend($receivingUser);
-                $receivingfriend = new Friend();
-                $receivingfriendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user' => $receivingUser, 'name' => 'wait'));
-                $receivingfriend->setFriendGroup($receivingfriendGroup);
-                $receivingfriend->setName($user->getUsername());
-                $receivingfriend->setSender($user);
-                $receivingfriend->setFriend($user);
-                $conn = $this->container->get('database_connection');
-
-                $query = "SELECT fd.name, fd.friendgroup_id
-                        FROM friend fd
-                        inner join friendGroups fg on fg.id = fd.friendgroup_id
-                        inner join user u on u.id = fg.user_id
-                        where u.id = ?";
-                $stmt = $conn->prepare($query);
-                $stmt->bindValue(1, $user->getId());
-                $stmt->execute();
-
-                foreach ($stmt as $f) {
-                    if ($f['name'] == $receivingUser->getUsername()) {
-                        return $this->redirect($this->generateUrl('core_friendList_homepage'));
-                    }
-                }
-
-                if ($receivingUser->getUsername() != $user->getUsername()) {
-                    $entityManager->persist($friend);
-                    $entityManager->persist($receivingfriend);
-                    $entityManager->flush();
-                }
-
-                return array(
-                    'code' => 200,
-                    'data' => $friend,
-                );
+        foreach ($friends as $f) {
+            if ($f->getUser() == $newFriend && $f->getFriend() == $user) {
+                return array('code' => 400, 'data' => $newFriend->getUsername() . ' already exists');
             }
         }
 
-        return array(
-            'code' => 400,
-            $form,
-        );
+        if ($newFriend->getUsername() != $user->getUsername()) {
+            $userWaitGroup->addFriend($friend);
+            $newFriendWaitGroup->addFriend($userInFriend);
+            $entityManager->persist($userWaitGroup);
+            $entityManager->persist($newFriendWaitGroup);
+            $entityManager->persist($friend);
+            $entityManager->persist($userInFriend);
+            $entityManager->flush();
+
+            return array('code' => 200, 'friend' => $friend);
+        }
+
+        return array('code' => 400, 'data' => 'Fail');
     }
 
     /**
     * @return array
     * @View()
     */
-    public function deleteFriendsAction($friendId)
+    public function deleteUserFriendAction($userId, $friendId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
         $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendId);
-        $conn = $this->container->get('database_connection');
+        $userInFriend = $entityManager->getRepository('CoreFriendListBundle:Friend')->findOneBy(array('user' => $user, 'friend' => $friend->getUser()));
 
-        $query = "SELECT fd.id
-                FROM friend fd
-                WHERE (fd.name = :user AND fd.sender = :name)
-                OR (fd.name = :user AND fd.sender = :user)";
-        $stmt = $conn->prepare($query);
-        $stmt->bindValue('name', $friend->getName());
-        $stmt->bindValue('user', $user->getUsername());
-        $stmt->execute();
-
-        foreach ($stmt as $f) {
-            $friendId = $f['id'];
-        }
-
-        $friendDelete = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendId);
-        if (!$friend) {
-            return array(
-                'code' => 404,
-                'data' => 'Friend Not Found',
-            );
-        }
-
-        $entityManager->remove($friendDelete);
+        $entityManager->remove($userInFriend);
         $entityManager->remove($friend);
         $entityManager->flush();
 
-        return array(
-            'code' => 200,
-            'data' => 'Delete done',
-        );
+        return array('code' => 200,'data' => 'Delete done');
     }
 
     /**
     * @return array
     * @View()
     */
-    public function getBygroupfriendsAction($friendGroupId)
+    public function postUserValidfriendAction($userId, $friendId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        $conn = $this->container->get('database_connection');
-        $query = "SELECT fd.name, fd.friendgroup_id, fd.sender, fd.id
-                FROM friend fd
-                inner join friendGroups fg on fg.id = fd.friendgroup_id
-                inner join user u on u.id = fg.user_id
-                where u.id = ? and fg.id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bindValue(1, $user->getId());
-        $stmt->bindValue(2, $friendGroupId);
-        $stmt->execute();
-
-        return array(
-            'friends' => $stmt,
-        );
-    }
-
-    /**
-    * @return array
-    * @View()
-    */
-    public function postValidfriendAction($friendId)
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user' => $user, 'name' => 'general'));
+        $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
+        $userGeneralGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user' => $user, 'name' => 'general'));
         $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendId);
-        $senderUser = $entityManager->getRepository('CoreUserBundle:User')->findOneBy(array('username' => $friend->getSender()));
-        $senderGeneralGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user' => $senderUser, 'name' => 'general'));
-        $senderFriend = $entityManager->getRepository('CoreFriendListBundle:Friend')->findOneBy(array('sender' => $senderUser->getUsername(), 'friend' => $user->getId()));
+        $friendInUser = $entityManager->getRepository('CoreUserBundle:User')->find($friend->getUser()->getId());
+        $friendGeneralGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user' => $friendInUser, 'name' => 'general'));
+        $userInFriend = $entityManager->getRepository('CoreFriendListBundle:Friend')->findOneBy(array('user' => $user, 'friend' => $friendInUser));
 
         if ($friend->getSender() != $user->getUsername()) {
-            $friend->setFriendGroup($friendGroup);
+            $friend->setFriendGroup($userGeneralGroup);
+            $userGeneralGroup->addFriend($friend);
+            $userInFriend->setFriendGroup($friendGeneralGroup);
+            $friendGeneralGroup->addFriend($userInFriend);
             $entityManager->persist($friend);
-
-            $senderFriend->setFriendGroup($senderGeneralGroup);
-            $entityManager->persist($senderFriend);
-
+            $entityManager->persist($userInFriend);
+            $entityManager->persist($userGeneralGroup);
+            $entityManager->persist($friendGeneralGroup);
             $entityManager->flush();
 
-            return array(
-                'code' => 200,
-                'data' => $friend,
-            );
+            return array('code' => 200, 'data' => $friend);
         }
 
-        return array(
-            'code' => 400,
-            'data' => 'Only receiver can accept',
-        );
+        return array('code' => 400, 'data' => 'Only receiver can accept');
     }
 
     /**
     * @return array
     * @View()
     */
-    public function postFriendGroupAction(Request $request, $friendId, $friendGroupId)
+    public function postUserFriendgroupAction(Request $request,$userId, $friendId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
         $form = $this->createForm(new SelectGroupType($user));
+        $jsonPost = json_decode($request->getContent(), true);
+        if ($request->isMethod('POST')) {
+            $form->bind($jsonPost);
+            $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendId);
+            $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user' => $user,'name' => $jsonPost['name']));
+            $friend->setFriendGroup($friendGroup);
+            $friendGroup->addFriend($friend);
+            $entityManager->persist($friend);
+            $entityManager->persist($friendGroup);
+            $entityManager->flush();
 
-        if ($request->isMethod('POST') && !empty($jsonPost)) {
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendId);
-                $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->find($friendGroupId);
-                $friend->setFriendGroup($friendGroup);
-                $entityManager->persist($friend);
-                $entityManager->flush();
-
-                return array(
-                    'code' => 200,
-                    'data' => $friend,
-                );
-            }
+            return array('code' => 200, 'data' => $friend);
         }
 
-        return array(
-            'code' => 400,
-            $form,
-        );
+        return array('code' => 400,$form);
     }
 }
