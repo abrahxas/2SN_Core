@@ -22,13 +22,6 @@ class Friend
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255)
-     */
-    private $name;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Core\FriendListBundle\Entity\FriendGroups", inversedBy="friends")
      * @ORM\JoinColumn(name="friendgroup_id", referencedColumnName="id", onDelete="CASCADE"))
      */
@@ -41,7 +34,13 @@ class Friend
     private $friend;
 
     /**
-     * @var collection
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="userFriend")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE"))
+     */
+    private $user;
+
+    /**
+     * @var Collection
      * @ORM\Column(name="sender", type="string", length=255)
      */
     private $sender;
@@ -103,29 +102,6 @@ class Friend
     }
 
     /**
-     * Set name
-     *
-     * @param  string $name
-     * @return Friend
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
      * Set sender
      *
      * @param  string $sender
@@ -146,5 +122,28 @@ class Friend
     public function getSender()
     {
         return $this->sender;
+    }
+
+    /**
+     * Set user
+     *
+     * @param  \Core\UserBundle\Entity\User $user
+     * @return user
+     */
+    public function setUser(\Core\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Core\UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
