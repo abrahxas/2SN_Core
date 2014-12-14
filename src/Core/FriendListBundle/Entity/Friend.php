@@ -46,6 +46,17 @@ class Friend
     private $sender;
 
     /**
+     * Constructor
+     */
+    public function __construct($friendgroup, $friend, $user, $sender)
+    {
+        $this->friendgroup = $friendgroup;
+        $this->friend = $friend;
+        $this->user = $user;
+        $this->sender = $sender;
+    }
+
+    /**
      * Get id
      *
      * @return integer

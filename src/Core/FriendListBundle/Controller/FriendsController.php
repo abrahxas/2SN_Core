@@ -21,24 +21,25 @@ class FriendsController extends FOSRestController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
-        $friends = $entityManager->getRepository('CoreFriendListBundle:Friend')->findby(array('friend'=> $user)); 
+        $friends = $entityManager->getRepository('CoreFriendListBundle:Friend')->findBy(array('friend'=> $user)); 
 
         return array('code' => 200, 'friends' => $friends);
     }
 
-        /**
-    * @return array
-    * @View()
-    */
-    public function getUserFriendsbyfriendgroupAction($userId, $friendgroupId)
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
-        $friendgroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->find($friendgroupId); 
-        $friends = $entityManager->getRepository('CoreFriendListBundle:Friend')->findby(array('friend'=> $user, 'friendgroup' => $friendgroup)); 
+//INUTIL = on recup les friend d'un friendgroup on recuperant directement le friendgroup cote front
+    //     /**
+    // * @return array
+    // * @View()
+    // */
+    // public function getUserFriendsbyfriendgroupAction($userId, $friendgroupId)
+    // {
+    //     $entityManager = $this->getDoctrine()->getManager();
+    //     $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
+    //     $friendgroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->find($friendgroupId); 
+    //     $friends = $entityManager->getRepository('CoreFriendListBundle:Friend')->findBy(array('friend'=> $user, 'friendgroup' => $friendgroup)); 
 
-        return array('code' => 200, 'friends' => $friends);
-    }
+    //     return array('code' => 200, 'friends' => $friends);
+    // }
 
     /**
     * @return array
@@ -51,22 +52,14 @@ class FriendsController extends FOSRestController
         $userWaitGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user' => $user, 'name' => 'wait'));
         $newFriend = $entityManager->getRepository('CoreUserBundle:User')->find($newFriendId);
         $newFriendWaitGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user' => $newFriend, 'name' => 'wait'));
-        $friends = $entityManager->getRepository('CoreFriendListBundle:Friend')->findBy(array('friend'=> $user));
+        $friends = $entityManager->getRepository('CoreFriendListBundle:Friend')->findBy(array('friend' => $user));
 
-        $friend = new Friend();
-        $friend->setFriendGroup($userWaitGroup);
-        $friend->setSender($user->getUsername());
-        $friend->setFriend($user);
-        $friend->setUser($newFriend);
-
-        $userInFriend = new Friend();
-        $userInFriend->setFriendGroup($newFriendWaitGroup);
-        $userInFriend->setSender($user->getUsername());
-        $userInFriend->setFriend($newFriend);
-        $userInFriend->setUser($user);
+        //grp, friend, user, sender
+        $friend = new Friend($userWaitGroup, $user, $newFriend, $user->getUsername());
+        $userInFriend = new Friend($newFriendWaitGroup, $newFriend, $user, $user->getUsername());
 
         foreach ($friends as $f) {
-            if ($f->getUser()->getId() == $newFriend->getId() && $f->getFriend()->getId() == $user->getId()) {
+            if ($f->getUser() == $newFriend && $f->getFriend() == $user) {
                 return array('code' => 400, 'data' => $newFriend->getUsername() . ' already exists');
             }
         }
@@ -74,12 +67,16 @@ class FriendsController extends FOSRestController
         if ($newFriend->getUsername() != $user->getUsername()) {
             $userWaitGroup->addFriend($friend);
             $newFriendWaitGroup->addFriend($userInFriend);
+            $entityManager->persist($userWaitGroup);
+            $entityManager->persist($newFriendWaitGroup);
             $entityManager->persist($friend);
             $entityManager->persist($userInFriend);
             $entityManager->flush(); 
+
+            return array('code' => 200, 'friend' => $friend);
         }
 
-        return array('code' => 200, 'friend' => $friend);
+        return array('code' => 400, 'data' => 'Fail');
     }
 
     /**
@@ -112,13 +109,17 @@ class FriendsController extends FOSRestController
         $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendId);
         $friendInUser = $entityManager->getRepository('CoreUserBundle:User')->find($friend->getUser()->getId());
         $friendGeneralGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findOneBy(array('user' => $friendInUser, 'name' => 'general'));
-        $userInFriend = $entityManager->getRepository('CoreFriendListBundle:Friend')->findOneBy(array('user' => $user->getId(), 'friend' => $friendInUser->getId()));
+        $userInFriend = $entityManager->getRepository('CoreFriendListBundle:Friend')->findOneBy(array('user' => $user, 'friend' => $friendInUser));
         
         if ($friend->getSender() != $user->getUsername()) {
             $friend->setFriendGroup($userGeneralGroup);
+            $userGeneralGroup->addFriend($friend);
             $userInFriend->setFriendGroup($friendGeneralGroup);
+            $friendGeneralGroup->addFriend($userInFriend);
             $entityManager->persist($friend);
             $entityManager->persist($userInFriend);
+            $entityManager->persist($userGeneralGroup);
+            $entityManager->persist($friendGeneralGroup);
             $entityManager->flush();
 
             return array('code' => 200, 'data' => $friend);
@@ -127,35 +128,32 @@ class FriendsController extends FOSRestController
         return array('code' => 400, 'data' => 'Only receiver can accept');
     }
 
-    // /**
-    // * @return array
-    // * @View()
-    // */
-    // public function postFriendGroupAction(Request $request, $friendId, $friendGroupId)
-    // {
-    //     $entityManager = $this->getDoctrine()->getManager();
-    //     $user = $this->container->get('security.context')->getToken()->getUser();
-    //     $form = $this->createForm(new SelectGroupType($user));
+    /**
+    * @return array
+    * @View()
+    */
+    public function postUserFriendGroupAction(Request $request,$userId, $friendId, $friendGroupId)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
+        $form = $this->createForm(new SelectGroupType($user));
+        $jsonPost = json_decode($request->getContent(), true);
 
-    //     if ($request->isMethod('POST') && !empty($jsonPost)) {
-    //         $form->handleRequest($request);
-    //         if ($form->isSubmitted() && $form->isValid()) {
-    //             $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendId);
-    //             $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->find($friendGroupId);
-    //             $friend->setFriendGroup($friendGroup);
-    //             $entityManager->persist($friend);
-    //             $entityManager->flush();
+        if ($request->isMethod('POST') && !empty($jsonPost)) {
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $friend = $entityManager->getRepository('CoreFriendListBundle:Friend')->find($friendId);
+                $friendGroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->find($friendGroupId);
+                $friend->setFriendGroup($friendGroup);
+                $friendGroup->addFriend($friend);
+                $entityManager->persist($friend);
+                $entityManager->persist($friendGroup);
+                $entityManager->flush();
 
-    //             return array(
-    //                 'code' => 200,
-    //                 'data' => $friend,
-    //             );
-    //         }
-    //     }
+                return array('code' => 200, 'data' => $friend);
+            }
+        }
 
-    //     return array(
-    //         'code' => 400,
-    //         $form,
-    //     );
-    // }
+        return array('code' => 400,$form);
+    }
 }
