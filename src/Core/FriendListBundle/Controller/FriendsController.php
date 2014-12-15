@@ -26,21 +26,6 @@ class FriendsController extends FOSRestController
         return array('code' => 200, 'friends' => $friends);
     }
 
-//INUTIL = on recup les friend d'un friendgroup on recuperant directement le friendgroup cote front
-    //     /**
-    // * @return array
-    // * @View()
-    // */
-    // public function getUserFriendsbyfriendgroupAction($userId, $friendgroupId)
-    // {
-    //     $entityManager = $this->getDoctrine()->getManager();
-    //     $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
-    //     $friendgroup = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->find($friendgroupId);
-    //     $friends = $entityManager->getRepository('CoreFriendListBundle:Friend')->findBy(array('friend'=> $user, 'friendgroup' => $friendgroup));
-
-    //     return array('code' => 200, 'friends' => $friends);
-    // }
-
     /**
     * @return array
     * @View()

@@ -112,3 +112,11 @@ lexik_jwt_authentication:
     pass_phrase:      'totobolo'                              # ssh key pass phrase
     token_ttl:        86400                                   # token ttl - defaults to 86400
     encoder_service:  lexik_jwt_authentication.jwt_encoder    # token encoder / decoder service - defaults to the jwt encoder (based on the namshi/jose library)
+
+jms_serializer:
+    metadata:
+        auto_detection: true
+        directories:
+            FOSUB:
+                namespace_prefix: "FOS\\UserBundle"
+                path: "%kernel.root_dir%/Resources/serializer/FOSUB"
