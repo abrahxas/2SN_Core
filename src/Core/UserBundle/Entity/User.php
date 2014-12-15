@@ -1,8 +1,8 @@
 <?php
-
 namespace Core\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Exclude;
 use FOS\UserBundle\Model\User as BaseUser;
 use Core\FriendListBundle\Entity\FriendGroups;
 
@@ -27,11 +27,12 @@ class User extends BaseUser
      * @var \DateTime
      *
      * @ORM\Column(name="birth_date", type="datetime", nullable=true)
+     * @Exclude
      */
     private $birthDate = null;
 
     /**
-     *@var Core\FriendListBundle\Entity\friendGroup[]
+     * @var Core\FriendListBundle\Entity\friendGroup[]
      * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\FriendGroups", mappedBy="user", cascade={"persist"})
      * @var string
      *
@@ -40,62 +41,72 @@ class User extends BaseUser
     private $imageProfile;
 
     /**
-     *@var friendGroups[]
+     * @var friendGroups[]
      * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\FriendGroups", mappedBy="user", cascade={"all"})
+     * @Exclude
      */
     protected $friendGroups;
 
     /**
-     *@var Core\MessageBundle\Entity\channel[]
+     * @var Core\MessageBundle\Entity\channel[]
      * @ORM\ManyToMany(targetEntity="Core\MessageBundle\Entity\Channel", mappedBy="users", cascade={"persist"})
+     * @Exclude
      */
     protected $channels;
 
     /**
      * @var \Core\BlogBundle\Entity\Post[]
      * @ORM\OneToMany(targetEntity="Core\BlogBundle\Entity\Post", mappedBy="user", cascade={"persist"})
+     * @Exclude
      */
     protected $posts;
 
     /**
      * @var \Core\CommentBundle\Entity\Comment[]
      * @ORM\OneToMany(targetEntity="Core\CommentBundle\Entity\Comment", mappedBy="user", cascade={"persist"})
+     * @Exclude
      */
     protected $comments;
 
     /**
      * @var \Core\GalleryBundle\Entity\Album[]
      * @ORM\OneToMany(targetEntity="Core\GalleryBundle\Entity\Album", mappedBy="user", cascade={"persist"})
+     * @Exclude
      */
     protected $albums;
 
     /**
      * @var \Core\GameSessionBundle\Entity\GameSession[]
      * @ORM\OneToMany(targetEntity="Core\GameSessionBundle\Entity\GameSession", mappedBy="master", cascade={"persist"})
+     * @Exclude
      */
     protected $gameSessions;
 
     /**
      * @var \Core\CharacterSheetBundle\Entity\CharacterSheet[]
      * @ORM\OneToMany(targetEntity="Core\CharacterSheetBundle\Entity\CharacterSheet", mappedBy="user", cascade={"persist"})
+     * @Exclude
      */
     protected $characterSheets;
 
     /**
      * @var \Core\MessageBundle\Entity\Message[]
      * @ORM\OneToMany(targetEntity="Core\MessageBundle\Entity\Message", mappedBy="sender", cascade={"persist"})
+     * @Exclude
      */
     protected $sender;
 
     /**
      * @var \Core\FiendListBundle\Entity\Friend[]
      * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\Friend", mappedBy="friend", cascade={"persist"})
+     * @Exclude
      */
     protected $friends;
 
     /**
      * @var \Core\FiendListBundle\Entity\Friend[]
      * @ORM\OneToMany(targetEntity="Core\FriendListBundle\Entity\Friend", mappedBy="user", cascade={"persist"})
+     * @Exclude
      */
     protected $userFriend;
 
