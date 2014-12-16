@@ -4,6 +4,7 @@ namespace Core\BlogBundle\Controller;
 
 use Core\BlogBundle\Entity\Post;
 use Core\BlogBundle\Form\Type\PostType;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,6 +74,7 @@ class BlogsController extends FOSRestController
     /**
      * @return array
      * @View()
+     * @Get("/blog/{postId}")
      */
     public function getBlogAction($postId)
     {

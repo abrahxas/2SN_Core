@@ -3,9 +3,10 @@
 namespace Core\GameSessionBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\Annotations\Get;
 use Core\GameSessionBundle\Form\Type\CreateGameSessionType;
 use Core\GameSessionBundle\Form\Type\AddGuestType;
 use Core\GameSessionBundle\Entity\GameSession;
@@ -31,23 +32,24 @@ class GamesSessionsController extends Controller
 
         foreach ($players as $p) {
             if($p->getUser = $user)
-            {   
+            {
                 $listGameSessionPlayer[] = $p->getGameSession();
             }
         }
-        
+
         return array('listGameSessionMaster' => $listGameSessionMaster,'listGameSessionPlayer' => $listGameSessionPlayer);
     }
 
     /**
     *@return array
     *$View()
+    * @Get("/game/{gameId}")
     */
-    public function getDetailGamesAction($GameSessionId)
+    public function getDetailGamesAction($gameId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-        $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($GameSessionId);
+        $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($gameId);
 
         return array('GameSession' => $gameSession);
     }
@@ -61,7 +63,7 @@ class GamesSessionsController extends Controller
     	$entityManager = $this->getDoctrine()->getManager();
     	$user = $this->container->get('security.context')->getToken()->getUser();
     	$form = $this->createForm(new CreateGameSessionType(), $gameSession = new GameSession());
-        
+
         $jsonPost = json_decode($request->getContent(),true);
 
     	if($request->isMethod('POST')){
@@ -86,7 +88,7 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function postGuestAction(Request $request, $GameSessionId)
+    public function postGuestAction(Request $request, $gameId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -97,14 +99,14 @@ class GamesSessionsController extends Controller
         if($request->isMethod('POST')){
             $form->bind($jsonPost);
             if($form->isValid()){
-                $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($GameSessionId);
+                $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($gameId);
                 $participant = $entityManager->getRepository('CoreUserBundle:User')->findOneBy(array('username'=>$form->get('username')->getdata()));
 
                 if($participant == $user)
                 {
                     return array("code" => 404, "data" => "You can not be Master and player at the the time");
                 }
-                
+
                 $listGameSessionPlayer = $gameSession->getPlayers();
 
                 foreach ($listGameSessionPlayer as $player) {
@@ -144,7 +146,7 @@ class GamesSessionsController extends Controller
                     $channels = $gameSession->getChannels();
                     $channel = $channels[0];
                 }
-                
+
                 $entityManager->persist($channel);
 
                 $user->addChannel($channel);
@@ -174,7 +176,7 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function postGamesValidationAction(Request $request, $GameSessionId, $invitationId)
+    public function postGamesValidationAction(Request $request, $gameId, $invitationId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -183,12 +185,12 @@ class GamesSessionsController extends Controller
         $jsonPost = json_decode($request->getContent(),true);
 
 
-        if ($request->isMethod('Post')) 
+        if ($request->isMethod('Post'))
         {
             $form->bind($jsonPost);
             if($form->isValid())
             {
-                $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($GameSessionId);
+                $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($gameId);
                 $invitation = $entityManager->getRepository('CoreGameSessionBundle:Guest')->find($invitationId);
 
                 $guest = $invitation->getGuest();
@@ -206,7 +208,7 @@ class GamesSessionsController extends Controller
 
                 $channel->addUser($guest);
                 $guest->addChannel($channel);
-                
+
                 $entityManager->flush();
                 $gameSession->addPlayer($newPlayer);
 
@@ -216,7 +218,7 @@ class GamesSessionsController extends Controller
 
                 return array('code' => 200, 'text'=> 'POST OK');
             }
-                
+
         }
         return array('code' => 400, $form);
     }
@@ -225,20 +227,20 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function deleteGamesAction(Request $request, $GameSessionId)
+    public function deleteGamesAction(Request $request, $gameId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         if($request->isMethod('Get'))
         {
-            $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($GameSessionId);
+            $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($gameId);
             if($gameSession->getMaster() == $user)
             {
                 $entityManager->remove($gameSession);
                 $entityManager->flush();
                 return array('code' => 200, 'text'=> 'DELETE OK');
-            }    
+            }
         }
         return array('code' => 400, 'text'=> 'DELETE KO');
     }
@@ -247,29 +249,29 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function deleteGamesPlayerAction(Request $request, $GameSessionId, $PlayerId)
+    public function deleteGamesPlayerAction(Request $request, $gameId, $PlayerId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-        
+
         if($request->isMethod('Delete'))
         {
             $deletePlayer = $entityManager->getRepository('CoreGameSessionBundle:Player')->find($PlayerId);
-            $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($GameSessionId);
+            $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($gameId);
             $listGameSessionPlayer = $gameSession->getPlayers();
             $listGameSessionChannel = $gameSession->getChannels();
 
             if($gameSession->getMaster() == $user || $deletePlayer->getUser() == $user)
             {
-                foreach ($listGameSessionPlayer as $player) 
+                foreach ($listGameSessionPlayer as $player)
                 {
                     if($player->getUser() == $deletePlayer->getuser())
                     {
-                        foreach ($listGameSessionChannel as $channel) 
+                        foreach ($listGameSessionChannel as $channel)
                         {
                             $listParticipant = $channel->getUsers();
 
-                            foreach ($listParticipant as $participant) 
+                            foreach ($listParticipant as $participant)
                             {
                                 if($participant == $deletePlayer->getUser())
                                 {
@@ -292,13 +294,13 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function deleteInvitationAction($GameSessionId)
+    public function deleteInvitationAction($gameId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-        $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($GameSessionId);
+        $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($gameId);
         $listGuest = $gameSession->getGuests();
-        foreach ($listGuest as $guest) 
+        foreach ($listGuest as $guest)
         {
             if($guest->getGuest() == $user)
             {
@@ -314,11 +316,11 @@ class GamesSessionsController extends Controller
     *@return array
     *$View()
     */
-    public function putUpdateGamesAction(Request $request, $GameSessionId)
+    public function putUpdateGamesAction(Request $request, $gameId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-        $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($GameSessionId);
+        $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($gameId);
         $form = $this->createForm(new CreateGameSessionType(),$gameSession);
 
         $jsonPost = json_decode($request->getContent(),true);

@@ -4,6 +4,7 @@ namespace Core\UserBundle\Controller;
 
 use Core\UserBundle\Entity\User;
 use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
@@ -32,6 +33,7 @@ class UsersController extends FOSRestController
      * @return array
      * @View()
      * @ParamConverter("user", class="CoreUserBundle:User")
+     * @Get("/user/{user}")
      */
     public function getUserAction(User $user)
     {
@@ -144,13 +146,22 @@ class UsersController extends FOSRestController
 
                 $userManager->updateUser($user);
 
-                if (null === $response = $event->getResponse()) {
-                    return array('code' => 200, 'data' => $user);
-                }
+                $subRequest = Request::create(
+                    '/api/login_check',
+                    'POST',
+                    array(
+                        'username' => $jsonPost['username'],
+                        'password' => $jsonPost['current_password'],
+                    )
+                );
 
-                $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+                $response = $this->get('http_kernel')->handle($subRequest);
+                $token = json_decode($response->getContent(), true);
 
-                return array('code' => 200 , 'data' => $user);
+                return array(
+                    'code' => 200,
+                    'token' => reset($token),
+                );
             }
         }
 

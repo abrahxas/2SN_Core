@@ -4,6 +4,7 @@ namespace Core\CharacterSheetBundle\Controller;
 
 use Core\CharacterSheetBundle\Entity\CharacterSheet;
 use Core\CharacterSheetBundle\Form\Type\CharacterSheetType;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,11 +29,12 @@ class CharacterSheetsController extends FOSRestController
     /**
     * @return array
     * @View()
+    * @Get("/sheet/{sheetId}")
     */
-    public function getSheetAction($characterSheetId)
+    public function getSheetAction($sheetId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $characterSheet = $entityManager->getRepository('CoreCharacterSheetBundle:CharacterSheet')->find($characterSheetId);
+        $characterSheet = $entityManager->getRepository('CoreCharacterSheetBundle:CharacterSheet')->find($sheetId);
 
         if (!$characterSheet) {
             return array(
@@ -85,11 +87,11 @@ class CharacterSheetsController extends FOSRestController
     * @return array
     * @View()
     */
-    public function putSheetsAction(Request $request, $characterSheetId)
+    public function putSheetsAction(Request $request, $SheetId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
-        $characterSheet = $entityManager->getRepository('CoreCharacterSheetBundle:CharacterSheet')->find($characterSheetId);
+        $characterSheet = $entityManager->getRepository('CoreCharacterSheetBundle:CharacterSheet')->find($SheetId);
         $form = $this->createForm(new CharacterSheetType(), $characterSheet);
 
         if (!$characterSheet) {
@@ -128,10 +130,10 @@ class CharacterSheetsController extends FOSRestController
     * @return array
     * @View()
     */
-    public function deleteSheetsAction($characterSheetId)
+    public function deleteSheetsAction($SheetId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $characterSheet = $entityManager->getRepository('CoreCharacterSheetBundle:CharacterSheet')->find($characterSheetId);
+        $characterSheet = $entityManager->getRepository('CoreCharacterSheetBundle:CharacterSheet')->find($SheetId);
 
         if (!$characterSheet) {
             return array(

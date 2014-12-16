@@ -3,11 +3,12 @@
 namespace Core\MessageBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Core\UserBundle\Entity\User;
 use Core\MessageBundle\Form\Type\AddMessageType;
 use Core\MessageBundle\Entity\Channel;
 use Core\MessageBundle\Entity\Message;
-use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\Annotations\Get;
 
 class MessagesController extends Controller
 {
@@ -15,7 +16,7 @@ class MessagesController extends Controller
     *@return array
     *$View()
     */
-    public function getMessageAction($channelId)
+    public function getMessagesAction($channelId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -23,6 +24,22 @@ class MessagesController extends Controller
 
         return array(
             'messages' => $channel->getMessages(),
+        );
+    }
+
+    /**
+    *@return array
+    *$View()
+    * @Get("/message/{messageId}")
+    */
+    public function getMessageAction($messageId)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $message = $entityManager->getRepository('CoreMessageBundle:Message')->find($messageId);
+
+
+        return array(
+            'message' => $message,
         );
     }
 

@@ -8,6 +8,7 @@ use Core\FriendListBundle\Entity\User;
 use Core\FriendListBundle\Form\Type\FriendGroupsType;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\Controller\Annotations\Get;
 use Symfony\Component\HttpFoundation\Request;
 
 class FriendListsController extends FOSRestController
@@ -23,6 +24,19 @@ class FriendListsController extends FOSRestController
         $friendLists = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->findBy(array('user' => $user));
 
         return array('code' => 200, 'friendLists' => $friendLists);
+    }
+
+    /**
+    * @return array
+    * @View()
+    * @Get("/friendlist/{friendGroupId}")
+    */
+    public function getFriendlistAction($friendGroupId)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $friendList = $entityManager->getRepository('CoreFriendListBundle:FriendGroups')->find($friendGroupId);
+
+        return array('code' => 200, 'friendList' => $friendList);
     }
 
     /**

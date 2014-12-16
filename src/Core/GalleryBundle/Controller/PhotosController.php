@@ -4,6 +4,7 @@ namespace Core\GalleryBundle\Controller;
 
 use Core\GalleryBundle\Entity\Photo;
 use Core\GalleryBundle\Form\Type\PhotoType;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,6 +42,7 @@ class PhotosController extends FOSRestController
     /**
     * @return array
     * @View()
+    * @Get("/photo/{photoId}")
     */
     public function getPhotoAction($photoId)
     {

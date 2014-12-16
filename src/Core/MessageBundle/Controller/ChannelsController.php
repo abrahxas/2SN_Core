@@ -3,11 +3,12 @@
 namespace Core\MessageBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\Annotations\Get;
 use Core\UserBundle\Entity\User;
 use Core\MessageBundle\Entity\Participant;
 use Core\MessageBundle\Entity\Channel;
 use Core\MessageBundle\Entity\Message;
-use Symfony\Component\HttpFoundation\Request;
 
 class ChannelsController extends Controller
 {
@@ -29,12 +30,27 @@ class ChannelsController extends Controller
     /**
     *@return array
     *$View()
+    * @Get("/channel/{channelId}")
     */
-     public function postChannelAction($friendId)
+    public function getChannelAction($channelId)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $channel = $entityManager->getRepository('CoreMessageBundle:Channel')->find($channelId);
+
+        return array(
+            'channel' => $channel,
+        );
+    }
+
+    /**
+    *@return array
+    *$View()
+    */
+     public function postChannelAction($userId)
      {
          $entityManager = $this->getDoctrine()->getManager();
          $user = $this->container->get('security.context')->getToken()->getUser();
-         $newParticipant = $entityManager->getRepository('CoreUserBundle:User')->find($friendId);
+         $newParticipant = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
 
          $channel = new Channel();
          $channel->addUser($user);
@@ -61,13 +77,13 @@ class ChannelsController extends Controller
     *@return array
     *$View()
     */
-    public function postParticipantFriendAction(Request $request, $channelId, $friendId)
+    public function postParticipantFriendAction(Request $request, $channelId, $userId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
         $jsonPost = json_decode($request->getContent(), true);
         $channel = $entityManager->getRepository('CoreMessageBundle:Channel')->find($channelId);
-        $newUser = $entityManager->getRepository('CoreUserBundle:User')->find($friendId);
+        $newUser = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
 
         $listParticipant = $channel->getUsers();
 

@@ -4,6 +4,7 @@ namespace Core\GalleryBundle\Controller;
 
 use Core\GalleryBundle\Entity\Album;
 use Core\GalleryBundle\Form\Type\AlbumType;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +29,7 @@ class AlbumsController extends FOSRestController
     /**
     * @return array
     * @View()
+    * @Get("/album/{albumId}")
     */
     public function getAlbumAction($albumId)
     {
