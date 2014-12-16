@@ -14,10 +14,10 @@ class BlogsController extends FOSRestController
     * @return array
     * @View()
     */
-    public function getBlogsAction()
+    public function getBlogsAction($userId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
         $posts = $entityManager->getRepository('CoreBlogBundle:Post')->findBy(array('user' => $user));
 
         return array(

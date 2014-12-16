@@ -14,10 +14,10 @@ class CharacterSheetsController extends FOSRestController
     * @return array
     * @View()
     */
-    public function getSheetsAction()
+    public function getSheetsAction($userId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
         $characterSheets = $entityManager->getRepository('CoreCharacterSheetBundle:CharacterSheet')->findBy(array('user' => $user), array('createdAt' => 'DESC'));
 
         return array(

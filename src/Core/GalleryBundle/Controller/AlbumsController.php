@@ -14,10 +14,10 @@ class AlbumsController extends FOSRestController
     * @return array
     * @View()
     */
-    public function getAlbumsAction()
+    public function getAlbumsAction($userId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $entityManager->getRepository('CoreUserBundle:User')->find($userId);
         $albums = $entityManager->getRepository('CoreGalleryBundle:Album')->findBy(array('user' => $user), array('createdAt' => 'DESC'));
 
         return array(
