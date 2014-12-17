@@ -280,7 +280,7 @@ class GamesSessionsController extends Controller
                                 }
                             }
                         }
-                        $entityManager->remove($deletePlayer->getUser());
+                        $entityManager->remove($deletePlayer);
                         $entityManager->flush();
                         return array('code' => 200, 'text'=> 'DELETE OK');
                     }
