@@ -232,7 +232,7 @@ class GamesSessionsController extends Controller
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->container->get('security.context')->getToken()->getUser();
 
-        if($request->isMethod('Get'))
+        if($request->isMethod('Delete'))
         {
             $gameSession = $entityManager->getRepository('CoreGameSessionBundle:GameSession')->find($gameId);
             if($gameSession->getMaster() == $user)
