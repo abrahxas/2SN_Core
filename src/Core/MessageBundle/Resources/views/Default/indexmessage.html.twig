@@ -1,3 +1,0 @@
-{% for message in messages %}
-	{{message.sender}} ---> {{message.contents}}<a href="{{path('core_message_deletemessage',{'messageId': message.id})}}">Delete Message</a><br>
-{% endfor %}
