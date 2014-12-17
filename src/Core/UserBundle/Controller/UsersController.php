@@ -44,7 +44,7 @@ class UsersController extends FOSRestController
      * @return array
      * @View()
      */
-    public function getUserMeAction()
+    public function getMeAction()
     {
         $usr = $this->get('security.context')->getToken()->getUser();
 
