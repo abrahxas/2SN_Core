@@ -1,0 +1,15 @@
+parameters:
+    database_driver:   pdo_mysql
+    database_host:     mysql://ba146521e6b416:dc92034e@us-cdbr-iron-east-01.cleardb.net/heroku_fe9b0de40a1f3ee?reconnect=true
+    database_port:     ~
+    database_name:     heroku_fe9b0de40a1f3ee
+    database_user:     ba146521e6b416
+    database_password: dc92034e
+
+    mailer_transport:  smtp
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+    mailer_password:   ~
+
+    locale:            en
+    secret:            ThisTokenIsNotSoSecretChangeIt
